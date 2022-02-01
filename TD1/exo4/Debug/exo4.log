@@ -1,0 +1,3 @@
+﻿  exo4.cpp
+D:\CLASSES\Session2-H2022\INF1015\TD1\exo4\exo4.cpp(48,2): warning C4834: discarding return value of function with 'nodiscard' attribute
+  exo4.vcxproj -> D:\CLASSES\Session2-H2022\INF1015\TD1\Debug\exo4.exe

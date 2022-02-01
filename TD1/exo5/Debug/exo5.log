@@ -1,0 +1,6 @@
+﻿  exo5.cpp
+D:\CLASSES\Session2-H2022\INF1015\TD1\exo5\exo5.cpp(42,18): warning C4156: deletion of an array expression without using the array form of 'delete'; array form substituted
+D:\CLASSES\Session2-H2022\INF1015\TD1\exo5\exo5.cpp(42,18): warning C4154: deletion of an array expression; conversion to pointer supplied
+D:\CLASSES\Session2-H2022\INF1015\TD1\exo5\exo5.cpp(43,18): warning C4156: deletion of an array expression without using the array form of 'delete'; array form substituted
+D:\CLASSES\Session2-H2022\INF1015\TD1\exo5\exo5.cpp(43,18): warning C4154: deletion of an array expression; conversion to pointer supplied
+  exo5.vcxproj -> D:\CLASSES\Session2-H2022\INF1015\TD1\Debug\exo5.exe
