@@ -1,7 +1,0 @@
-﻿  exo2.cpp
-D:\CLASSES\Session2-H2022\INF1015\TD1\exo2\exo2.cpp(33,17): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\CLASSES\Session2-H2022\INF1015\TD1\exo2\exo2.cpp(35,9): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\CLASSES\Session2-H2022\INF1015\TD1\exo2\exo2.cpp(50,17): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\CLASSES\Session2-H2022\INF1015\TD1\exo2\exo2.cpp(65,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\CLASSES\Session2-H2022\INF1015\TD1\exo2\exo2.cpp(68,45): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
-  exo2.vcxproj -> D:\CLASSES\Session2-H2022\INF1015\TD1\Debug\exo2.exe
