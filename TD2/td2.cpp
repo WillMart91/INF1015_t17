@@ -188,9 +188,32 @@ ListeFilms creerListe(string nomFichier)
 // et les acteurs qui ne jouent plus dans aucun films de la collection).
 //Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.
 //Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
-
+void detruireFilm(ListeFilms& liste, Film* film) 
+{
+	for (Acteur*& acteur : span(film->acteurs.elements, film->acteurs.nElements))
+	{
+		retirerFilm(acteur->joueDans, film);
+		if (acteur->joueDans.nElements == 0)
+		{
+			cout << acteur->nom;
+			delete[] acteur;
+		}
+	}
+	cout << film->titre;
+	delete[] film;
+}
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
-
+void detruireListeFilms(ListeFilms& liste)
+{
+	for (Film*& film : span(liste.elements, liste.nElements))
+	{
+		detruireFilm(liste, film);
+	}
+	delete[] liste.elements;
+	delete &liste.nElements;
+	delete &liste.capacite;
+	delete &liste;
+}
 void afficherActeur(const Acteur& acteur)
 {
 	cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
