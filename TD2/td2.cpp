@@ -235,8 +235,8 @@ void afficherListeFilms(const ListeFilms& listeFilms)
 	static const string ligneDeSeparation = {};
 	cout << ligneDeSeparation;
 	//TODO: Changer le for pour utiliser un span.
-	for (int i = 0; i < listeFilms.nElements; i++) {
-		afficherFilm(*listeFilms.elements[i]);
+	for (Film*& film : span(listeFilms.elements, listeFilms.nElements)) {
+		afficherFilm(*film);
 		cout << ligneDeSeparation;
 	}
 }
