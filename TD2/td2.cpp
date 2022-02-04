@@ -101,15 +101,15 @@ void retirerFilm(ListeFilms& liste, Film* film)
 
 Acteur* trouverActeur(const ListeFilms& liste, string nomActeur)
 {
-	ListeActeurs listeActeur = {};
+	//ListeActeurs listeActeur = {};//pas besoin
 	if (liste.elements == nullptr)
 	{
 		return nullptr;
 	}
 	for (Film*& film : span(liste.elements, liste.nElements))
 	{
-		listeActeur = film->acteurs;
-		for (Acteur*& acteur : span(listeActeur.elements, listeActeur.nElements))
+		//listeActeur = film->acteurs;
+		for (Acteur*& acteur : span(film->acteurs.elements, film->acteurs.nElements))
 		{
 			if (acteur->nom == nomActeur)
 				return acteur;
@@ -146,28 +146,28 @@ Acteur* lireActeur(istream& fichier, ListeFilms& liste)
 
 Film* lireFilm(istream& fichier, ListeFilms& liste)
 {
-	Film film = {};
-	film.titre = lireString(fichier);
-	film.realisateur = lireString(fichier);
-	film.anneeSortie = lireUint16(fichier);
-	film.recette = lireUint16(fichier);
-	film.acteurs.nElements = lireUint8(fichier);
-	film.acteurs.capacite = film.acteurs.nElements;
-	film.acteurs.elements = new Acteur * [film.acteurs.nElements];
+	Film* film = new Film();
+	film->titre = lireString(fichier);
+	film->realisateur = lireString(fichier);
+	film->anneeSortie = lireUint16(fichier);
+	film->recette = lireUint16(fichier);
+	film->acteurs.nElements = lireUint8(fichier);
+	film->acteurs.capacite = film->acteurs.nElements;
+	film->acteurs.elements = new Acteur * [film->acteurs.nElements];
 	//NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.
 	//Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
-	for (int i = 0; i < film.acteurs.nElements; i++)
+	for (int i = 0; i < film->acteurs.nElements; i++)
 	{
 
 		Acteur* acteur = lireActeur(fichier, liste); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
-		film.acteurs.elements[i] = acteur;
-		ajouterFilm(acteur->joueDans, &film);
+		film->acteurs.elements[i] = acteur;
+		ajouterFilm(acteur->joueDans, film);
 
 	}
-	Film* ptrFilm = new Film{};
-	*ptrFilm = film;
-	return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
+	//Film* ptrFilm = new Film{};
+	//*ptrFilm = film;
+	return film; //TODO: Retourner le pointeur vers le nouveau film.
 }
 
 ListeFilms creerListe(string nomFichier)
@@ -285,6 +285,8 @@ int main()
 	//TODO: Faire les appels qui manquent pour avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; 
 			//c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes 
 			//du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
+
+
 
 	//TODO: Détruire tout avant de terminer le programme.  La bibliothèque de verification_allocation devrait afficher "Aucune fuite detectee." 
 			//a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
