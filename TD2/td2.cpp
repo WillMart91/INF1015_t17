@@ -212,7 +212,7 @@ void detruireListeFilms(ListeFilms& liste)
 	delete[] liste.elements;
 	delete &liste.nElements;
 	delete &liste.capacite;
-	delete &liste;
+	delete &liste; //par sur si sa marche
 }
 void afficherActeur(const Acteur& acteur)
 {
