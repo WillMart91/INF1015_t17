@@ -188,7 +188,7 @@ ListeFilms creerListe(string nomFichier)
 // et les acteurs qui ne jouent plus dans aucun films de la collection).
 //Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.
 //Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
-void detruireFilm(ListeFilms& liste, Film* film)
+void detruireFilm(Film* film)
 {
 	for (Acteur*& acteur : span(film->acteurs.elements, film->acteurs.nElements))
 	{
@@ -207,7 +207,7 @@ void detruireListeFilms(ListeFilms& liste)
 {
 	for (Film*& film : span(liste.elements, liste.nElements))
 	{
-		detruireFilm(liste, film);
+		detruireFilm(film);
 	}
 	delete[] liste.elements;
 	delete& liste.nElements;
