@@ -132,7 +132,7 @@ Acteur* lireActeur(istream& fichier, ListeFilms& liste)
 
 	if (ptrActeur == nullptr)
 	{
-		cout << acteur.nom << "    ";
+		//cout << acteur.nom << "    ";
 		acteur.joueDans.elements = new Film * [0];
 		ptrActeur = new Acteur{};
 		*ptrActeur = acteur;
@@ -188,19 +188,25 @@ ListeFilms creerListe(string nomFichier)
 // et les acteurs qui ne jouent plus dans aucun films de la collection).
 //Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.
 //Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
-void detruireFilm(Film* film)
+void detruireFilm(Film*& film)
 {
 	for (Acteur*& acteur : span(film->acteurs.elements, film->acteurs.nElements))
 	{
 		retirerFilm(acteur->joueDans, film);
 		if (acteur->joueDans.nElements == 0)
 		{
-			cout << acteur->nom;
-			delete[] acteur;
+			//cout << acteur->nom<<endl;
+			//delete& acteur->nom;
+			//delete& acteur->anneeNaissance;
+			//delete& acteur->sexe;
+			delete[] & acteur->joueDans.elements[0]; 
+			//delete[]& acteur->joueDans.elements;
+			delete acteur;
 		}
 	}
-	cout << film->titre;
-	delete[] film;
+	//cout << film->titre<<endl;
+	delete[] film->acteurs.elements;
+	delete film;
 }
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 void detruireListeFilms(ListeFilms& liste)
@@ -210,9 +216,9 @@ void detruireListeFilms(ListeFilms& liste)
 		detruireFilm(film);
 	}
 	delete[] liste.elements;
-	delete& liste.nElements;
-	delete& liste.capacite;
-	delete& liste; //par sur si sa marche
+	//delete& liste.nElements;
+	//delete& liste.capacite;
+	//delete[] &liste; //par sur si sa marche
 }
 void afficherActeur(const Acteur& acteur)
 {
@@ -254,7 +260,8 @@ void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomA
 int main()
 {
 	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
-	int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Fuite detectee" de "4 octets" affiché à la fin de l'exécution, qui réfère à cette ligne du programme.
+	//int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Fuite detectee" de "4 octets"
+							//affiché à la fin de l'exécution, qui réfère à cette ligne du programme.
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
 	//TODO: Chaque TODO dans cette fonction devrait se faire en 1 ou 2 lignes, en appelant les fonctions écrites.
@@ -276,7 +283,9 @@ int main()
 	afficherFilmographieActeur(listeFilms, acteur->nom); //un fuck? maybe
 
 	//TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement" (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas Sigourney Weaver puisqu'elle joue aussi dans Avatar.
+	detruireFilm(listeFilms.elements[0]);
 	retirerFilm(listeFilms, listeFilms.elements[0]);
+	
 
 
 	cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
@@ -290,5 +299,6 @@ int main()
 
 	//TODO: Détruire tout avant de terminer le programme.  La bibliothèque de verification_allocation devrait afficher "Aucune fuite detectee." 
 			//a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
-
+	detruireListeFilms(listeFilms);
+	return 0;
 }
