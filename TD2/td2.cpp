@@ -92,7 +92,7 @@ void retirerFilm(ListeFilms& liste, Film* film)
 			liste.elements[liste.nElements] = nullptr;
 			break;
 		}
-	}
+	} //non couverte en raison du break
 }
 
 
@@ -102,10 +102,10 @@ void retirerFilm(ListeFilms& liste, Film* film)
 Acteur* trouverActeur(const ListeFilms& liste, string nomActeur)
 {
 	//ListeActeurs listeActeur = {};//pas besoin
-	if (liste.elements == nullptr)
-	{
-		return nullptr;
-	}
+	//if (liste.elements == nullptr)
+	//{
+	//	return nullptr;
+	//}
 	for (Film*& film : span(liste.elements, liste.nElements))
 	{
 		//listeActeur = film->acteurs;
@@ -251,10 +251,10 @@ void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomA
 {
 	//TODO: Utiliser votre fonction pour trouver l'acteur (au lieu de le mettre à nullptr).
 	const Acteur* acteur = trouverActeur(listeFilms, nomActeur);
-	if (acteur == nullptr)
-		cout << "Aucun acteur de ce nom" << endl;
-	else
-		afficherListeFilms(acteur->joueDans);
+	//if (acteur == nullptr)
+	//	cout << "Aucun acteur de ce nom" << endl;
+	//else
+	afficherListeFilms(acteur->joueDans);
 }
 
 int main()
