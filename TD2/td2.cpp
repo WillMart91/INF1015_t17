@@ -60,23 +60,23 @@ string lireString(istream& fichier)
 void ajouterFilm(ListeFilms& liste, Film* film)
 {
 	Film** nouvelleListe;
-	if (liste.capacite == 0)
+	if (liste.getCapacite() == 0)
 	{
-		liste.capacite = 1;
-		nouvelleListe = new Film * [liste.capacite];
-		delete[] liste.elements;
-		liste.elements = nouvelleListe;
+		liste.getCapacite() = 1;
+		nouvelleListe = new Film * [liste.getCapacite()];
+		delete[] liste.getElements();
+		liste.getElements() = nouvelleListe;
 	}
-	if (liste.capacite <= liste.nElements)
+	if (liste.getCapacite() <= liste.getNElements())
 	{
-		liste.capacite *= 2;
-		nouvelleListe = new Film * [liste.capacite];
-		for (int i : range(0, liste.nElements))
-			nouvelleListe[i] = liste.elements[i];
-		delete[] liste.elements;
-		liste.elements = nouvelleListe;
+		liste.getCapacite() *= 2;
+		nouvelleListe = new Film * [liste.getCapacite()];
+		for (int i : range(0, liste.getNElements()))
+			nouvelleListe[i] = liste.getElements()[i];
+		delete[] liste.getElements();
+		liste.getElements() = nouvelleListe;
 	}
-	liste.elements[liste.nElements++] = film;
+	liste.getElements()[liste.getNElements()++] = film;
 }
 
 //TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film;
@@ -84,12 +84,12 @@ void ajouterFilm(ListeFilms& liste, Film* film)
 //L'ordre des films dans la liste n'a pas à être conservé.
 void retirerFilm(ListeFilms& liste, Film* film)
 {
-	for (int i : range(0, liste.nElements))
+	for (int i : range(0, liste.getNElements()))
 	{
-		if (liste.elements[i] == film)
+		if (liste.getElements()[i] == film)
 		{
-			liste.elements[i] = liste.elements[--liste.nElements];
-			liste.elements[liste.nElements] = nullptr;
+			liste.getElements()[i] = liste.getElements()[--liste.getNElements()];
+			liste.getElements()[liste.getNElements()] = nullptr;
 			break;
 		}
 	} //non couverte en raison du break
@@ -102,11 +102,11 @@ void retirerFilm(ListeFilms& liste, Film* film)
 Acteur* trouverActeur(const ListeFilms& liste, string nomActeur)
 {
 	//ListeActeurs listeActeur = {};//pas besoin
-	//if (liste.elements == nullptr)
+	//if (liste.getElements() == nullptr)
 	//{
 	//	return nullptr;
 	//}
-	for (Film*& film : span(liste.elements, liste.nElements))
+	for (Film*& film : span(liste.getElements(), liste.getNElements()))
 	{
 		//listeActeur = film->acteurs;
 		for (Acteur*& acteur : span(film->acteurs.elements, film->acteurs.nElements))
@@ -211,13 +211,13 @@ void detruireFilm(Film*& film)
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 void detruireListeFilms(ListeFilms& liste)
 {
-	for (Film*& film : span(liste.elements, liste.nElements))
+	for (Film*& film : span(liste.getElements(), liste.getNElements()))
 	{
 		detruireFilm(film);
 	}
-	delete[] liste.elements;
-	//delete& liste.nElements;
-	//delete& liste.capacite;
+	delete[] liste.getElements();
+	//delete& liste.getNElements();
+	//delete& liste.getCapacite();
 	//delete[] &liste; //par sur si sa marche
 }
 void afficherActeur(const Acteur& acteur)
@@ -301,4 +301,21 @@ int main()
 			//a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
 	detruireListeFilms(listeFilms);
 	return 0;
+}
+int ListeFilms::getCapacite() const{
+	return capacite_;
+}
+int ListeFilms::getNElements() const{
+	return nElements_;
+}
+Film** ListeFilms::getElements()const {
+	return elements_;
+}
+ListeFilms::ListeFilms() {
+	capacite_ = 0;
+	nElements_ = 0;
+	elements_ = new Film * [0];
+}
+ListeFilms::~ListeFilms() {
+	detruireListeFilms(*this);
 }

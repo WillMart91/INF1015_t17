@@ -5,14 +5,29 @@
 
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
-struct ListeFilms {
-	int capacite, nElements;
-	Film** elements; // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
-};
+//struct ListeFilms {
+//	int capacite, nElements;
+//	Film** elements; // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
+//};
 
 struct ListeActeurs {
 	int capacite, nElements;
 	Acteur** elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+};
+class ListeFilms {
+public:
+	ListeFilms();
+	int getCapacite()const;
+	int getNElements()const;
+	Film** getElements()const;
+	~ListeFilms();
+	void setCapacite(int newCapacite);
+	void setNElements(int newCapacite);
+	void setElements(int index, Film* newFilm);
+private:
+	
+	int capacite_, nElements_;
+	Film** elements_;
 };
 
 struct Film
