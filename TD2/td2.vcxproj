@@ -46,9 +46,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bibliotheque_cours.cpp" />
+    <ClCompile Include="structures.cpp" />
     <ClCompile Include="td2.cpp">
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level4</WarningLevel>
     </ClCompile>
+    <ClCompile Include="td2_sansPOO.cpp" />
     <ClCompile Include="verification_allocation.cpp" />
   </ItemGroup>
   <ItemGroup>

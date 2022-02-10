@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace std;
+
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
 //struct ListeFilms {
@@ -17,28 +19,33 @@ struct ListeActeurs {
 class ListeFilms {
 public:
 	ListeFilms();
+	ListeFilms(const string& nomFichier);
 	int getCapacite()const;
 	int getNElements()const;
 	Film** getElements()const;
-	~ListeFilms();
-	void setCapacite(int newCapacite);
-	void setNElements(int newCapacite);
-	void setElements(int index, Film* newFilm);
+	void ajouterFilm(Film* film);
+	void retirerFilm(Film* film);
+	Film* getElements(int index);
+	void detruireListeFilms();
+	void setCapacite(int nouvCapacite);
+	void setNElements(int nouvCapacite);
+	void setElements(int index, Film* nouvFilm);
+	void setElements(Film** nouvListe);
+	void afficherListeFilms()const;
 private:
-	
 	int capacite_, nElements_;
 	Film** elements_;
 };
 
 struct Film
 {
-	std::string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
+	string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
 	int anneeSortie, recette; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs;
 };
 
 struct Acteur
 {
-	std::string nom; int anneeNaissance; char sexe;
+	string nom; int anneeNaissance; char sexe;
 	ListeFilms joueDans;
 };
