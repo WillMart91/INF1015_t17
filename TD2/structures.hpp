@@ -20,17 +20,12 @@ class ListeFilms {
 public:
 	ListeFilms();
 	ListeFilms(const string& nomFichier);
-	int getCapacite()const;
 	int getNElements()const;
 	Film** getElements()const;
 	void ajouterFilm(Film* film);
 	void retirerFilm(Film* film);
 	Film* getElements(int index);
 	void detruireListeFilms();
-	void setCapacite(int nouvCapacite);
-	void setNElements(int nouvCapacite);
-	void setElements(int index, Film* nouvFilm);
-	void setElements(Film** nouvListe);
 	void afficherListeFilms()const;
 private:
 	int capacite_, nElements_;

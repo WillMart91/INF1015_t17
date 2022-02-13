@@ -92,10 +92,6 @@ void ListeFilms::retirerFilm(Film* film)
 
 Acteur* trouverActeur(const ListeFilms& liste, string nomActeur)
 {
-	if (liste.getElements() == nullptr)
-	{
-		return nullptr;
-	}
 	for (Film*& film : span(liste.getElements(), liste.getNElements()))
 	{
 		//listeActeur = film->acteurs;
@@ -159,19 +155,6 @@ Film* lireFilm(istream& fichier, ListeFilms& liste)
 	return film; //TODO: Retourner le pointeur vers le nouveau film.
 }
 
-//ListeFilms creerListe(const string& nomFichier)
-//{
-//	ifstream fichier(nomFichier, ios::binary);
-//	fichier.exceptions(ios::failbit);
-//	//ListeFilms liste = { 0,0,new Film * [0] };
-//	ListeFilms liste = ListeFilms();
-//	int nElements = lireUint16(fichier);
-//	for (int i = 0; i < nElements; i++)
-//	{
-//		liste.ajouterFilm(lireFilm(fichier, liste)); //TODO: Ajouter le film à la liste.
-//	}
-//	return liste; //TODO: Retourner la liste de films.
-//}
 
 //TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film,
 // et les acteurs qui ne jouent plus dans aucun films de la collection).
@@ -282,9 +265,6 @@ int main()
 	listeFilms.detruireListeFilms();
 	return 0;
 }
-int ListeFilms::getCapacite() const {
-	return capacite_;
-}
 int ListeFilms::getNElements() const {
 	return nElements_;
 }
@@ -299,22 +279,6 @@ ListeFilms::ListeFilms() {
 	capacite_ = 1;
 	nElements_ = 0;
 	elements_ = new Film * [capacite_];
-}
-//ListeFilms::~ListeFilms() {
-//	detruireListeFilms(*this);
-//}
-void ListeFilms::setCapacite(int nouvCapacite)
-{
-	capacite_ = nouvCapacite;
-}
-void ListeFilms::setNElements(int nouvNElements) {
-	nElements_ = nouvNElements;
-}
-void ListeFilms::setElements(int index, Film* nouvPtrFilm) {
-	elements_[index] = nouvPtrFilm;
-}
-void ListeFilms::setElements(Film** nouvListe) {
-	elements_ = nouvListe;
 }
 
 ListeFilms::ListeFilms(const string& nomFichier)
@@ -331,7 +295,9 @@ ListeFilms::ListeFilms(const string& nomFichier)
 	capacite_ = 1;
 	nElements_ = 0;
 	elements_ = new Film * [capacite_];
-	for (int i = 0; i < nElements; i++)
+
+
+	for (int i : range(0, nElements)) 
 	{
 		(*this).ajouterFilm(lireFilm(fichier, *this)); //TODO: Ajouter le film à la liste.
 	}
