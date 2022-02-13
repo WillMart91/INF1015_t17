@@ -145,7 +145,7 @@ Film* lireFilm(istream& fichier, ListeFilms& liste)
 	film->acteurs.elements = new Acteur * [film->acteurs.capacite];
 	//NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.
 	//Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
-	for (int i = 0; i < film->acteurs.capacite; i++)
+	for (int i :range(0,film->acteurs.capacite))
 	{
 
 		Acteur* acteur = lireActeur(fichier, liste); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
@@ -221,12 +221,12 @@ void afficherFilm(Film* film) //Film*& ou Film& ou Film*
 void ListeFilms::afficherListeFilms()const
 {
 	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
-	static const string ligneDeSeparation = {};
-	cout << ligneDeSeparation;
+	static const char16_t ligneCar = '\u005F';
+	cout << string(50,ligneCar)<<endl;
 	//TODO: Changer le for pour utiliser un span.
 	for (Film*& film : span(elements_, nElements_)) {
 		afficherFilm(film);
-		cout << ligneDeSeparation;
+		cout << string(50, ligneCar)<<endl;
 	}
 }
 
@@ -240,7 +240,7 @@ void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomA
 int main()
 {
 	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
-	int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Fuite detectee" de "4 octets"
+	//int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Fuite detectee" de "4 octets"
 							//affiché à la fin de l'exécution, qui réfère à cette ligne du programme.
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
@@ -299,7 +299,6 @@ ListeFilms::ListeFilms() {
 	capacite_ = 1;
 	nElements_ = 0;
 	elements_ = new Film * [capacite_];
-	cout << "allo";
 }
 //ListeFilms::~ListeFilms() {
 //	detruireListeFilms(*this);
