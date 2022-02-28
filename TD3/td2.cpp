@@ -255,6 +255,10 @@ int main()
 	afficherFilm(&skylien);
 	afficherFilm(listeFilms.getElements(0));
 	afficherFilm(listeFilms.getElements(1));
+	
+
+	Film* filmTrouver = listeFilms.trouverFilm([](Film*& f) mutable {return f->recette == 955;  });
+	afficherFilm(filmTrouver);
 
 
 	//TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement" (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas Sigourney Weaver puisqu'elle joue aussi dans Avatar.
@@ -311,6 +315,7 @@ ListeFilms::ListeFilms(const string& nomFichier)
 
 	for (int i : range(0, nElements)) 
 	{
+		i;
 		(*this).ajouterFilm(lireFilm(fichier, *this)); //TODO: Ajouter le film à la liste.
 	}
 }
@@ -321,4 +326,14 @@ ostream& operator<<(ostream& o, Film* film)
 		o << "  " << acteur.get()->nom << ", " << acteur.get()->anneeNaissance << " " << acteur.get()->sexe << endl;
 	}
 	return o;
+}
+
+Film* ListeFilms::trouverFilm(const function<bool(Film*&)>& critere)
+{
+	for (Film*& f: span(elements_,nElements_) )
+	{
+		if (critere(f))
+			return f;
+	}
+	return nullptr;
 }

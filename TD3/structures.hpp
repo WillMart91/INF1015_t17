@@ -27,10 +27,34 @@ struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront d
 //	Film** elements; // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
 //};
 
+//class ListeActeurs {
+//private:
+//	int capacite_, nElements_;
+//	unique_ptr<shared_ptr<Acteur> []> elements_;
+//	// Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+//public:
+//	ListeActeurs();
+//	ListeActeurs(const ListeActeurs& liste) {
+//		nElements_ = liste.nElements_;
+//		capacite_ = liste.capacite_;
+//		elements_ = make_unique<shared_ptr<Acteur>[]>(capacite_);
+//		for (int i = 0; i < liste.nElements_; i++)
+//		{
+//			elements_[i] = liste.elements_[i];
+//		}
+//	}
+//	int getCapacite()const;
+//	shared_ptr<Acteur>* getElements()const;
+//	int getNElements()const;
+//	void setElements(shared_ptr<Acteur> newElem, int index);
+//	void setCapacite(int newCap);
+//	void setNElements(int newNElem);
+//};
+
 class ListeActeurs {
 private:
 	int capacite_, nElements_;
-	unique_ptr<shared_ptr<Acteur> []> elements_;
+	unique_ptr<shared_ptr<Acteur>[]> elements_;
 	// Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 public:
 	ListeActeurs();
@@ -62,6 +86,7 @@ public:
 	void detruireListeFilms();
 	void afficherListeFilms()const;
 	Film*& operator[](int i);
+	Film* trouverFilm(const function<bool(Film*&)>& critere);
 private:
 	int capacite_, nElements_;
 	Film** elements_;
