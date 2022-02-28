@@ -27,53 +27,57 @@ struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront d
 //	Film** elements; // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
 //};
 
-//class ListeActeurs {
-//private:
-//	int capacite_, nElements_;
-//	unique_ptr<shared_ptr<Acteur> []> elements_;
-//	// Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-//public:
-//	ListeActeurs();
-//	ListeActeurs(const ListeActeurs& liste) {
-//		nElements_ = liste.nElements_;
-//		capacite_ = liste.capacite_;
-//		elements_ = make_unique<shared_ptr<Acteur>[]>(capacite_);
-//		for (int i = 0; i < liste.nElements_; i++)
-//		{
-//			elements_[i] = liste.elements_[i];
-//		}
-//	}
-//	int getCapacite()const;
-//	shared_ptr<Acteur>* getElements()const;
-//	int getNElements()const;
-//	void setElements(shared_ptr<Acteur> newElem, int index);
-//	void setCapacite(int newCap);
-//	void setNElements(int newNElem);
-//};
+////////////class ListeActeurs {
+////////////private:
+////////////	int capacite_, nElements_;
+////////////	unique_ptr<shared_ptr<Acteur> []> elements_;
+////////////	// Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+////////////public:
+////////////	ListeActeurs();
+////////////	ListeActeurs(const ListeActeurs& liste) {
+////////////		nElements_ = liste.nElements_;
+////////////		capacite_ = liste.capacite_;
+////////////		elements_ = make_unique<shared_ptr<Acteur>[]>(capacite_);
+////////////		for (int i = 0; i < liste.nElements_; i++)
+////////////		{
+////////////			elements_[i] = liste.elements_[i];
+////////////		}
+////////////	}
+////////////	int getCapacite()const;
+////////////	shared_ptr<Acteur>* getElements()const;
+////////////	int getNElements()const;
+////////////	void setElements(shared_ptr<Acteur> newElem, int index);
+////////////	void setCapacite(int newCap);
+////////////	void setNElements(int newNElem);
+////////////};
 
-class ListeActeurs {
+template <typename T>
+class Liste {
 private:
 	int capacite_, nElements_;
-	unique_ptr<shared_ptr<Acteur>[]> elements_;
+	unique_ptr<shared_ptr<T>[]> elements_;
 	// Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 public:
-	ListeActeurs();
-	ListeActeurs(const ListeActeurs& liste) {
+	
+	Liste();
+	Liste(int cap,int nElem, int[] leau);
+	Liste(const Liste& liste) {
 		nElements_ = liste.nElements_;
 		capacite_ = liste.capacite_;
-		elements_ = make_unique<shared_ptr<Acteur>[]>(capacite_);
+		elements_ = make_unique<shared_ptr<T>[]>(capacite_);
 		for (int i = 0; i < liste.nElements_; i++)
 		{
 			elements_[i] = liste.elements_[i];
 		}
 	}
 	int getCapacite()const;
-	shared_ptr<Acteur>* getElements()const;
+	shared_ptr<T>* getElements()const;
 	int getNElements()const;
-	void setElements(shared_ptr<Acteur> newElem, int index);
+	void setElements(shared_ptr<T> newElem, int index);
 	void setCapacite(int newCap);
 	void setNElements(int newNElem);
 };
+using ListeActeurs = Liste<Acteur>;
 class ListeFilms {
 public:
 	ListeFilms();
@@ -119,39 +123,40 @@ struct Acteur
 	//////	this->sexe = acteur.sexe;
 	//////}*/
 };
-
-ListeActeurs::ListeActeurs()
+template <typename T>
+Liste<T>::Liste()
 {
 	capacite_ = 1;
 	nElements_ = 0;
-	elements_ = make_unique<shared_ptr<Acteur>[]>(capacite_);
+	elements_ = make_unique<shared_ptr<T>[]>(capacite_);
 }
-
-int ListeActeurs::getCapacite() const
+template <typename T>
+int Liste<T>::getCapacite() const
 {
 	return capacite_;
 }
-shared_ptr<Acteur>* ListeActeurs::getElements() const
+template <typename T>
+shared_ptr<T>* Liste<T>::getElements() const
 {
 	return elements_.get();
 }
-
-int ListeActeurs::getNElements() const
+template <typename T>
+int Liste<T>::getNElements() const
 {
 	return nElements_;
 }
-
-void ListeActeurs::setElements(shared_ptr<Acteur> newElem, int index)
+template <typename T>
+void Liste<T>::setElements(shared_ptr<T> newElem, int index)
 {
 
 	elements_[index] = newElem;
 
 }
-
-void ListeActeurs::setCapacite(int newCap)
+template <typename T>
+void Liste<T>::setCapacite(int newCap)
 {
 	capacite_ = newCap;
-	unique_ptr<shared_ptr<Acteur> []> newElements = make_unique<shared_ptr<Acteur> []>(capacite_);
+	unique_ptr<shared_ptr<T> []> newElements = make_unique<shared_ptr<T> []>(capacite_);
 	for(int i=0;i<nElements_;i++)
 	{
 		newElements[i]= elements_[i];
@@ -159,7 +164,21 @@ void ListeActeurs::setCapacite(int newCap)
 	//elements_.get_deleter();
 	elements_ = move(newElements);
 }
-void ListeActeurs::setNElements(int newNElem)
+template <typename T>
+void Liste<T>::setNElements(int newNElem)
 {
 	nElements_ = newNElem;
 }
+
+template<typename T>
+Liste<T>::Liste(int cap, int nElem, int[] leau)
+{
+	capacite_ = cap;
+	nElements_ = nElem;
+	elements_ = make_unique<shared_ptr<T>[]>(capacite_);
+	for (int i = 0; i < nElements_; i++)
+	{
+		elements_[i] = tab[i];
+	}
+}
+
