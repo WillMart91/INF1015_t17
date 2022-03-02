@@ -273,9 +273,20 @@ int main()
 	//TODO: Faire les appels qui manquent pour avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; 
 			//c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes 
 			//du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
+	shared_ptr<string> ps1(new string("hello"));
+	shared_ptr<string> ps2(new string("world"));
+	unique_ptr<shared_ptr<string>[]> stringTab = make_unique<shared_ptr<string>[]>(2);
+	stringTab[0] = ps1;
+	stringTab[1] = ps2;
+	Liste<string> listeTextes = Liste(2, 2, stringTab);
+	Liste<string> listeTextes2 = listeTextes;
+	shared_ptr<string> ps3(new string("hello world"));
+	listeTextes.setElements(ps3, 0);
+	*listeTextes.getElements()[1]="bye";
 
-	Liste<string> listeTextes;
-	listeTextes.
+	listeTextes.afficher();
+	listeTextes2.afficher();
+
 
 	//TODO: Détruire tout avant de terminer le programme.  La bibliothèque de verification_allocation devrait afficher "Aucune fuite detectee." 
 			//a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.

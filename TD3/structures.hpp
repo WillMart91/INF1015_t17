@@ -60,7 +60,7 @@ private:
 public:
 	
 	Liste();
-	Liste(int cap,int nElem, int[] leau);
+	Liste(int cap,int nElem, const unique_ptr<shared_ptr<T>[]>& tab);
 	Liste(const Liste& liste) {
 		nElements_ = liste.nElements_;
 		capacite_ = liste.capacite_;
@@ -76,8 +76,11 @@ public:
 	void setElements(shared_ptr<T> newElem, int index);
 	void setCapacite(int newCap);
 	void setNElements(int newNElem);
+	void afficher()const;
 };
 using ListeActeurs = Liste<Acteur>;
+
+
 class ListeFilms {
 public:
 	ListeFilms();
@@ -171,7 +174,7 @@ void Liste<T>::setNElements(int newNElem)
 }
 
 template<typename T>
-Liste<T>::Liste(int cap, int nElem, int[] leau)
+Liste<T>::Liste(int cap, int nElem, const unique_ptr<shared_ptr<T>[]>& tab)
 {
 	capacite_ = cap;
 	nElements_ = nElem;
@@ -182,3 +185,11 @@ Liste<T>::Liste(int cap, int nElem, int[] leau)
 	}
 }
 
+template<typename T>
+void Liste<T>::afficher() const
+{
+	for (int i = 0; i < nElements_; i++)
+	{
+		cout << *elements_[i]<<endl;
+	}
+}
