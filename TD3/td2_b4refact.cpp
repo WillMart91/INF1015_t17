@@ -1,16 +1,19 @@
-﻿/*
-Programme modifié du TP2, permettant ainsi l'ajout de classes génériques, de fonctions lamda,
-								de pointeurs unique et partagés et de surcharges d'opérateurs
-\fichier   td2.cpp
-\auteurs Sawka et Martin
-\date   6 mars 2022
-Créé le 21 février 2022
-*/
-
-
-
-
+﻿//#pragma region "Includes"//{
+//#define _CRT_SECURE_NO_WARNINGS // On permet d'utiliser les fonctions de copies de chaînes qui sont considérées non sécuritaires.
+//
 #include "structures.hpp"      // Structures de données pour la collection de films en mémoire.
+//
+//#include <iostream>
+//#include <fstream>
+//#include <limits>
+//#include <algorithm>
+//
+//#include "cppitertools/range.hpp"
+//#include "gsl/span"
+//
+//#include "bibliotheque_cours.hpp"
+//#include "verification_allocation.hpp" // Nos fonctions pour le rapport de fuites de mémoire.
+//#include "debogage_memoire.hpp"        // Ajout des numéros de ligne des "new" dans le rapport de fuites.  Doit être après les include du système, qui peuvent utiliser des "placement new" (non supporté par notre ajout de numéros de lignes).
 
 using namespace std;
 using namespace iter;
@@ -60,7 +63,7 @@ void ListeFilms::ajouterFilm(Film* film)
 	{
 		capacite_ *= 2;
 		nouvelleListe = new Film * [capacite_];
-		for (int i : range(nElements_))
+		for (int i : range(0, nElements_))
 			nouvelleListe[i] = elements_[i];
 		delete[] elements_;
 		elements_ = nouvelleListe;
@@ -73,14 +76,14 @@ void ListeFilms::ajouterFilm(Film* film)
 //L'ordre des films dans la liste n'a pas à être conservé.
 void ListeFilms::retirerFilm(Film* film)
 {
-	for (int i : range(nElements_))
+	for (int i : range(0, nElements_))
 	{
 		if (elements_[i] == film)
 		{
 			elements_[i] = elements_[--nElements_];
 			elements_[nElements_] = nullptr;
 		}
-	} 
+	} //non couverte en raison du break
 }
 
 
@@ -114,11 +117,16 @@ shared_ptr<Acteur> lireActeur(istream& fichier, ListeFilms& liste)
 
 	shared_ptr<Acteur> ptrActeur = trouverActeur(liste, acteur.nom);
 
-	if (ptrActeur == nullptr) {
+	if (ptrActeur == nullptr)
+	{
 		return make_shared<Acteur>(acteur);
 	}
-
+	//on detruit la liste joueDans qu'on a créer a la ligne 117 car on ne savait pas encore si l'acteur existait déja
+	//acteur.joueDans.detruireListeFilms();
 	return ptrActeur;
+	//TODO: Retourner un pointeur soit vers un acteur existant ou un nouvel acteur ayant les bonnes informations,
+	//selon si l'acteur existait déjà.  Pour fins de débogage, affichez les noms des acteurs crées;
+	//vous ne devriez pas voir le même nom d'acteur affiché deux fois pour la création.
 }
 
 Film* lireFilm(istream& fichier, ListeFilms& liste)
@@ -129,14 +137,19 @@ Film* lireFilm(istream& fichier, ListeFilms& liste)
 	film->anneeSortie = lireUint16(fichier);
 	film->recette = lireUint16(fichier);
 	film->acteurs.setCapacite(lireUint8(fichier));
-
-	for (int i :range(film->acteurs.getCapacite()))
+	//film->acteurs.elements = new Acteur * [film->acteurs.capacite];
+	//NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.
+	//Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
+	for (int i :range(0,film->acteurs.getCapacite()))
 	{
 
 		shared_ptr<Acteur> acteur = lireActeur(fichier, liste); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
 		film->acteurs.setElements(acteur,i);
 		film->acteurs.setNElements((film->acteurs.getNElements())+1);
+		//acteur->joueDans.ajouterFilm(film);
+		
+
 	}
 	return film; //TODO: Retourner le pointeur vers le nouveau film.
 }
@@ -146,18 +159,46 @@ Film* lireFilm(istream& fichier, ListeFilms& liste)
 // et les acteurs qui ne jouent plus dans aucun films de la collection).
 //Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.
 //Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
-void detruireFilm(Film*& film) {
+void detruireFilm(Film*& film)
+{
+	///////*for (Acteur*& acteur : span(film->acteurs.getElements(), film->acteurs.getNElements()))
+	//////{
+	//////	acteur->joueDans.retirerFilm(film);
+	//////	if (acteur->joueDans.getNElements() == 0)
+	//////	{
+	//////		acteur->joueDans.detruireListeFilms();
+	//////		delete acteur;
+	//////	}
+	//////}*/
+	//delete[] film->acteurs.getElements().;
 	delete film;
 }
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 void ListeFilms::detruireListeFilms()
 {
+
 	for (Film*& film : span(elements_, nElements_))
 	{
 		detruireFilm(film);
 	}
 	delete[] elements_;
+
+
 }
+//////////void afficherActeur(const Acteur& acteur)
+//////////{
+//////////	cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
+//////////}
+
+//TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
+//////////void afficherFilm(Film* film) //Film*& ou Film& ou Film*
+//////////{
+//////////	cout << "  " << film->titre << ", " << film->realisateur << ", " << film->anneeSortie << ", " << film->recette << endl;
+//////////	for (shared_ptr<Acteur>& acteur : span(film->acteurs.getElements(), film->acteurs.getNElements()))
+//////////	{
+//////////		afficherActeur(*acteur);
+//////////	}
+//////////}
 
 void afficherFilm(Film* film) {
 	cout << (film);
@@ -175,6 +216,13 @@ void ListeFilms::afficherListeFilms()const
 	}
 }
 
+////////void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)
+////////{
+////////	//TODO: Utiliser votre fonction pour trouver l'acteur (au lieu de le mettre à nullptr).
+////////	const Acteur* acteur = trouverActeur(listeFilms, nomActeur);
+////////	acteur->joueDans.afficherListeFilms();
+////////}
+
 int main()
 {
 	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
@@ -191,6 +239,7 @@ int main()
 
 	cout << ligneDeSeparation << "Les films sont:" << endl;
 	listeFilms.afficherListeFilms();    //TODO: Afficher la liste des films.  Il devrait y en avoir 7.
+	//Film* f = listeFilms.getElements(2);
 
 	shared_ptr<Acteur> acteur = trouverActeur(listeFilms, "Benedict Cumberbatch"); //TODO: Modifier l'année de naissance de Benedict Cumberbatch pour être 1976 (elle était 0 dans les données lues du fichier).
 	acteur->anneeNaissance = 1976;                                        //Vous ne pouvez pas supposer l'ordre des films et des acteurs dans les listes, il faut y aller par son nom.
@@ -254,16 +303,29 @@ Film* ListeFilms::getElements(int index) {
 	return elements_[index];
 }
 
+ListeFilms::ListeFilms() {
+	capacite_ = 1;
+	nElements_ = 0;
+	elements_ = new Film * [capacite_];
+}
+
 ListeFilms::ListeFilms(const string& nomFichier)
 {
+	/*ListeFilms lF = creerListe(nomFichier);
+	capacite_ = lF.getCapacite();
+	nElements_ = lF.getNElements();
+	elements_ = lF.getElements();*/
 	ifstream fichier(nomFichier, ios::binary);
 	fichier.exceptions(ios::failbit);
+	//ListeFilms liste = { 0,0,new Film * [0] };
+	//ListeFilms liste = ListeFilms();
 	int nElements = lireUint16(fichier);
 	capacite_ = 1;
 	nElements_ = 0;
 	elements_ = new Film * [capacite_];
 
-	for (int i : range(nElements)) 
+
+	for (int i : range(0, nElements)) 
 	{
 		i;
 		(*this).ajouterFilm(lireFilm(fichier, *this)); //TODO: Ajouter le film à la liste.
@@ -285,71 +347,5 @@ Film* ListeFilms::trouverFilm(const function<bool(Film*&)>& critere)
 		if (critere(f))
 			return f;
 	}
-	//return nullptr; //cela n'arrive jamais --> couverture de code
-}
-
-template <typename T>
-Liste<T>::Liste()
-{
-	capacite_ = 1;
-	nElements_ = 0;
-	elements_ = make_unique<shared_ptr<T>[]>(capacite_);
-}
-template <typename T>
-int Liste<T>::getCapacite() const 
-{
-	return capacite_;
-}
-
-template <typename T>
-shared_ptr<T>* Liste<T>::getElements() const 
-{
-	return elements_.get();
-}
-
-template <typename T>
-int Liste<T>::getNElements() const 
-{
-	return nElements_;
-}
-
-template <typename T>
-void Liste<T>::setElements(shared_ptr<T> newElem, int index) 
-{
-	elements_[index] = newElem;
-}
-
-template <typename T>
-void Liste<T>::setCapacite(int newCap)
-{
-	capacite_ = newCap;
-	unique_ptr<shared_ptr<T>[]> newElements = make_unique<shared_ptr<T>[]>(capacite_);
-	elements_ = move(newElements);
-}
-
-template <typename T>
-void Liste<T>::setNElements(int newNElem) 
-{ 
-	nElements_ = newNElem; 
-}
-
-template<typename T>
-Liste<T>::Liste(int cap, int nElem, const unique_ptr<shared_ptr<T>[]>& tab)
-{
-	capacite_ = cap;
-	nElements_ = nElem;
-	elements_ = make_unique<shared_ptr<T>[]>(capacite_);
-	for (int i : range(nElements_))
-	{
-		elements_[i] = tab[i];
-	}
-}
-
-template<typename T>
-void Liste<T>::afficher() const
-{
-	for (int i : range(nElements_))  
-	{
-		cout << *elements_[i] << endl;
-	}
+	return nullptr;
 }
