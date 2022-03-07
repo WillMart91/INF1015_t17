@@ -1,3 +1,12 @@
+/*
+Programme modifié du TP2, permettant ainsi l'ajout de classes génériques, de fonctions lamda,
+								de pointeurs unique et partagés et de surcharges d'opérateurs
+\fichier   structures.hpp
+\auteurs Sawka et Martin
+\date   6 mars 2022
+Créé le 21 février 2022
+*/
+
 #pragma once
 // Structures mémoires pour une collection de films.
 
@@ -22,34 +31,6 @@ using namespace std;
 
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
-//struct ListeFilms {
-//	int capacite, nElements;
-//	Film** elements; // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
-//};
-
-////////////class ListeActeurs {
-////////////private:
-////////////	int capacite_, nElements_;
-////////////	unique_ptr<shared_ptr<Acteur> []> elements_;
-////////////	// Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-////////////public:
-////////////	ListeActeurs();
-////////////	ListeActeurs(const ListeActeurs& liste) {
-////////////		nElements_ = liste.nElements_;
-////////////		capacite_ = liste.capacite_;
-////////////		elements_ = make_unique<shared_ptr<Acteur>[]>(capacite_);
-////////////		for (int i = 0; i < liste.nElements_; i++)
-////////////		{
-////////////			elements_[i] = liste.elements_[i];
-////////////		}
-////////////	}
-////////////	int getCapacite()const;
-////////////	shared_ptr<Acteur>* getElements()const;
-////////////	int getNElements()const;
-////////////	void setElements(shared_ptr<Acteur> newElem, int index);
-////////////	void setCapacite(int newCap);
-////////////	void setNElements(int newNElem);
-////////////};
 
 template <typename T>
 class Liste {
@@ -58,7 +39,6 @@ private:
 	unique_ptr<shared_ptr<T>[]> elements_;
 	// Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 public:
-	
 	Liste();
 	Liste(int cap,int nElem, const unique_ptr<shared_ptr<T>[]>& tab);
 	Liste(const Liste& liste) {
@@ -80,10 +60,9 @@ public:
 };
 using ListeActeurs = Liste<Acteur>;
 
-
 class ListeFilms {
 public:
-	ListeFilms();
+	//ListeFilms(); //code coverage
 	ListeFilms(const string& nomFichier);
 	int getNElements()const;
 	Film** getElements()const;
@@ -119,77 +98,6 @@ struct Acteur
 	string nom ="unknown";
 	int anneeNaissance=2022;
 	char sexe='M';
-	//ListeFilms joueDans= ListeFilms();
-	///////*Acteur(const Acteur& acteur) {
-	//////	this->anneeNaissance = acteur.anneeNaissance;
-	//////	this->nom = acteur.nom;
-	//////	this->sexe = acteur.sexe;
-	//////}*/
 };
-template <typename T>
-Liste<T>::Liste()
-{
-	capacite_ = 1;
-	nElements_ = 0;
-	elements_ = make_unique<shared_ptr<T>[]>(capacite_);
-}
-template <typename T>
-int Liste<T>::getCapacite() const
-{
-	return capacite_;
-}
-template <typename T>
-shared_ptr<T>* Liste<T>::getElements() const
-{
-	return elements_.get();
-}
-template <typename T>
-int Liste<T>::getNElements() const
-{
-	return nElements_;
-}
-template <typename T>
-void Liste<T>::setElements(shared_ptr<T> newElem, int index)
-{
 
-	elements_[index] = newElem;
 
-}
-template <typename T>
-void Liste<T>::setCapacite(int newCap)
-{
-	capacite_ = newCap;
-	unique_ptr<shared_ptr<T> []> newElements = make_unique<shared_ptr<T> []>(capacite_);
-	for(int i=0;i<nElements_;i++)
-	{
-		newElements[i]= elements_[i];
-	}
-	//elements_.get_deleter();
-	elements_ = move(newElements);
-}
-template <typename T>
-void Liste<T>::setNElements(int newNElem)
-{
-	nElements_ = newNElem;
-}
-
-template<typename T>
-Liste<T>::Liste(int cap, int nElem, const unique_ptr<shared_ptr<T>[]>& tab)
-{
-	capacite_ = cap;
-	nElements_ = nElem;
-	elements_ = make_unique<shared_ptr<T>[]>(capacite_);
-	for (int i = 0; i < nElements_; i++)
-	{
-		elements_[i] = tab[i];
-	}
-}
-
-template<typename T>
-void Liste<T>::afficher() const
-{
-	for (int i = 0; i < nElements_; i++)
-	{
-		cout << *elements_[i]<<endl;
-	}
-}
