@@ -93,7 +93,7 @@ void ListeFilms::enleverFilm(const Film* film)
 	}
 }
 //]
-Livre* creerLivre(const string& info);
+unique_ptr<Livre> creerLivre(const string& info);
 // Fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 //[
 
@@ -172,7 +172,7 @@ void ListeFilms::detruire(bool possedeLesFilms)
 	delete[] elements;
 }
 
-vector<Item*> ajouterLivresVecteur(string nomFichier,vector<Item*> biblio)
+void ajouterLivresVecteur(string nomFichier, vector<unique_ptr<Item>>& biblio)
 {
 	ifstream f;
 	f.open(nomFichier);
@@ -184,18 +184,17 @@ vector<Item*> ajouterLivresVecteur(string nomFichier,vector<Item*> biblio)
 
 	}	
 	f.close();	
-	return biblio;
 }
-vector<Item*> ajouterFilmsVecteur(ListeFilms& listeFilms, vector<Item*> biblio)
+void ajouterFilmsVecteur(ListeFilms& listeFilms, vector<unique_ptr<Item>>& biblio)
 {
 	for (auto&& ptr:listeFilms.enSpan()) {
-		biblio.push_back(ptr);
+		biblio.push_back(make_unique<Film>(*ptr));
+		delete ptr;
 	}
-	return biblio;
 }
 
-Livre* creerLivre(const string& info) {
-	Livre* livre = new Livre;
+unique_ptr<Livre> creerLivre(const string& info) {
+	Livre livre;
 	int debut = 0;
 	for (int i:range(5))
 	{
@@ -210,26 +209,26 @@ Livre* creerLivre(const string& info) {
 		switch (i)
 		{
 		case 0:
-			livre->titre = temp;
+			livre.titre = temp;
 			break;
 		case 1:
 			
-			livre->anneeSortie = atoi(temp.c_str());
+			livre.anneeSortie = atoi(temp.c_str());
 
 			break;
 		case 2:
-			livre->auteur = temp;
+			livre.auteur = temp;
 			break;
 		case 3:
-			livre->milCopieVendue = atoi(temp.c_str());
+			livre.milCopieVendue = atoi(temp.c_str());
 			break;
 		case 4:
 			
-			livre->nbPages = atoi(temp.c_str());
+			livre.nbPages = atoi(temp.c_str());
 			break;
 		}
 	}
-	return livre;
+	return make_unique<Livre>(livre);
 }
 
 //]
@@ -242,6 +241,22 @@ ostream& operator<< (ostream& os, const Acteur& acteur)
 
 // Fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
 //[
+ostream& operator<< (ostream& os, const FilmLivre& filmlivre)
+{
+	os << "Titre: " << filmlivre.titre << endl;	
+	os << "Année :" << filmlivre.anneeSortie << endl;
+
+	os << "  Auteur: " << filmlivre.auteur << endl;
+	os << "  Copies vendue: " << filmlivre.milCopieVendue << "M" << endl;
+	os << "  Nombre de pages: " << filmlivre.nbPages << "pages" << endl;
+
+	os << "  Réalisateur: " << filmlivre.realisateur << endl;
+	os << "  Recette: " << filmlivre.recettesMil << "M$" << endl;
+	os << "Acteurs:" << endl;
+	for (const shared_ptr<Acteur>& acteur : filmlivre.acteurs.enSpan())
+		os << *acteur;
+	return os;
+}
 ostream& operator<< (ostream& os, const Film& film)
 {
 	os << "Titre: " << film.titre << endl;
@@ -272,6 +287,10 @@ void Item::print(ostream& os) const
 	os << "Titre: " << titre << endl;
 	os<< "Année :" << anneeSortie << endl;
 }
+void FilmLivre::print(ostream& os) const
+{
+	os << *this;
+}
 // Pas demandé dans l'énoncé de tout mettre les affichages avec surcharge, mais pourquoi pas.
 ostream& operator<< (ostream& os, const ListeFilms& listeFilms)
 {
@@ -283,26 +302,20 @@ ostream& operator<< (ostream& os, const ListeFilms& listeFilms)
 	}
 	return os;
 }
-ostream& operator<< (ostream& os, const vector<Item*>& biblio)
+ostream& operator<< (ostream& os, const vector<unique_ptr<Item>>& biblio)
 {
 	static const string ligneDeSeparation = //[
 		"\033[32m────────────────────────────────────────\033[0m\n";
 	os << ligneDeSeparation;
-	for (const Item* item : biblio) {
-		os << *item << ligneDeSeparation;
+	for (int i : range(biblio.size())) {
+		os << *(biblio[i]) << ligneDeSeparation;
 	}
 	return os;
 }
-void detruireBiblio(const vector<Item*>& biblio) {
-	int i = 1;
+void detruireBiblio(const vector<unique_ptr<Item>>& biblio) {
 	for (auto&& ptr:biblio) {
-		cout << *ptr<<endl;
-		if (i > 0) {
-			delete ptr;
-		}
-		
+		ptr.get_deleter();
 	}
-	
 }
 
 void Film::print(ostream& os)const
@@ -313,7 +326,12 @@ void Livre::print(ostream& os)const
 {
 	os << *this;
 }
+FilmLivre::FilmLivre(const Film& film, const Livre& livre):Film(film),Livre(livre)
+{
+	titre = film.titre;
+	anneeSortie = film.anneeSortie;
 
+}
 int main()
 {
 	#ifdef VERIFICATION_ALLOCATION_INCLUS
@@ -324,8 +342,9 @@ int main()
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
 	ListeFilms listeFilms = creerListe("films.bin");
-	vector<Item*> biblio = ajouterFilmsVecteur(listeFilms, biblio);
-	biblio = ajouterLivresVecteur("livres.txt", biblio);
+	vector<unique_ptr<Item>> biblio;
+	ajouterFilmsVecteur(listeFilms, biblio);
+	ajouterLivresVecteur("livres.txt", biblio);
 
 	//cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//// Le premier film de la liste.  Devrait être Alien.
@@ -393,6 +412,11 @@ int main()
 	//assert(listeFilms.size() == 6);
 	//// Détruire tout avant de terminer le programme.
 	listeFilms.detruire(false);
+	
+	cout << *biblio[4];
+	cout << *biblio[9];
+	FilmLivre fl = FilmLivre(*(dynamic_cast<Film*>(biblio[4].get())),*(dynamic_cast<Livre*>(biblio[9].get())));
+	biblio.push_back(make_unique<FilmLivre>(fl));
 	cout << biblio;
 	detruireBiblio(biblio);
 	//biblio.erase(biblio.begin());

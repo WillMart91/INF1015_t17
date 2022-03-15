@@ -77,20 +77,23 @@ struct Item {
 	int anneeSortie = 0;
 	string titre = "";
 	virtual void print(ostream& os) const;
+	virtual ~Item() = default ;
 };
-struct Film:Item
+struct Film:virtual public Item
 {
 	string realisateur=""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
 	int recettesMil=0; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs;
 	void print(ostream& os) const override;
+	virtual ~Film() = default;
 };
-struct Livre :Item {
+struct Livre :virtual public Item {
 public:
 	string auteur = "";
 	int milCopieVendue = 0; 
 	int nbPages = 0;
 	void print(ostream& os) const override;
+	virtual ~Livre() = default;
 };
 
 struct Acteur
@@ -98,4 +101,11 @@ struct Acteur
 	string nom; int anneeNaissance=0; char sexe='\0';
 };
 
+struct FilmLivre : Film, Livre 
+{
+	FilmLivre();
+	FilmLivre(const Film& film, const Livre& livre);
+	void print(ostream& os) const override;
+	virtual ~FilmLivre() = default;
+};
 
