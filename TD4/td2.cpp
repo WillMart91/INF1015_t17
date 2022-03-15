@@ -93,7 +93,7 @@ void ListeFilms::enleverFilm(const Film* film)
 	}
 }
 //]
-
+Livre* creerLivre(const string& info);
 // Fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 //[
 
@@ -172,52 +172,64 @@ void ListeFilms::detruire(bool possedeLesFilms)
 	delete[] elements;
 }
 
-Liste<Livre> creerListeLivre(string nomFichier)
+vector<Item*> ajouterLivresVecteur(string nomFichier,vector<Item*> biblio)
 {
-	Liste<Livre> listeLivres;
 	ifstream f;
 	f.open(nomFichier);
 
 	string test;
 	while (!ws(f).eof()) {
 		getline(f, test);
-		listeLivres.ajouter(creerLivre(test));
+		biblio.push_back(creerLivre(test));
+
 	}	
 	f.close();	
+	return biblio;
+}
+vector<Item*> ajouterFilmsVecteur(ListeFilms& listeFilms, vector<Item*> biblio)
+{
+	for (auto&& ptr:listeFilms.enSpan()) {
+		biblio.push_back(ptr);
+	}
+	return biblio;
 }
 
-shared_ptr<Livre> creerLivre(string info) {
-	Livre livre = {};
+Livre* creerLivre(const string& info) {
+	Livre* livre = new Livre;
 	int debut = 0;
 	for (int i:range(5))
 	{
 		string temp="";
-		while ((info[debut] != '\t')&& debut!=info.length()) {
-			temp += info[debut];
+		while ((info[debut] != '\t')&& (debut != info.length())) {
+			if (info[debut] != '"') {
+				temp += info[debut];
+			}
 			debut++;
 		}
 		debut++;
-		
 		switch (i)
 		{
 		case 0:
-			livre.titre = temp;
+			livre->titre = temp;
 			break;
 		case 1:
-			livre.anneeSortie = atoi(temp.c_str());
+			
+			livre->anneeSortie = atoi(temp.c_str());
+
 			break;
 		case 2:
-			livre.auteur = temp;
+			livre->auteur = temp;
 			break;
 		case 3:
-			livre.milCopieVendue = atoi(temp.c_str());
+			livre->milCopieVendue = atoi(temp.c_str());
 			break;
 		case 4:
-			livre.nbPages = atoi(temp.c_str());
+			
+			livre->nbPages = atoi(temp.c_str());
 			break;
 		}
 	}
-	return make_shared<Livre>(livre);
+	return livre;
 }
 
 //]
@@ -242,7 +254,24 @@ ostream& operator<< (ostream& os, const Film& film)
 	return os;
 }
 //]
-
+ostream& operator<< (ostream& os, const Livre& livre)
+{
+	os << "Titre: " << livre.titre << endl;
+	os << "  Auteur: " << livre.auteur << "  Année :" << livre.anneeSortie << endl;
+	os << "  Copies vendue: " << livre.milCopieVendue << "M" << endl;
+	os << "  Nombre de pages: " << livre.nbPages << "pages" << endl;
+	return os;
+}
+ostream& operator<< (ostream& os, const Item& item)
+{
+	item.print(os);
+	return os;
+}
+void Item::print(ostream& os) const
+{
+	os << "Titre: " << titre << endl;
+	os<< "Année :" << anneeSortie << endl;
+}
 // Pas demandé dans l'énoncé de tout mettre les affichages avec surcharge, mais pourquoi pas.
 ostream& operator<< (ostream& os, const ListeFilms& listeFilms)
 {
@@ -253,6 +282,36 @@ ostream& operator<< (ostream& os, const ListeFilms& listeFilms)
 		os << *film << ligneDeSeparation;
 	}
 	return os;
+}
+ostream& operator<< (ostream& os, const vector<Item*>& biblio)
+{
+	static const string ligneDeSeparation = //[
+		"\033[32m────────────────────────────────────────\033[0m\n";
+	os << ligneDeSeparation;
+	for (const Item* item : biblio) {
+		os << *item << ligneDeSeparation;
+	}
+	return os;
+}
+void detruireBiblio(const vector<Item*>& biblio) {
+	int i = 1;
+	for (auto&& ptr:biblio) {
+		cout << *ptr<<endl;
+		if (i > 0) {
+			delete ptr;
+		}
+		
+	}
+	
+}
+
+void Film::print(ostream& os)const
+{
+	os << *this;
+}
+void Livre::print(ostream& os)const
+{
+	os << *this;
 }
 
 int main()
@@ -265,74 +324,77 @@ int main()
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
 	ListeFilms listeFilms = creerListe("films.bin");
+	vector<Item*> biblio = ajouterFilmsVecteur(listeFilms, biblio);
+	biblio = ajouterLivresVecteur("livres.txt", biblio);
 
-	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-	// Le premier film de la liste.  Devrait être Alien.
-	cout << *listeFilms[0];
+	//cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
+	//// Le premier film de la liste.  Devrait être Alien.
+	//cout << *listeFilms[0];
 
-	// Tests chapitre 7:
-	ostringstream tamponStringStream;
-	tamponStringStream << *listeFilms[0];
-	string filmEnString = tamponStringStream.str();
-	assert(filmEnString == 
-		"Titre: Alien\n"
-		"  Réalisateur: Ridley Scott  Année :1979\n"
-		"  Recette: 203M$\n"
-		"Acteurs:\n"
-		"  Tom Skerritt, 1933 M\n"
-		"  Sigourney Weaver, 1949 F\n"
-		"  John Hurt, 1940 M\n"
-	);
+	//// Tests chapitre 7:
+	//ostringstream tamponStringStream;
+	//tamponStringStream << *listeFilms[0];
+	//string filmEnString = tamponStringStream.str();
+	//assert(filmEnString == 
+	//	"Titre: Alien\n"
+	//	"  Réalisateur: Ridley Scott  Année :1979\n"
+	//	"  Recette: 203M$\n"
+	//	"Acteurs:\n"
+	//	"  Tom Skerritt, 1933 M\n"
+	//	"  Sigourney Weaver, 1949 F\n"
+	//	"  John Hurt, 1940 M\n"
+	//);
 
-	cout << ligneDeSeparation << "Les films sont:" << endl;
-	// Affiche la liste des films.  Il devrait y en avoir 7.
-	cout << listeFilms;
+	//cout << ligneDeSeparation << "Les films sont:" << endl;
+	//// Affiche la liste des films.  Il devrait y en avoir 7.
+	//cout << listeFilms;
 
-	listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
+	//listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
 
-	// Tests chapitres 7-8:
-	// Les opérations suivantes fonctionnent.
-	Film skylien = *listeFilms[0];
-	skylien.titre = "Skylien";
-	skylien.acteurs[0] = listeFilms[1]->acteurs[0];
-	skylien.acteurs[0]->nom = "Daniel Wroughton Craig";
-	cout << ligneDeSeparation
-		<< "Les films copiés/modifiés, sont:\n"
-		<< skylien << *listeFilms[0] << *listeFilms[1] << ligneDeSeparation;
-	assert(skylien.acteurs[0]->nom == listeFilms[1]->acteurs[0]->nom);
-	assert(skylien.acteurs[0]->nom != listeFilms[0]->acteurs[0]->nom);
+	//// Tests chapitres 7-8:
+	//// Les opérations suivantes fonctionnent.
+	//Film skylien = *listeFilms[0];
+	//skylien.titre = "Skylien";
+	//skylien.acteurs[0] = listeFilms[1]->acteurs[0];
+	//skylien.acteurs[0]->nom = "Daniel Wroughton Craig";
+	//cout << ligneDeSeparation
+	//	<< "Les films copiés/modifiés, sont:\n"
+	//	<< skylien << *listeFilms[0] << *listeFilms[1] << ligneDeSeparation;
+	//assert(skylien.acteurs[0]->nom == listeFilms[1]->acteurs[0]->nom);
+	//assert(skylien.acteurs[0]->nom != listeFilms[0]->acteurs[0]->nom);
 
-	// Tests chapitre 10:
-	auto film955 = listeFilms.trouver([](const auto& f) { return f.recettesMil == 955; });
-	cout << "\nFilm de 955M$:\n" << *film955;
-	assert(film955->titre == "Le Hobbit : La Bataille des Cinq Armées");
-	assert(listeFilms.trouver([](const auto&) { return false; }) == nullptr); // Pour la couveture de code: chercher avec un critère toujours faux ne devrait pas trouver.
+	//// Tests chapitre 10:
+	//auto film955 = listeFilms.trouver([](const auto& f) { return f.recettesMil == 955; });
+	//cout << "\nFilm de 955M$:\n" << *film955;
+	//assert(film955->titre == "Le Hobbit : La Bataille des Cinq Armées");
+	//assert(listeFilms.trouver([](const auto&) { return false; }) == nullptr); // Pour la couveture de code: chercher avec un critère toujours faux ne devrait pas trouver.
 
-	// Tests chapitre 9:
-	Liste<string> listeTextes(2);
-	listeTextes.ajouter(make_shared<string>("Bonjour"));
-	listeTextes.ajouter(make_shared<string>("Allo"));
-	Liste<string> listeTextes2 = listeTextes;
-	listeTextes2[0] = make_shared<string>("Hi");
-	*listeTextes2[1] = "Allo!";
-	assert(*listeTextes[0] == "Bonjour");
-	assert(*listeTextes[1] == *listeTextes2[1]);
-	assert(*listeTextes2[0] == "Hi");
-	assert(*listeTextes2[1] == "Allo!");
-	listeTextes = move(listeTextes2);  // Pas demandé, mais comme j'ai fait la méthode on va la tester; noter que la couverture de code dans VisualStudio ne montre pas la couverture des constructeurs/opérateurs= =default.
-	assert(*listeTextes[0] == "Hi" && *listeTextes[1] == "Allo!");
-
-	// Détruit et enlève le premier film de la liste (Alien).
-	delete listeFilms[0];
-	listeFilms.enleverFilm(listeFilms[0]);
-
-	cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
-	cout << listeFilms;
-
-	// Pour une couverture avec 0% de lignes non exécutées:
-	listeFilms.enleverFilm(nullptr); // Enlever un film qui n'est pas dans la liste (clairement que nullptr n'y est pas).
-	assert(listeFilms.size() == 6);
-
-	// Détruire tout avant de terminer le programme.
-	listeFilms.detruire(true);
+	//// Tests chapitre 9:
+	//Liste<string> listeTextes(2);
+	//listeTextes.ajouter(make_shared<string>("Bonjour"));
+	//listeTextes.ajouter(make_shared<string>("Allo"));
+	//Liste<string> listeTextes2 = listeTextes;
+	//listeTextes2[0] = make_shared<string>("Hi");
+	//*listeTextes2[1] = "Allo!";
+	//assert(*listeTextes[0] == "Bonjour");
+	//assert(*listeTextes[1] == *listeTextes2[1]);
+	//assert(*listeTextes2[0] == "Hi");
+	//assert(*listeTextes2[1] == "Allo!");
+	//listeTextes = move(listeTextes2);  // Pas demandé, mais comme j'ai fait la méthode on va la tester; noter que la couverture de code dans VisualStudio ne montre pas la couverture des constructeurs/opérateurs= =default.
+	//assert(*listeTextes[0] == "Hi" && *listeTextes[1] == "Allo!");
+	//// Détruit et enlève le premier film de la liste (Alien).
+	////delete listeFilms[0];
+	//listeFilms.enleverFilm(listeFilms[0]);
+	//cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
+	////cout << listeFilms;
+	//// Pour une couverture avec 0% de lignes non exécutées:
+	//cout << "nfjdnvnfmbklfgmn" << endl;
+	//listeFilms.enleverFilm(nullptr); // Enlever un film qui n'est pas dans la liste (clairement que nullptr n'y est pas).
+	//assert(listeFilms.size() == 6);
+	//// Détruire tout avant de terminer le programme.
+	listeFilms.detruire(false);
+	cout << biblio;
+	detruireBiblio(biblio);
+	//biblio.erase(biblio.begin());
 }
+//bibliotheque_cours::BreakpointSurAllocations breakpointSurAllocations = { 9U, 14U, 18U, 19U, 21U, 22U, 24U, 29U, 30U, 34U, 39U, 43U, 44U, 48U, 49U, 53U, 54U, 58U, 63U, 67U, 68U, 72U, 73U, 81U, 87U, 91U, 92U, 94U, 95U, 97U, 101U, 107U, 111U, 112U, 114U, 115U, 117U, 122U, 123U, 127U, 133U, 141U, 142U, 146U, 147U, 151U, 152U, 156U, 157U, 164U, 165U, 167U, 169U, 170U, 172U, 175U, 176U, 178U, 181U, 182U, 184U, 206U, 220U, 225U, 232U, 237U, 244U, 258U, };

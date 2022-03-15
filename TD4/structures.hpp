@@ -76,19 +76,21 @@ using ListeActeurs = Liste<Acteur>;
 struct Item {
 	int anneeSortie = 0;
 	string titre = "";
-
+	virtual void print(ostream& os) const;
 };
 struct Film:Item
 {
 	string realisateur=""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
 	int recettesMil=0; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs;
+	void print(ostream& os) const override;
 };
 struct Livre :Item {
 public:
 	string auteur = "";
 	int milCopieVendue = 0; 
 	int nbPages = 0;
+	void print(ostream& os) const override;
 };
 
 struct Acteur
