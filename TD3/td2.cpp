@@ -273,7 +273,7 @@ ostream& operator<<(ostream& o, Film* film)
 {
 	o << "  " << film->titre << ", " << film->realisateur << ", " << film->anneeSortie << ", " << film->recette << endl;
 	for (shared_ptr<Acteur>& acteur : span(film->acteurs.getElements(), film->acteurs.getNElements())) {
-		o << "  " << acteur.get()->nom << ", " << acteur.get()->anneeNaissance << " " << acteur.get()->sexe << endl;
+		o << "  " << acteur->nom << ", " << acteur->anneeNaissance << " " << acteur->sexe << endl;
 	}
 	return o;
 }
