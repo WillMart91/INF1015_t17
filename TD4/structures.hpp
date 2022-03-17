@@ -13,6 +13,10 @@ using namespace std;
 
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
+struct Affichable {
+	virtual void print(ostream& os) const=0;
+};
+
 class ListeFilms {
 public:
 	ListeFilms() = default;
@@ -73,7 +77,7 @@ private:
 };
 using ListeActeurs = Liste<Acteur>;
 
-struct Item {
+struct Item : virtual Affichable {
 	int anneeSortie = 0;
 	string titre = "";
 	virtual void print(ostream& os) const;
