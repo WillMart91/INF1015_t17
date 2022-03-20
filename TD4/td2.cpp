@@ -81,17 +81,17 @@ void ListeFilms::ajouterFilm(Film* film)
 // On a juste fait une version const qui retourne un span non const.  C'est valide puisque c'est la struct qui est const et non ce qu'elle pointe.  Ça ne va peut-être pas bien dans l'idée qu'on ne devrait pas pouvoir modifier une liste const, mais il y aurais alors plusieurs fonctions à écrire en version const et non-const pour que ça fonctionne bien, et ce n'est pas le but du TD (il n'a pas encore vraiment de manière propre en C++ de définir les deux d'un coup).
 span<Film*> ListeFilms::enSpan() const { return span(elements, nElements); }
 
-void ListeFilms::enleverFilm(const Film* film)
-{
-	for (Film*& element : enSpan()) {  // Doit être une référence au pointeur pour pouvoir le modifier.
-		if (element == film) {
-			if (nElements > 1)
-				element = elements[nElements - 1];
-			nElements--;
-			return;
-		}
-	}
-}
+//void ListeFilms::enleverFilm(const Film* film) //fct du prof
+//{
+//	for (Film*& element : enSpan()) {  // Doit être une référence au pointeur pour pouvoir le modifier.
+//		if (element == film) {
+//			if (nElements > 1)
+//				element = elements[nElements - 1];
+//			nElements--;
+//			return;
+//		}
+//	}
+//}
 //]
 unique_ptr<Livre> creerLivre(const string& info);
 // Fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
@@ -164,11 +164,8 @@ ListeFilms creerListe(string nomFichier)
 // Fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 //[
 //NOTE: La bonne manière serait que la liste sache si elle possède, plutôt qu'on le dise au moment de la destruction, et que ceci soit le destructeur.  Mais ça aurait complexifié le TD2 de demander une solution de ce genre, d'où le fait qu'on a dit de le mettre dans une méthode.
-void ListeFilms::detruire(bool possedeLesFilms)
+void ListeFilms::detruire()
 {
-	if (possedeLesFilms)
-		for (Film* film : enSpan())
-			delete film;
 	delete[] elements;
 }
 
@@ -208,24 +205,22 @@ unique_ptr<Livre> creerLivre(const string& info) {
 		debut++;
 		switch (i)
 		{
-		case 0:
-			livre.titre = temp;
-			break;
-		case 1:
+			case 0 :
+				livre.titre = temp;
+				break;
+			case 1 :
+				livre.anneeSortie = atoi(temp.c_str());
+				break;
+			case 2 :
+				livre.auteur = temp;
+				break;
+			case 3 :
+				livre.milCopieVendue = atoi(temp.c_str());
+				break;
+			case 4 :
 			
-			livre.anneeSortie = atoi(temp.c_str());
-
-			break;
-		case 2:
-			livre.auteur = temp;
-			break;
-		case 3:
-			livre.milCopieVendue = atoi(temp.c_str());
-			break;
-		case 4:
-			
-			livre.nbPages = atoi(temp.c_str());
-			break;
+				livre.nbPages = atoi(temp.c_str());
+				break;
 		}
 	}
 	return make_unique<Livre>(livre);
@@ -279,15 +274,15 @@ ostream& operator<< (ostream& os, const Livre& livre)
 }
 ostream& operator<< (ostream& os, const Item& item)
 {
-	item.print(os);
+	item.Afficher(os);
 	return os;
 }
-void Item::print(ostream& os) const
+void Item::Afficher(ostream& os) const
 {
 	os << "Titre: " << titre << endl;
 	os<< "Année :" << anneeSortie << endl;
 }
-void FilmLivre::print(ostream& os) const
+void FilmLivre::Afficher(ostream& os) const
 {
 	os << *this;
 }
@@ -318,11 +313,11 @@ void detruireBiblio(const vector<unique_ptr<Item>>& biblio) {
 	}
 }
 
-void Film::print(ostream& os)const
+void Film::Afficher(ostream& os)const
 {
 	os << *this;
 }
-void Livre::print(ostream& os)const
+void Livre::Afficher(ostream& os)const
 {
 	os << *this;
 }
@@ -346,72 +341,8 @@ int main()
 	ajouterFilmsVecteur(listeFilms, biblio);
 	ajouterLivresVecteur("livres.txt", biblio);
 
-	//cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-	//// Le premier film de la liste.  Devrait être Alien.
-	//cout << *listeFilms[0];
 
-	//// Tests chapitre 7:
-	//ostringstream tamponStringStream;
-	//tamponStringStream << *listeFilms[0];
-	//string filmEnString = tamponStringStream.str();
-	//assert(filmEnString == 
-	//	"Titre: Alien\n"
-	//	"  Réalisateur: Ridley Scott  Année :1979\n"
-	//	"  Recette: 203M$\n"
-	//	"Acteurs:\n"
-	//	"  Tom Skerritt, 1933 M\n"
-	//	"  Sigourney Weaver, 1949 F\n"
-	//	"  John Hurt, 1940 M\n"
-	//);
-
-	//cout << ligneDeSeparation << "Les films sont:" << endl;
-	//// Affiche la liste des films.  Il devrait y en avoir 7.
-	//cout << listeFilms;
-
-	//listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
-
-	//// Tests chapitres 7-8:
-	//// Les opérations suivantes fonctionnent.
-	//Film skylien = *listeFilms[0];
-	//skylien.titre = "Skylien";
-	//skylien.acteurs[0] = listeFilms[1]->acteurs[0];
-	//skylien.acteurs[0]->nom = "Daniel Wroughton Craig";
-	//cout << ligneDeSeparation
-	//	<< "Les films copiés/modifiés, sont:\n"
-	//	<< skylien << *listeFilms[0] << *listeFilms[1] << ligneDeSeparation;
-	//assert(skylien.acteurs[0]->nom == listeFilms[1]->acteurs[0]->nom);
-	//assert(skylien.acteurs[0]->nom != listeFilms[0]->acteurs[0]->nom);
-
-	//// Tests chapitre 10:
-	//auto film955 = listeFilms.trouver([](const auto& f) { return f.recettesMil == 955; });
-	//cout << "\nFilm de 955M$:\n" << *film955;
-	//assert(film955->titre == "Le Hobbit : La Bataille des Cinq Armées");
-	//assert(listeFilms.trouver([](const auto&) { return false; }) == nullptr); // Pour la couveture de code: chercher avec un critère toujours faux ne devrait pas trouver.
-
-	//// Tests chapitre 9:
-	//Liste<string> listeTextes(2);
-	//listeTextes.ajouter(make_shared<string>("Bonjour"));
-	//listeTextes.ajouter(make_shared<string>("Allo"));
-	//Liste<string> listeTextes2 = listeTextes;
-	//listeTextes2[0] = make_shared<string>("Hi");
-	//*listeTextes2[1] = "Allo!";
-	//assert(*listeTextes[0] == "Bonjour");
-	//assert(*listeTextes[1] == *listeTextes2[1]);
-	//assert(*listeTextes2[0] == "Hi");
-	//assert(*listeTextes2[1] == "Allo!");
-	//listeTextes = move(listeTextes2);  // Pas demandé, mais comme j'ai fait la méthode on va la tester; noter que la couverture de code dans VisualStudio ne montre pas la couverture des constructeurs/opérateurs= =default.
-	//assert(*listeTextes[0] == "Hi" && *listeTextes[1] == "Allo!");
-	//// Détruit et enlève le premier film de la liste (Alien).
-	////delete listeFilms[0];
-	//listeFilms.enleverFilm(listeFilms[0]);
-	//cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
-	////cout << listeFilms;
-	//// Pour une couverture avec 0% de lignes non exécutées:
-	//cout << "nfjdnvnfmbklfgmn" << endl;
-	//listeFilms.enleverFilm(nullptr); // Enlever un film qui n'est pas dans la liste (clairement que nullptr n'y est pas).
-	//assert(listeFilms.size() == 6);
-	//// Détruire tout avant de terminer le programme.
-	listeFilms.detruire(false);
+	listeFilms.detruire();
 	
 	cout << *biblio[4];
 	cout << *biblio[9];

@@ -8,13 +8,15 @@
 #include <functional>
 #include <cassert>
 #include "gsl/span"
+#include "cppitertools/range.hpp"
 using gsl::span;
 using namespace std;
+using namespace iter;
 
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
 struct Affichable {
-	virtual void print(ostream& os) const=0;
+	virtual void Afficher(ostream& os) const=0;
 };
 
 class ListeFilms {
@@ -25,7 +27,7 @@ public:
 	shared_ptr<Acteur> trouverActeur(const string& nomActeur) const;
 	span<Film*> enSpan() const;
 	int size() const { return nElements; }
-	void detruire(bool possedeLesFilms = false);
+	void detruire();
 	Film*& operator[] (int index) { return elements[index]; }
 	Film* trouver(const function<bool(const Film&)>& critere) {
 		for (auto& film : enSpan())
@@ -55,7 +57,7 @@ public:
 		nElements_(autre.nElements_),
 		elements_(make_unique<shared_ptr<T>[]>(nElements_))
 	{
-		for (int i = 0; i < nElements_; ++i)
+		for (int i: range(nElements_))
 			elements_[i] = autre.elements_[i];
 	}
 	Liste(Liste<T>&&) = default;  // Pas nécessaire, mais puisque c'est si simple avec unique_ptr...
@@ -80,7 +82,7 @@ using ListeActeurs = Liste<Acteur>;
 struct Item : virtual Affichable {
 	int anneeSortie = 0;
 	string titre = "";
-	virtual void print(ostream& os) const;
+	virtual void Afficher(ostream& os) const;
 	virtual ~Item() = default ;
 };
 struct Film:virtual public Item
@@ -88,7 +90,7 @@ struct Film:virtual public Item
 	string realisateur=""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
 	int recettesMil=0; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs;
-	void print(ostream& os) const override;
+	void Afficher(ostream& os) const override;
 	virtual ~Film() = default;
 };
 struct Livre :virtual public Item {
@@ -96,7 +98,7 @@ public:
 	string auteur = "";
 	int milCopieVendue = 0; 
 	int nbPages = 0;
-	void print(ostream& os) const override;
+	void Afficher(ostream& os) const override;
 	virtual ~Livre() = default;
 };
 
@@ -109,7 +111,7 @@ struct FilmLivre : Film, Livre
 {
 	FilmLivre();
 	FilmLivre(const Film& film, const Livre& livre);
-	void print(ostream& os) const override;
+	void Afficher(ostream& os) const override;
 	virtual ~FilmLivre() = default;
 };
 
