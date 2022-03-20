@@ -81,18 +81,7 @@ void ListeFilms::ajouterFilm(Film* film)
 // On a juste fait une version const qui retourne un span non const.  C'est valide puisque c'est la struct qui est const et non ce qu'elle pointe.  Ça ne va peut-être pas bien dans l'idée qu'on ne devrait pas pouvoir modifier une liste const, mais il y aurais alors plusieurs fonctions à écrire en version const et non-const pour que ça fonctionne bien, et ce n'est pas le but du TD (il n'a pas encore vraiment de manière propre en C++ de définir les deux d'un coup).
 span<Film*> ListeFilms::enSpan() const { return span(elements, nElements); }
 
-//void ListeFilms::enleverFilm(const Film* film) //fct du prof
-//{
-//	for (Film*& element : enSpan()) {  // Doit être une référence au pointeur pour pouvoir le modifier.
-//		if (element == film) {
-//			if (nElements > 1)
-//				element = elements[nElements - 1];
-//			nElements--;
-//			return;
-//		}
-//	}
-//}
-//]
+
 unique_ptr<Livre> creerLivre(const string& info);
 // Fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 //[
