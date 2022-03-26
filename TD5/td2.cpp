@@ -16,6 +16,7 @@
 #include "cppitertools/range.hpp"
 #include "cppitertools/enumerate.hpp"
 #include "gsl/span"
+#include <forward_list>
 
 #if __has_include("gtest/gtest.h")
 #include "gtest/gtest.h"
@@ -272,7 +273,9 @@ Livre::Livre(istream& is) {
 	lireDe(is);
 }
 
-void afficherListeItems(span<unique_ptr<Item>> listeItems)
+
+template <typename T>
+void afficherListeItems(T& listeItems)
 {
 	static const string ligneDeSeparation = "\033[32m────────────────────────────────────────\033[0m\n";
 	cout << ligneDeSeparation;
@@ -280,6 +283,15 @@ void afficherListeItems(span<unique_ptr<Item>> listeItems)
 		cout << *item << ligneDeSeparation;
 	}
 }
+
+//void afficherListeItems(span<unique_ptr<Item>> listeItems)
+//{
+//	static const string ligneDeSeparation = "\033[32m────────────────────────────────────────\033[0m\n";
+//	cout << ligneDeSeparation;
+//	for (auto&& item : listeItems) {
+//		cout << *item << ligneDeSeparation;
+//	}
+//}
 
 #pragma region "Exemples de tests unitaires"//{
 #ifdef TEST
@@ -328,12 +340,12 @@ int main(int argc, char* argv[])
 
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
-	vector<unique_ptr<Item>> items;
+	vector<shared_ptr<Item>> items;
 	
 	{
 		ListeFilms listeFilms = creerListe("films.bin");
 		for (auto&& film : listeFilms.enSpan())
-			items.push_back(unique_ptr<Item>(film));  // On transert la possession.
+			items.push_back(shared_ptr<Item>(film));  // On transert la possession.
 		listeFilms.detruire();
 	}
 
@@ -341,10 +353,44 @@ int main(int argc, char* argv[])
 		ifstream fichier("livres.txt");
 		fichier.exceptions(ios::failbit);  // Pas demandé mais permet de savoir s'il y a une erreur de lecture.
 		while (!ws(fichier).eof())
-			items.push_back(make_unique<Livre>(fichier));
+			items.push_back(make_shared<Livre>(fichier));
 	}
 	
-	items.push_back(make_unique<FilmLivre>(dynamic_cast<Film&>(*items[4]), dynamic_cast<Livre&>(*items[9])));  // On ne demandait pas de faire une recherche; serait direct avec la matière du TD5.
+	items.push_back(make_shared<FilmLivre>(dynamic_cast<Film&>(*items[4]), dynamic_cast<Livre&>(*items[9])));  // On ne demandait pas de faire une recherche; serait direct avec la matière du TD5.
 
 	afficherListeItems(items);
+
+	// Declaring forward list
+	forward_list<shared_ptr<Item>> flist;
+	auto itDebut = flist.begin();
+	auto iterateur = itDebut;
+	//forward_list<int> flist1;
+	//flist1.assign({ 1, 2, 3 });
+	//auto endIt = flist1.end();
+	//auto beginIt = flist1.begin();
+	//flist1.insert_after(++beginIt, 1);
+
+	//for (int& a : flist1)
+	//	cout << a << " ";
+
+
+	//copy in order
+	//for (int i :range(items.size()))
+	//{
+
+	//	flist.insert_after(iterateur, move(items.front())); // make_shared<Item>(items.front())
+	//	++iterateur;
+	//}
+
+
+
+	////copy in reverse
+	//forward_list<unique_ptr<Item>> fListReversed;
+	//auto b4Begin = flist.before_begin();
+	//for (int i : range(flist.max_size()))
+	//{
+	//	flist.insert_after(b4Begin, flist.pop_front()); //use move 
+	//}
+
+	
 }

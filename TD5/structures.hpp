@@ -43,13 +43,13 @@ public:
 	Liste() = default;
 	Liste(int capaciteInitiale) :
 		capacite(capaciteInitiale),
-		elements(make_unique<shared_ptr<T>[]>(capacite))
+		elements(make_shared<shared_ptr<T>[]>(capacite))
 	{
 	}
 	Liste(const Liste<T>& autre) :
 		capacite(autre.nElements),
 		nElements(autre.nElements),
-		elements(make_unique<shared_ptr<T>[]>(nElements))
+		elements(make_shared<shared_ptr<T>[]>(nElements))
 	{
 		for (int i = 0; i < nElements; ++i)
 			elements[i] = autre.elements[i];
@@ -68,16 +68,21 @@ public:
 
 private:
 	int capacite = 0, nElements = 0;
-	unique_ptr<shared_ptr<T>[]> elements;
+	shared_ptr<shared_ptr<T>[]> elements;
 };
 
 using ListeActeurs = Liste<Acteur>;
+
+
 
 class Affichable {
 public:
 	virtual void afficherSur(ostream& os) const = 0;
 	virtual ~Affichable() = default;
 };
+
+
+
 
 class Item : public Affichable {
 public:
