@@ -293,6 +293,57 @@ void afficherListeItems(T& listeItems)
 //	}
 //}
 
+forward_list<shared_ptr<Item>> copierVecEnFList(vector<shared_ptr<Item>> items)
+{
+	forward_list<shared_ptr<Item>> flist;
+
+	for (int i : range(items.size())) //enlever i
+	{	
+		shared_ptr<Item> temp = items.back(); 
+		flist.push_front(temp);
+		items.pop_back();
+
+	}
+	return flist;
+}
+
+
+forward_list<shared_ptr<Item>> renverserFList(forward_list<shared_ptr<Item>> flist)
+{
+	forward_list<shared_ptr<Item>> flistRev;
+
+	for (auto iterateur = flist.begin(); iterateur != flist.end(); iterateur++) //enlever i
+	{
+		flistRev.push_front(*iterateur);
+	}
+	return flistRev;
+}
+
+forward_list<shared_ptr<Item>> copierFList(forward_list<shared_ptr<Item>> flist)
+{
+	forward_list<shared_ptr<Item>> flistCop;
+	auto posIt = flistCop.before_begin();
+	for (auto iterateur = flist.begin(); iterateur != flist.end(); iterateur++) 
+	{
+		flistCop.insert_after(posIt,*iterateur);
+		posIt++;
+	}
+	return flistCop;
+}
+
+
+vector<shared_ptr<Item>> copierFListEnVec(forward_list<shared_ptr<Item>> flist)
+{
+	vector<shared_ptr<Item>> vect;
+	for (auto iterateur = flist.begin(); iterateur != flist.end(); iterateur++) 
+	{
+		vect.insert(vect.begin(), *iterateur);
+	}
+	return vect;
+}
+
+
+
 #pragma region "Exemples de tests unitaires"//{
 #ifdef TEST
 // Pas demandés dans ce TD mais sert d'exemple.
@@ -360,37 +411,23 @@ int main(int argc, char* argv[])
 
 	afficherListeItems(items);
 
-	// Declaring forward list
-	forward_list<shared_ptr<Item>> flist;
-	auto itDebut = flist.begin();
-	auto iterateur = itDebut;
-	//forward_list<int> flist1;
-	//flist1.assign({ 1, 2, 3 });
-	//auto endIt = flist1.end();
-	//auto beginIt = flist1.begin();
-	//flist1.insert_after(++beginIt, 1);
 
-	//for (int& a : flist1)
-	//	cout << a << " ";
+	//1.1
+	forward_list<shared_ptr<Item>> flist = copierVecEnFList(items);
+	afficherListeItems(flist);
 
+	//1.2
+	forward_list<shared_ptr<Item>> flistrev = renverserFList(flist);
+	afficherListeItems(flistrev);
 
-	//copy in order
-	//for (int i :range(items.size()))
-	//{
+	//1.3
+	forward_list<shared_ptr<Item>> flistCop = copierFList(flist);
+	afficherListeItems(flistCop);
 
-	//	flist.insert_after(iterateur, move(items.front())); // make_shared<Item>(items.front())
-	//	++iterateur;
-	//}
+	//1.4
+	vector<shared_ptr<Item>> vect = copierFListEnVec(flist); //O(n)
+	afficherListeItems(vect);
 
 
-
-	////copy in reverse
-	//forward_list<unique_ptr<Item>> fListReversed;
-	//auto b4Begin = flist.before_begin();
-	//for (int i : range(flist.max_size()))
-	//{
-	//	flist.insert_after(b4Begin, flist.pop_front()); //use move 
-	//}
-
-	
+	return 0;
 }
