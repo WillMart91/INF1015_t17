@@ -17,6 +17,7 @@
 #include "cppitertools/enumerate.hpp"
 #include "gsl/span"
 #include <forward_list>
+#include <typeinfo>
 
 #if __has_include("gtest/gtest.h")
 #include "gtest/gtest.h"
@@ -383,6 +384,7 @@ TEST(tests_ListeFilms, trouver) {
 #endif
 #pragma endregion//}
 
+
 int main(int argc, char* argv[])
 {
 	initialiserBibliothequeCours(argc, argv);
@@ -390,7 +392,6 @@ int main(int argc, char* argv[])
 	//int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Detected memory leak" de "4 bytes" affiché dans la "Sortie", qui réfère à cette ligne du programme.
 
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-
 	vector<shared_ptr<Item>> items;
 	
 	{
@@ -427,7 +428,42 @@ int main(int argc, char* argv[])
 	//1.4
 	vector<shared_ptr<Item>> vect = copierFListEnVec(flist); //O(n)
 	afficherListeItems(vect);
+	//1.5
+	Film film = dynamic_cast<Film&>(*vect[0]);
+	for (auto&& acteur : film.acteurs) {
+		cout << acteur->nom<<endl;
+	}
+	cout << endl;
+	//2.1
+	map<string, shared_ptr<Item>> carte;
+	for (int i : range(vect.size()))
+	{
+		carte[vect[i]->titre]=vect[i];
+
+	}
+
+	for (auto it=carte.begin();it!=carte.end();it++)
+	{
+		cout << it->first<<" ";
+		cout << endl;
+
+	}
+	//2.2
+	unordered_map<string, shared_ptr<Item>> carteBrut;
+	for (auto it = carte.begin(); it != carte.end(); it++)
+	{
+		carteBrut[it->first] = it->second;
+
+	}
+	cout<< carteBrut["The Hobbit"]<<endl;
+	//3.1
+	vector<shared_ptr<Item>> v;
+	cout << typeid(flist.begin()->get()).name()<<endl;
+	copy_if(flist.begin(), flist.end(), v.begin(), [](shared_ptr<Item> i) {return dynamic_cast<Film*>(i.get()); });
+	
+	//3.2
 
 
 	return 0;
 }
+

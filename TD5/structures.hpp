@@ -6,6 +6,7 @@
 #include <memory>
 #include <functional>
 #include <cassert>
+#include <map>
 #include "gsl/span"
 using gsl::span;
 using namespace std;  // On le permet, mais j'ai écrit mon .hpp sans, avant de le permettre dans l'énoncé.
@@ -65,7 +66,8 @@ public:
 
 	shared_ptr<T>& operator[] (int index) { return elements[index]; }
 	span<shared_ptr<T>> enSpan() const { return span(elements.get(), nElements); }
-
+	auto begin() { return &elements[0]; }
+	auto end() { return &elements[nElements]; }
 private:
 	int capacite = 0, nElements = 0;
 	shared_ptr<shared_ptr<T>[]> elements;
