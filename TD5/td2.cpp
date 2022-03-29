@@ -18,6 +18,7 @@
 #include "gsl/span"
 #include <forward_list>
 #include <typeinfo>
+#include<numeric>
 
 #if __has_include("gtest/gtest.h")
 #include "gtest/gtest.h"
@@ -458,12 +459,12 @@ int main(int argc, char* argv[])
 	cout<< carteBrut["The Hobbit"]<<endl;
 	//3.1
 	vector<shared_ptr<Item>> v;
-	cout << typeid(flist.begin()->get()).name()<<endl;
-	copy_if(flist.begin(), flist.end(), v.begin(), [](shared_ptr<Item> i) {return dynamic_cast<Film*>(i.get()); });
 	
+	copy_if(flist.begin(), flist.end(), back_inserter(v), [](shared_ptr<Item> i) {return dynamic_cast<Film*>(i.get())!=NULL; });
+	cout << v[0]->titre << endl;
 	//3.2
-
-
+	int somme =transform_reduce(v.begin(), v.end(), 0, plus{}, [](shared_ptr<Item> i) { return dynamic_cast<Film*>(i.get())->recette; });
+	cout << somme;
 	return 0;
 }
 
