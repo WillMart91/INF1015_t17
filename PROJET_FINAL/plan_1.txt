@@ -1,0 +1,82 @@
+PLAN JEU D’ÉCHEC
+1-	Diagramme de classes
+
+						Classes : 
+AffichageJeux
+Int nb tour
+Bool enJeu = True
+AffichageJeux() //affiche la map une première fois avec toutes les pièces aux bons endroits
+// 	QT  permettant l’affichage complet 
+
+Joueur : AffichageJeux (bonne idée?)	
+-vector<Pièces> conteneurPieceRestante 
+-vector<Pièces> conteneurPieceDécédé
+-int nbPièceRestante
+-int nbMovements
+-bool equipeBlanc
+Joueur(bool equipeBlanc) //instancie toutes les pièces avec leurs positions
+Jouer()
+
+Position
+(int posX, int posY)
+
+Pièce : Joueur (bonne idée?)	    
+-Position pos
+void déplacer(Position newPos) 					
+virtual vector<Position> posPossible() = 0  //doit obligatoirement être ovverdie par l'enfant (la pièce en question)
+
+Pion : Pièce  
+-const int maxMouvementY = 1      //+/- 1 slon l'équipe
+vector<Position> posPossible() 
+Pion(Position posDepart)
+
+Tour : Pièce 
+-const int maxMouvementX : 7
+-const int maxMouvementY : 7
+vector<Position> posPossible()   //contrainte : un ou l'autre
+Tour(Position posDepart)
+
+Cavalier : Pièce 
+-const int maxMouvement1 : 2
+-const int maxMouvement2 : 1
+vector<Position> posPossible() //contrainte : un et l'autre 
+Cavalier(Position posDepart)
+
+Fou : Pièce 
+-const int maxMouvementX : 7
+-const int maxMouvementY : 7
+vector<Position> posPossible() //contrainte : un et l'autre (=)
+Cavalier(Position posDepart)
+
+Reine : Pièce 
+-const int maxMouvementX : 7
+-const int maxMouvementY : 7
+vector<Position> posPossible() //contrainte : un ou l'autre OU un et l'autre // or call fou.posPossible et tour.posPossible
+Reine() //if équipeBlanc
+
+Roi : Pièce 
+-const int maxMouvementX : 1
+-const int maxMouvementY : 1
+-static bool finPartie = false
+vector<Position> posPossible() //contrainte : un et l'autre (diag) OU un ou l'autre (nseo)
+Roi() //if équipeBlanc
+
+//Autre cas défi à régler
+-	Swap tour roi
+-	Match nul
+-	Pion mouvement x2 2 1er tour
+
+
+
+Int main()
+
+AffichageJeux();
+{
+	Int cpt = 0;
+ do
+		If(cpt %2)	//système de tour 
+			
+
+cpt++
+} while (AffichageJeux.Jeux.enJeu)
+)
