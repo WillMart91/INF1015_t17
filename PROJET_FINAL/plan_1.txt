@@ -16,9 +16,10 @@ Joueur : AffichageJeux (bonne idée?)
 -bool equipeBlanc
 Joueur(bool equipeBlanc) //instancie toutes les pièces avec leurs positions
 Jouer()
+TrouverPièce
 
 Position
-(int posX, int posY)
+(char posX, int posY)
 
 Pièce : Joueur (bonne idée?)	    
 -Position pos
@@ -27,8 +28,10 @@ virtual vector<Position> posPossible() = 0  //doit obligatoirement être ovverdi
 
 Pion : Pièce  
 -const int maxMouvementY = 1      //+/- 1 slon l'équipe
-vector<Position> posPossible() 
+vector<Position> posPossible()
+Ataquer()
 Pion(Position posDepart)
+ChangerPièce()
 
 Tour : Pièce 
 -const int maxMouvementX : 7
@@ -80,3 +83,19 @@ AffichageJeux();
 cpt++
 } while (AffichageJeux.Jeux.enJeu)
 )
+
+
+
+
+
+
+
+
+class : 
+Game
+Player : 
+Box :
+Position : 
+Piece 
+ 
+tower, king, queen,...
