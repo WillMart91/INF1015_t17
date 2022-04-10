@@ -2,62 +2,59 @@ PLAN JEU D’ÉCHEC
 1-	Diagramme de classes
 
 						Classes : 
-AffichageJeux
-Int nb tour
-Bool enJeu = True
-AffichageJeux() //affiche la map une première fois avec toutes les pièces aux bons endroits
-// 	QT  permettant l’affichage complet 
+Game
+Game()   //affiche la map tout au long du jeux
 
-Joueur : AffichageJeux (bonne idée?)	
--vector<Pièces> conteneurPieceRestante 
--vector<Pièces> conteneurPieceDécédé
--int nbPièceRestante
--int nbMovements
--bool equipeBlanc
-Joueur(bool equipeBlanc) //instancie toutes les pièces avec leurs positions
-Jouer()
-TrouverPièce
+
+
+Player : Game 
+
 
 Position
-(char posX, int posY)
+(int posX, int posY)
 
-Pièce : Joueur (bonne idée?)	    
--Position pos
-void déplacer(Position newPos) 					
-virtual vector<Position> posPossible() = 0  //doit obligatoirement être ovverdie par l'enfant (la pièce en question)
 
-Pion : Pièce  
+Board
+
+
+Box
+
+
+ChessPiece :     
+
+
+Pion : ChessPiece 
 -const int maxMouvementY = 1      //+/- 1 slon l'équipe
 vector<Position> posPossible()
 Ataquer()
 Pion(Position posDepart)
 ChangerPièce()
 
-Tour : Pièce 
+Tour : ChessPiece 
 -const int maxMouvementX : 7
 -const int maxMouvementY : 7
 vector<Position> posPossible()   //contrainte : un ou l'autre
 Tour(Position posDepart)
 
-Cavalier : Pièce 
+Cavalier : ChessPiece 
 -const int maxMouvement1 : 2
 -const int maxMouvement2 : 1
 vector<Position> posPossible() //contrainte : un et l'autre 
 Cavalier(Position posDepart)
 
-Fou : Pièce 
+Fou : ChessPiece 
 -const int maxMouvementX : 7
 -const int maxMouvementY : 7
 vector<Position> posPossible() //contrainte : un et l'autre (=)
 Cavalier(Position posDepart)
 
-Reine : Pièce 
+Reine : ChessPiece 
 -const int maxMouvementX : 7
 -const int maxMouvementY : 7
 vector<Position> posPossible() //contrainte : un ou l'autre OU un et l'autre // or call fou.posPossible et tour.posPossible
 Reine() //if équipeBlanc
 
-Roi : Pièce 
+Roi : ChessPiece 
 -const int maxMouvementX : 1
 -const int maxMouvementY : 1
 -static bool finPartie = false
@@ -71,20 +68,6 @@ Roi() //if équipeBlanc
 
 
 
-Int main()
-
-AffichageJeux();
-{
-	Int cpt = 0;
- do
-		If(cpt %2)	//système de tour 
-			
-
-cpt++
-} while (AffichageJeux.Jeux.enJeu)
-)
-
-
 
 
 
@@ -95,7 +78,19 @@ class :
 Game
 Player : 
 Box :
+Board:
 Position : 
 Piece 
  
 tower, king, queen,...
+
+
+
+is box/Piece necessary???
+
+NOTES :
+Board englobe tout le backend
+Game englode tout le visuel (frontend) + Déroulement jeu? (maybe)
+
+tips julien :
+create board dans main, puis send ref dans ctor de Game

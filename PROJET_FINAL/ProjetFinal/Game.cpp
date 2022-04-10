@@ -1,19 +1,20 @@
-
 #include "Game.h"
-#include "CalcWindow.hpp"
 
 
 using namespace Qt;
 
 Game::Game(QWidget* parent) :
-	QGraphicsView(parent)
+	QMainWindow(parent)
 {
 	scene = new QGraphicsScene();
 	view = new QGraphicsView();
-	
 	setFixedSize(1600, 1400);
+	//setScene(scene);
 
 	initializeGame();
+	
+	//for loop for game progress (eventually)
+	updateScene();
 
 	view->setScene(scene);
 	view->show();
@@ -30,12 +31,10 @@ void Game::initializeGame()
 		{
 			if ((i + j) % 2)
 			{
-				//Box box(HORIZONTAL_MARGIN + (i * SQUARE_SIZE), VERTICAL_MARGIN + (j * SQUARE_SIZE), SQUARE_SIZE, SQUARE_SIZE, red, 0.7);
 				drawRectangle(HORIZONTAL_MARGIN + (i * SQUARE_SIZE), VERTICAL_MARGIN + (j * SQUARE_SIZE), SQUARE_SIZE, SQUARE_SIZE, red, 0.7);
-			}	
+			}
 			else
 			{
-				//Box box(HORIZONTAL_MARGIN + (i * SQUARE_SIZE), VERTICAL_MARGIN + (j * SQUARE_SIZE), SQUARE_SIZE, SQUARE_SIZE, white, 1.0);
 				drawRectangle(HORIZONTAL_MARGIN + (i * SQUARE_SIZE), VERTICAL_MARGIN + (j * SQUARE_SIZE), SQUARE_SIZE, SQUARE_SIZE, white, 1.0);
 			}
 				
@@ -76,24 +75,39 @@ void Game::drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color,
 	rect->setBrush(color);
 	rect->setOpacity(opacity);
 	scene->addItem(rect);
+	
 }
 
+void Game::updateScene() //receves a chess piece ; deletes it ; copies it to the right place
+{
+	//delete previous items : scene->scene->removeItem
+	//place new item 
+	// maybe on side if elimination
 
 
+}
+
+//TEST : FAIRE APPARAITRE PIÈCE
+
+//QGraphicsPixmapItem *item = new QGraphicsPixmapItem();
+//QPixmap pix(":/ressources/pion.png");
+////QLabel* label = new QLabel();
+////label->setPixmap(pix);
+//item->setPixmap(pix);
+//item->setPos(100,100);
+//item->setScale(15);
+//scene->addItem(item);
 
 
+//QPixmap pix("C:/Users/Willm/Documents/Documents/POLY/Poly_session2/INF1015\INF1015_t17/PROJET_FINAL/ProjetFinal/ressources/knight.png");
+//QGraphicsPixmapItem* item = scene->addPixmap(pix);
 
-
-
-
-//void Game::drawText(int posX, int posY, float scale, string str)
-//{
-//	QGraphicsTextItem* text = new QGraphicsTextItem(str); //qgraphicsitem_cast<QGraphicsTextItem*>(str)
-//	text->setPos(posX, posY);
-//	text->setScale(scale);
-//	scene->addItem(text);
-//}
-
+////QLabel* label = new QLabel();
+////label->setPixmap(pix);
+//item->setPixmap(pix);
+//item->setPos(100,100);
+//item->setScale(15);
+//scene->addItem(item);
 
 
 
