@@ -8,7 +8,7 @@ Game::Game(QWidget* parent) :
 {
 	scene = new QGraphicsScene();
 	view = new QGraphicsView();
-	setFixedSize(1600, 1400);
+	setFixedSize(1600, 1000);
 	//setScene(scene);
 
 	initializeGame();
@@ -48,7 +48,7 @@ void Game::drawSides()
 	drawRectangle(0, VERTICAL_MARGIN, HORIZONTAL_MARGIN, NB_BOX * SQUARE_SIZE, darkBlue, 0.5); //left
 	drawRectangle(HORIZONTAL_MARGIN + NB_BOX* SQUARE_SIZE, VERTICAL_MARGIN, HORIZONTAL_MARGIN, NB_BOX*SQUARE_SIZE, darkBlue, 0.5); //right
 	drawRectangle(0, 0, HORIZONTAL_MARGIN*2 + NB_BOX * SQUARE_SIZE, VERTICAL_MARGIN, darkBlue, 0.5); //top
-	drawRectangle(0, NB_BOX * SQUARE_SIZE + VERTICAL_MARGIN, HORIZONTAL_MARGIN * 2 + NB_BOX * SQUARE_SIZE, SQUARE_SIZE, darkBlue, 0.5); //bottom
+	drawRectangle(0, NB_BOX * SQUARE_SIZE + VERTICAL_MARGIN, HORIZONTAL_MARGIN * 2 + NB_BOX * SQUARE_SIZE, SQUARE_SIZE/2, darkBlue, 0.5); //bottom
 	
 	//drawing players elim text
 	QGraphicsTextItem* player1 = new QGraphicsTextItem("Player 1's elimination :");
@@ -63,7 +63,7 @@ void Game::drawSides()
 
 	//drawing turns 
 	QGraphicsTextItem* turn = new QGraphicsTextItem("'s turn to play");
-	turn->setPos((HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE)/2 + 150, VERTICAL_MARGIN /4);
+	turn->setPos((HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE)/2 + 175, VERTICAL_MARGIN /6);
 	turn->setScale(5);
 	scene->addItem(turn);
 }
@@ -84,19 +84,25 @@ void Game::updateScene() //receves a chess piece ; deletes it ; copies it to the
 	//place new item 
 	// maybe on side if elimination
 
+	//QGraphicsPixmapItem *item = new QGraphicsPixmapItem();
+	//QPixmap pix("C:/Users/Willm/Documents/Documents/POLY/Poly_session2/INF1015\INF1015_t17/PROJET_FINAL/ProjetFinal/ressources/knight.png");
+	//QLabel* label = new QLabel();
+	//label->setPixmap(pix);
+	//item->setPixmap(pix);
+	//item->setPos(100, 100);
+	//item->setScale(15);
+	//scene->addItem(item);
+	//scene->addWidget(label);
 
+	//QPixmap pixmap = QPixmap("C:/Users/Willm/Documents/Documents/POLY/Poly_session2/INF1015\INF1015_t17/PROJET_FINAL/ProjetFinal/ressources/knight.png");
+	//QGraphicsPixmapItem* pixItem = new QGraphicsPixmapItem(pixmap);
+	//scene->addItem(pixItem);
+	//view->fitInView(pixItem);
 }
 
 //TEST : FAIRE APPARAITRE PIÈCE
 
-//QGraphicsPixmapItem *item = new QGraphicsPixmapItem();
-//QPixmap pix(":/ressources/pion.png");
-////QLabel* label = new QLabel();
-////label->setPixmap(pix);
-//item->setPixmap(pix);
-//item->setPos(100,100);
-//item->setScale(15);
-//scene->addItem(item);
+
 
 
 //QPixmap pix("C:/Users/Willm/Documents/Documents/POLY/Poly_session2/INF1015\INF1015_t17/PROJET_FINAL/ProjetFinal/ressources/knight.png");
