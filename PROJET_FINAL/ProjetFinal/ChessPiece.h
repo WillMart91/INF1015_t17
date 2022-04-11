@@ -5,12 +5,14 @@
 #include <QObject>
 #include <QGraphicsItem>
 
+#include <vector>
+
 class ChessPiece : public QObject, public QGraphicsPixmapItem
 {
 	Q_OBJECT
 public:
 	ChessPiece();
-	virtual Position calculateMoves() = 0;
+	virtual std::vector<Position> calculateMoves() = 0;
 
 };
 
