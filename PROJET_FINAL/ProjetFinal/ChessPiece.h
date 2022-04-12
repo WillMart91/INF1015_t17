@@ -1,5 +1,6 @@
 #pragma once
 #include "Position.h"
+#include "Board.h"
 
 #include <QGraphicsPixmapItem>
 #include <QObject>
@@ -11,8 +12,14 @@ class ChessPiece : public QObject, public QGraphicsPixmapItem
 {
 	Q_OBJECT
 public:
-	ChessPiece();
-	virtual std::vector<Position> calculateMoves() = 0;
+	virtual void calculateMoves(Board* board) = 0;
+	virtual std::vector<Position> getPossibleMoves();
+	bool isBlackTeam() { return isBlack; }
 
+private :
+	bool isBlack;
+
+	std::vector<Position> movesList;
+	const std::vector<std::vector<int, int>> direction;
 };
 

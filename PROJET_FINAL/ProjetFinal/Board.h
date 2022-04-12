@@ -1,12 +1,16 @@
 #include "Square.h"
 #include <vector>
-using namespace std;
 
 class Board
 {
 public:
 	Board();
 	//vector of box
-	vector<Square> chessBoard;
+	bool squareOccupied(Position pos);
+	void movePiece(ChessPiece piece, Position square);
+private:
+	std::vector < std::vector<Square>> chessBoard;
+
+
 };
 
