@@ -115,6 +115,8 @@
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="King.cpp" />
+    <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="Calc.cpp" />
     <ClCompile Include="CalcWindow.cpp" />
@@ -135,6 +137,8 @@
   <ItemGroup>
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="King.h" />
+    <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
     <QtMoc Include="ChessPiece.h" />
     <ClInclude Include="Position.h" />

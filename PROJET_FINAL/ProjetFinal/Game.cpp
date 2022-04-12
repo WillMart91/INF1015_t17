@@ -1,6 +1,7 @@
 #include "Game.h"
+#include "qchar.h"
 
-
+using namespace std;
 using namespace Qt;
 
 Game::Game(QWidget* parent) :
@@ -8,14 +9,13 @@ Game::Game(QWidget* parent) :
 {
 	scene = new QGraphicsScene();
 	view = new QGraphicsView();
-	setFixedSize(1600, 1000);
+	//setFixedSize(1600, 1000);
 	//setScene(scene);
 
 	initializeGame();
 	
 	//for loop for game progress (eventually)
 	updateScene();
-
 	view->setScene(scene);
 	view->show();
 }
@@ -36,10 +36,34 @@ void Game::initializeGame()
 			else
 			{
 				drawRectangle(HORIZONTAL_MARGIN + (i * SQUARE_SIZE), VERTICAL_MARGIN + (j * SQUARE_SIZE), SQUARE_SIZE, SQUARE_SIZE, white, 1.0);
-			}
-				
+			}	
 		}
 	}
+
+	drawPositions();
+}
+void Game::drawPositions()
+{
+	//vertical
+	for (int i = 1; i <= 8; i++)
+	{
+		drawText(QString::number(i), HORIZONTAL_MARGIN - 15, VERTICAL_MARGIN + SQUARE_SIZE * i - 50, 1);
+	}
+
+	//horizontal
+	vector<QString> tab = { "a","b","c","d","e","f","g","h"};
+	for (int i = 0; i < 8; i++)
+	{
+		drawText(tab[i], HORIZONTAL_MARGIN + SQUARE_SIZE * (i+1) - 50, VERTICAL_MARGIN + NB_BOX*SQUARE_SIZE, 1);
+	}
+}
+
+void Game::drawText(QString str, int posX, int posY, int scale )
+{
+	QGraphicsTextItem* player1 = new QGraphicsTextItem(str);
+	player1->setPos(posX, posY);
+	player1->setScale(scale);
+	scene->addItem(player1);
 }
 
 void Game::drawSides()
@@ -51,21 +75,13 @@ void Game::drawSides()
 	drawRectangle(0, NB_BOX * SQUARE_SIZE + VERTICAL_MARGIN, HORIZONTAL_MARGIN * 2 + NB_BOX * SQUARE_SIZE, SQUARE_SIZE/2, darkBlue, 0.5); //bottom
 	
 	//drawing players elim text
-	QGraphicsTextItem* player1 = new QGraphicsTextItem("Player 1's elimination :");
-	player1->setPos(10, VERTICAL_MARGIN-50);
-	player1->setScale(3);
-	scene->addItem(player1);
+	drawText("Player 1's elimination", 0, VERTICAL_MARGIN - 40, 2);
 
-	QGraphicsTextItem* player2 = new QGraphicsTextItem("Player 2's elimination :");
-	player2->setPos(HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE + 10, VERTICAL_MARGIN - 50);
-	player2->setScale(3);
-	scene->addItem(player2);
+	//QGraphicsTextItem* player2 = new QGraphicsTextItem("Player 2's elimination");
+	drawText("Player 2's elimination", HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE - 5, VERTICAL_MARGIN - 40, 2);
 
 	//drawing turns 
-	QGraphicsTextItem* turn = new QGraphicsTextItem("'s turn to play");
-	turn->setPos((HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE)/2 + 175, VERTICAL_MARGIN /6);
-	turn->setScale(5);
-	scene->addItem(turn);
+	drawText("'s turn to play", (HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE) / 2 + 50, VERTICAL_MARGIN / 6, 3);
 }
 
 void Game::drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity)
@@ -74,6 +90,8 @@ void Game::drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color,
 	rect->setRect(posX, posY, sizeX, sizeY);
 	rect->setBrush(color);
 	rect->setOpacity(opacity);
+	//view->fitInView(rect, Qt::KeepAspectRatio);
+	//rect->setScale(2);
 	scene->addItem(rect);
 	
 }
