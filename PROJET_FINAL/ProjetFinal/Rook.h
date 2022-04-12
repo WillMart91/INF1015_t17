@@ -2,9 +2,9 @@
 class Rook :public ChessPiece
 {
 public:
-    Rook(bool blackTeam, QGraphicsItem* parent = 0);
+    Rook(bool isBlackTeam, QGraphicsItem* parent = 0);
 
-    void setImage();
+    void setImage(bool isBlackTeam);
     std::vector<Position> calculateMoves();
 
 };
