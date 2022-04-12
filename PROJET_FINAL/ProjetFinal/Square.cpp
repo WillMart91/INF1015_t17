@@ -1,9 +1,12 @@
 #include "Square.h"
 
-
-Square::Square(int posX, int posY)
+Square::Square(int rank, int file)
 {
-	int _posX = posX;
-	int _posY = posY;
+	position = Position(rank, file);
+	pieceOnMe = nullptr;
+}
 
+bool Square::friendlyOccupied(ChessPiece* piece)
+{
+	return piece->isBlackTeam()==pieceOnMe->isBlackTeam();
 }
