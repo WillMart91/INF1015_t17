@@ -1,4 +1,3 @@
-//#include "Calc.hpp"
 
 #pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
 #include <QMainWindow>
@@ -15,15 +14,14 @@
 #include <QPointF> //F for float + more fctions 
 #include <QPixmap>
 #include <QString>
-//#include <QtGui>
-
+#include <QPushButton>
 #include <cppitertools/range.hpp>
-
-//#include "Box.h"
+#include "Position.h"
 #include <QMouseEvent>
+#include "button.h"
 
-namespace FrontEnd {
-	class Game : public QMainWindow {
+//namespace FrontEnd {
+	class Game : public QGraphicsView {
 		Q_OBJECT
 
 	public:
@@ -35,23 +33,11 @@ namespace FrontEnd {
 		void updateScene();//send board
 		void drawPositions();
 		void drawText(QString str, int posX, int posY, int scale);
+		void settupPossibleLocation(); 
+		void createButton(Position pos);
 		void startGame();
-
+		void Action();
 
 		QGraphicsView* view;
 		QGraphicsScene* scene;
-
-		//const int HORIZONTAL_MARGIN = 100;
-		//const int VERTICAL_MARGIN = 50;
-		//const int SQUARE_SIZE = 50;
-		//const int NB_BOX = 8;
-
-		const int HORIZONTAL_MARGIN = 200;
-		const int VERTICAL_MARGIN = 100;
-		const int SQUARE_SIZE = 100;
-		const int NB_BOX = 8;
 	};
-}
-
-//height: parent.height*0.2
-//width: parent.width

@@ -1,6 +1,6 @@
-#include "ChessPiece.h"
-
-std::vector<Position> ChessPiece::getPossibleMoves()
-{
-    return movesList;
-}
+//#include "ChessPiece.h"
+//
+//std::vector<Position> ChessPiece::getPossibleMoves()
+//{
+//    return movesList;
+//}

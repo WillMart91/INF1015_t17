@@ -64,6 +64,12 @@
     <ClCompile Include="King.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bishop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Calc.hpp">
@@ -75,7 +81,7 @@
     <QtMoc Include="Game.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ChessPiece.h">
+    <QtMoc Include="Button.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -93,6 +99,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="King.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bishop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessPiece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalConst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
