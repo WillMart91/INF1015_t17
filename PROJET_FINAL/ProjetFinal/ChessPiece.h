@@ -1,12 +1,13 @@
 #pragma once
 #include "Position.h"
-#include "Board.h"
 
 #include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QGraphicsItem>
 
 #include <vector>
+
+class Board;
 
 class ChessPiece : public QObject, public QGraphicsPixmapItem
 {

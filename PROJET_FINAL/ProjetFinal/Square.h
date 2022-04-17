@@ -1,5 +1,6 @@
 #include "ChessPiece.h"
-#include "Position.h"
+
+class Position;
 
 class Square
 {
