@@ -3,19 +3,25 @@
 #include "Position.h"
 #include "GlobalConst.h"
 
+using namespace Qt;
+
 class Button :public QObject, public QGraphicsRectItem {
     Q_OBJECT
 public:
     // constructors
-    Button(Position position, QGraphicsItem* parent = NULL);
+    Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent = NULL);
 
     // public methods (events)
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
+    void clickEvent(QGraphicsSceneMouseEvent* event);
+    void hoverEvent(QGraphicsSceneHoverEvent* event);
+    void offHoverEvent(QGraphicsSceneHoverEvent* event);
+    Position getPos();
 signals:
     void Pressed();
 private:
     QGraphicsTextItem* text;
     Position pos;
+    QColor color1;
+    QColor color2;
+
 };

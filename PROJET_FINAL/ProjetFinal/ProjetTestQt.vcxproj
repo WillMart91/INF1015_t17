@@ -117,6 +117,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="King.cpp" />
+    <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="Calc.cpp" />
@@ -141,9 +142,10 @@
     <QtMoc Include="Button.h" />
     <ClInclude Include="GlobalConst.h" />
     <ClInclude Include="King.h" />
+    <QtMoc Include="Pawn.h" />
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
-    <ClInclude Include="ChessPiece.h" />
+    <QtMoc Include="ChessPiece.h" />
     <ClInclude Include="Position.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

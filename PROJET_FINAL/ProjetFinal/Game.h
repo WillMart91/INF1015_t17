@@ -20,10 +20,14 @@
 #include <QMouseEvent>
 #include "button.h"
 
+//#include "Pawn.h"
+
 //namespace FrontEnd {
 	class Game : public QGraphicsView {
 		Q_OBJECT
 
+	public slots:
+		void Action(Position pos);
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
@@ -32,12 +36,21 @@
 		void drawSides();
 		void updateScene();//send board
 		void drawPositions();
-		void drawText(QString str, int posX, int posY, int scale);
+		void drawText(QString str, int posX, int posY, int scale, QColor color);
 		void settupPossibleLocation(); 
 		void createButton(Position pos);
 		void startGame();
-		void Action();
+		void setupWhiteTeam();
+		void setupBlackTeam();
+		void showPieces();
+		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
+		void setupTeam(QColor color);
+		void mouvementPiece(Position pos1, Position pos2);
+
 
 		QGraphicsView* view;
 		QGraphicsScene* scene;
+		//map<pair<int, int>, QGraphicsTextItem*> piecesContainer;
+		QGraphicsTextItem* mat[8][8];
+		
 	};
