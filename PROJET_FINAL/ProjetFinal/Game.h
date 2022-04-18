@@ -19,6 +19,8 @@
 #include "Position.h"
 #include <QMouseEvent>
 #include "button.h"
+#include "AbsPiece.h"
+#include <QMessageBox>
 
 //#include "Pawn.h"
 
@@ -27,7 +29,7 @@
 		Q_OBJECT
 
 	public slots:
-		void Action(Position pos);
+		void Action();
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
@@ -40,8 +42,6 @@
 		void settupPossibleLocation(); 
 		void createButton(Position pos);
 		void startGame();
-		void setupWhiteTeam();
-		void setupBlackTeam();
 		void showPieces();
 		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
 		void setupTeam(QColor color);
@@ -52,5 +52,7 @@
 		QGraphicsScene* scene;
 		//map<pair<int, int>, QGraphicsTextItem*> piecesContainer;
 		QGraphicsTextItem* mat[8][8];
+		AbsPiece* matPiece[8][8];
+
 		
 	};

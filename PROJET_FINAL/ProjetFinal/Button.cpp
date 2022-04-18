@@ -2,34 +2,32 @@
 #include <QGraphicsTextItem>
 #include <QBrush>
 
-Button::Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem *parent): QGraphicsRectItem(parent){
+Button::Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) {
 
     color1 = baseColor;
     color2 = hoverColor;
     pos = position;
-    setRect(pos.rank , pos.file, sizeX, sizeY);
-    
+    setRect(pos.rank, pos.file, sizeX, sizeY);
+    //setScale(3);
 
     QBrush brush;
     brush.setStyle(SolidPattern);
     brush.setColor(color1);
     setBrush(brush);
 
-    //text = new QGraphicsTextItem("G", this);
-    //text->setScale(3);
-    ////int xPos = rect().width() / 2 - text->boundingRect().width() / 2;
-    ////int yPos = rect().height() / 2 - text->boundingRect().height() / 2;
-    //text->setPos(pos.rank, pos.file);
-
     setAcceptHoverEvents(true);
 }
 
-void Button::clickEvent(QGraphicsSceneMouseEvent *event)
+void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     emit Pressed();
+    QBrush brush;
+    brush.setStyle(SolidPattern);
+    brush.setColor(red);
+    setBrush(brush);
 }
 
-void Button::hoverEvent(QGraphicsSceneHoverEvent *event)
+void Button::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 {
     QBrush brush;
     brush.setStyle(SolidPattern);
@@ -37,7 +35,7 @@ void Button::hoverEvent(QGraphicsSceneHoverEvent *event)
     setBrush(brush);
 }
 
-void Button::offHoverEvent(QGraphicsSceneHoverEvent *event)
+void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 {
     QBrush brush;
     brush.setStyle(SolidPattern);

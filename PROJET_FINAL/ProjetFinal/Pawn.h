@@ -1,7 +1,7 @@
-#include "Chesspiece.h"
+#include "AbsPiece.h"
 
-class Pawn : public ChessPiece
+class Pawn : public AbsPiece
 {
 public:
-	Pawn(QGraphicsItem* parent);
+	Pawn(bool blackTeam, Position beginPos, QGraphicsItem* parent);
 };

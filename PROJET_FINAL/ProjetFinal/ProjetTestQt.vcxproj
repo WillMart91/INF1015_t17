@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbsPiece.cpp" />
     <ClCompile Include="bibliotheque_cours\bibliotheque_cours.cpp" />
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
     <ClCompile Include="Bishop.cpp" />
@@ -122,7 +123,6 @@
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="Calc.cpp" />
     <ClCompile Include="CalcWindow.cpp" />
-    <ClCompile Include="ChessPiece.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="googletest\src\gtest-all.cc" />
     <ClCompile Include="main.cpp" />
@@ -137,15 +137,15 @@
     <QtMoc Include="Game.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="AbsPiece.h" />
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Board.h" />
     <QtMoc Include="Button.h" />
     <ClInclude Include="GlobalConst.h" />
     <ClInclude Include="King.h" />
-    <QtMoc Include="Pawn.h" />
+    <ClInclude Include="Pawn.h" />
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
-    <QtMoc Include="ChessPiece.h" />
     <ClInclude Include="Position.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

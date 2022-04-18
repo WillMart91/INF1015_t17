@@ -57,13 +57,13 @@ using namespace std;
 				if ((i + j) % 2)
 				{
 					Button* playButton = new Button(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
-					//connect(playButton, SIGNAL(Pressed()), this, SLOT(Action(playButton->getPos())));
+					connect(playButton, SIGNAL(Pressed()), this, SLOT(Action()));
 					scene->addItem(playButton);
 				}
 				else
 				{
 					Button* playButton = new Button(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
-					//connect(playButton, SIGNAL(Pressed()), this, SLOT(Action(playButton->getPos())));
+					connect(playButton, SIGNAL(Pressed()), this, SLOT(Action()));
 					scene->addItem(playButton);
 				}
 			}
@@ -127,9 +127,13 @@ using namespace std;
 		mat[0][v] = createPiece("♜",0,v, color);
 		mat[7][v] = createPiece("♜",7,v, color);
 
+
+
 		for (int i = 0; i < 8; i++)
 		{
 			mat[i][w] = createPiece("♟",i,w, color);
+			//Pawn* piece = new Pawn(true,pos);
+			//matPiece[i][w] = piece;
 		}
 	}
 
@@ -143,9 +147,12 @@ using namespace std;
 	}
 
 
-	void Game::Action(Position pos)
+	void Game::Action()
 	{
-		drawRectangle(pos.rank * 100, pos.file * 100, 300, 300, red, 1);
+		
+		QMessageBox::about(this, "Position of the tile : (x)" , "");
+
+		//drawRectangle(pos.rank * 100, pos.file * 100, 300, 300, red, 1);
 	}
 
 	void Game::createButton(Position pos) //to be removed
