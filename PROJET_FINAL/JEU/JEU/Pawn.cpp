@@ -18,6 +18,5 @@ std::vector<Square> Pawn::getValidPositions(const std::vector<std::vector<AbsPie
         }
     }
     return moves;
-
 }
 
