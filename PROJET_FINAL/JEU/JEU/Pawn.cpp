@@ -7,6 +7,7 @@ Pawn::Pawn(bool blackTeam, Square beginPos) :AbsPiece(blackTeam,beginPos)
 std::vector<Square> Pawn::getValidPositions(const std::vector<std::vector<AbsPiece*>> chessBoard)
 {
     Square pos = getPosition();
+    //creer un clone pour en passant
     std::vector<Square> moves = { pos + direction[0]*range * (-1 ^ isBlackTeam()) };
     if (inStartPos()) {
         moves.push_back(pos + direction[0] * (range + 1)*(-1^ isBlackTeam()));
