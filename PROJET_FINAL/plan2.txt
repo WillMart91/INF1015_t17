@@ -1,0 +1,7 @@
+1- changer array to  map<pair> when absPiece + Piece is operationnal 
+2- revoir déroulement/affichge linéraire du jeu
+3- delete all raw ptr (cours sur qt)
+
+scene est evoyé aux enfant, donc ds dstructeur, s'occupe d'enlever la pièce
+
+piece seront des unique_ptr : =nullptr qd il se font manger, move dans un déplacement

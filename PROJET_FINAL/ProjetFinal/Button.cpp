@@ -2,38 +2,43 @@
 #include <QGraphicsTextItem>
 #include <QBrush>
 
-Button::Button(Position position, QGraphicsItem *parent): QGraphicsRectItem(parent){
+Button::Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) {
 
+    color1 = baseColor;
+    color2 = hoverColor;
     pos = position;
-    setRect(HORIZONTAL_MARGIN + (pos.rank - 1) * SQUARE_SIZE + 10, VERTICAL_MARGIN + (pos.file - 1) * SQUARE_SIZE + 10, 80, 80);
+    setRect(HORIZONTAL_MARGIN + (position.rank * SQUARE_SIZE), VERTICAL_MARGIN + (position.file * SQUARE_SIZE), sizeX, sizeY);
     QBrush brush;
-    brush.setStyle(Qt::Dense3Pattern);
-    brush.setColor(Qt::blue);
+    brush.setStyle(SolidPattern);
+    brush.setColor(color1);
     setBrush(brush);
-
     setAcceptHoverEvents(true);
 }
 
-void Button::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    emit Pressed();
+void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    emit Clicked();
+}
+
+void Button::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+{
+    emit Hovered();
     QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::blue);
+    brush.setStyle(SolidPattern);
+    brush.setColor(color2);
     setBrush(brush);
 }
 
-void Button::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
-    // change color to cyan
+void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
+{
+    emit OffHovered();
     QBrush brush;
-    brush.setStyle(Qt::Dense4Pattern);
-    brush.setColor(Qt::blue);
+    brush.setStyle(SolidPattern);
+    brush.setColor(color1);
     setBrush(brush);
 }
 
-void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
-    // change color to dark cyan
-    QBrush brush;
-    brush.setStyle(Qt::Dense3Pattern);
-    brush.setColor(Qt::blue);
-    setBrush(brush);
+Position Button::getPos()
+{
+    return pos;
 }
