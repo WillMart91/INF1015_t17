@@ -1,10 +1,5 @@
 #include "AbsPiece.h"
 
-bool AbsPiece::isAlive()
-{
-    return alive_;
-}
-
 AbsPiece::AbsPiece(bool blackTeam, Square position)
 {
     blackTeam_ = blackTeam;
@@ -13,7 +8,3 @@ AbsPiece::AbsPiece(bool blackTeam, Square position)
     alive_ = true;
 }
 
-Square AbsPiece::getPosition()
-{
-    return position_;
-}
