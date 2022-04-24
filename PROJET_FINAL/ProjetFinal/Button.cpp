@@ -7,28 +7,22 @@ Button::Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor
     color1 = baseColor;
     color2 = hoverColor;
     pos = position;
-    setRect(pos.rank, pos.file, sizeX, sizeY);
-    //setScale(3);
-
+    setRect(HORIZONTAL_MARGIN + (position.rank * SQUARE_SIZE), VERTICAL_MARGIN + (position.file * SQUARE_SIZE), sizeX, sizeY);
     QBrush brush;
     brush.setStyle(SolidPattern);
     brush.setColor(color1);
     setBrush(brush);
-
     setAcceptHoverEvents(true);
 }
 
 void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    emit Pressed();
-    QBrush brush;
-    brush.setStyle(SolidPattern);
-    brush.setColor(red);
-    setBrush(brush);
+    emit Clicked();
 }
 
 void Button::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 {
+    emit Hovered();
     QBrush brush;
     brush.setStyle(SolidPattern);
     brush.setColor(color2);
@@ -37,6 +31,7 @@ void Button::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 
 void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 {
+    emit OffHovered();
     QBrush brush;
     brush.setStyle(SolidPattern);
     brush.setColor(color1);

@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 
 
-	Game game;
+	FrontEnd::Game game;
 
 	initialiserBibliothequeCours(argc, argv);
 	return app.exec();

@@ -17,7 +17,9 @@ public:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
     Position getPos();
 signals:
-    void Pressed();
+    void Clicked();
+    void Hovered();
+    void OffHovered();
 private:
     QGraphicsTextItem* text;
     Position pos;

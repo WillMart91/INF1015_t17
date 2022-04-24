@@ -143,6 +143,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="JEU.cpp" />
     <ClCompile Include="King.cpp" />
+    <ClCompile Include="knight.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Square.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="AbsPiece.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="King.h" />
+    <ClInclude Include="knight.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Square.h" />

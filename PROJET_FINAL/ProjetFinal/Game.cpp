@@ -4,7 +4,7 @@
 using namespace std;
 
 
-//namespace FrontEnd {
+namespace FrontEnd {
 	Game::Game(QWidget* parent) : QGraphicsView(parent)
 	{
 		scene = new QGraphicsScene();
@@ -12,17 +12,23 @@ using namespace std;
 
 		startGame();
 
-		updateScene();
 		view->setScene(scene);
 		view->show();
+
 	}
 
 	void Game::startGame() //receves Player1, Player2, Board
 	{
 		initializeGame();
 
-		settupPossibleLocation();
+		//settupPossibleLocation();
+		
+
 		showPieces();
+
+		
+
+		
 	}
 
 	void Game::initializeGame()
@@ -53,18 +59,25 @@ using namespace std;
 		{
 			for (int j = 0; j < NB_BOX; j++)
 			{
-				Position pos = { HORIZONTAL_MARGIN + (i * SQUARE_SIZE), VERTICAL_MARGIN + (j * SQUARE_SIZE) };
+				
+				Position pos = {i,j};
 				if ((i + j) % 2)
 				{
 					Button* playButton = new Button(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
-					connect(playButton, SIGNAL(Pressed()), this, SLOT(Action()));
+					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
+					connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
+					connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
 					scene->addItem(playButton);
+					buttons[i][j] = playButton;
 				}
 				else
 				{
 					Button* playButton = new Button(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
-					connect(playButton, SIGNAL(Pressed()), this, SLOT(Action()));
+					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
+					connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
+					connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
 					scene->addItem(playButton);
+					buttons[i][j] = playButton;
 				}
 			}
 		}
@@ -101,10 +114,9 @@ using namespace std;
 		vector<QString> tab = { "a","b","c","d","e","f","g","h" };
 		for (int file = 0; file < 8; file++)
 		{
-			drawText(tab[file], HORIZONTAL_MARGIN + SQUARE_SIZE * (file + 1) - 60, VERTICAL_MARGIN + NB_BOX * SQUARE_SIZE, 1,white);
+			drawText(tab[file], HORIZONTAL_MARGIN + SQUARE_SIZE * (file + 1) - 60, VERTICAL_MARGIN + NB_BOX * SQUARE_SIZE, 1, white);
 		}
 	}
-
 
 	void Game::setupTeam(QColor color)
 	{
@@ -115,64 +127,93 @@ using namespace std;
 			v = 7;
 			w = 6;
 		}
-		mat[3][v] = createPiece("♛",3,v, color);
-		mat[4][v] = createPiece("♚",4,v, color);
+		mat[3][v] = createPiece("♛", 3, v, color);
+		mat[4][v] = createPiece("♚", 4, v, color);
 
-		mat[2][v] = createPiece("♝",2,v, color);
-		mat[5][v] = createPiece("♝",5,v, color);
+		mat[2][v] = createPiece("♝", 2, v, color);
+		mat[5][v] = createPiece("♝", 5, v, color);
 
-		mat[1][v] = createPiece("♞",1,v, color);
-		mat[6][v] = createPiece("♞",6,v, color);
+		mat[1][v] = createPiece("♞", 1, v, color);
+		mat[6][v] = createPiece("♞", 6, v, color);
 
-		mat[0][v] = createPiece("♜",0,v, color);
-		mat[7][v] = createPiece("♜",7,v, color);
-
-
+		mat[0][v] = createPiece("♜", 0, v, color);
+		mat[7][v] = createPiece("♜", 7, v, color);
 
 		for (int i = 0; i < 8; i++)
 		{
-			mat[i][w] = createPiece("♟",i,w, color);
+			//mat[i][w] = make_unique<QGraphicsTextItem*>(createPiece("♟",i,w, color));
+			mat[i][w] = createPiece("♟", i, w, color);
 			//Pawn* piece = new Pawn(true,pos);
 			//matPiece[i][w] = piece;
 		}
 	}
 
-
-
-
-
-	void Game::updateScene() //receves a chess piece ; deletes it ; copies it to the right place
+	void Game::tilePressed() //fction call when a button is pressed
 	{
-
+		auto obj = sender();
+		Position pos;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (buttons[i][j] == sender())
+				{
+					QMessageBox::information(this, "x,y",QString("pos : %1 %2 ").arg(buttons[i][j]->getPos().rank).arg(buttons[i][j]->getPos().file));
+				}
+			}
+		}
 	}
 
-
-	void Game::Action()
+	void Game::tileHover()
 	{
-		
-		QMessageBox::about(this, "Position of the tile : (x)" , "");
+		//calls for possible location of chessPiece
+		//exemple of positions (to test)
+		Position pos1 = { 4,3 };
+		Position pos2 = { 4,5 };
+		Position pos3 = { 4,6 };
+		Position pos4 = { 5,4 };
+		Position pos5 = { 3,4 };
+		vector<Position> pos = { pos1, pos2, pos3, pos4, pos5 };
 
-		//drawRectangle(pos.rank * 100, pos.file * 100, 300, 300, red, 1);
+		for (int i = 0; i < pos.size(); i++)
+		{
+			//locations.push_back(CreateRectangle(HORIZONTAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE + 10, VERTICAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE - 20, SQUARE_SIZE - 20, gray, 0.70));
+		}
 	}
 
-	void Game::createButton(Position pos) //to be removed
+	void Game::tileOffHover()
 	{
-		drawRectangle(HORIZONTAL_MARGIN + (pos.rank - 1) * SQUARE_SIZE+ 10, VERTICAL_MARGIN + (pos.file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE-20, SQUARE_SIZE-20, gray, 0.70);
+		//locations.clear();
+	}
+
+	void Game::chessAction() //fction call when a button is pressed
+	{
+	//	auto obj = sender();
+	//	Position pos;
+	//	for (int i = 0; i < 8; i++)
+	//	{
+	//		for (int j = 0; j < 8; j++)
+	//		{
+	//			if (buttons[i][j] == sender())
+	//			{
+	//				QMessageBox::information(this, "x,y", QString("pos : %1 %2 ").arg(chessBoard[i][j]->getPos().file).arg(chessBoard[i][j]->getPos().rank));
+	//			}
+	//		}
+	//	}
 	}
 
 	void Game::settupPossibleLocation() //will receve vector of position
 	{
 		//exemple of positions (to test)
-		//Position pos1 = { 4,3 };
-		//Position pos2 = { 4,5 };
-		//Position pos3 = { 4,6 };
-		//Position pos4 = { 5,4 };
-		//Position pos5 = { 3,4 };
-		//vector<Position> pos = { pos1, pos2, pos3, pos4, pos5};
+		Position pos1 = { 4,3 };
+		Position pos2 = { 4,5 };
+		Position pos3 = { 4,6 };
+		Position pos4 = { 5,4 };
+		Position pos5 = { 3,4 };
+		vector<Position> pos = { pos1, pos2, pos3, pos4, pos5};
 
-		//for (int i = 0; i < pos.size(); i++)
-			//createButton(pos[i]);
-		
+		for (int i = 0; i < pos.size(); i++)
+			drawRectangle(HORIZONTAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE+ 10, VERTICAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE-20, SQUARE_SIZE-20, gray, 0.70);
 	}
 
 	void Game::mouvementPiece(Position pos1, Position pos2)
@@ -188,8 +229,7 @@ using namespace std;
 		mat[pos1.file][pos1.rank] = nullptr;
 	}
 
-
-	QGraphicsTextItem* Game::createPiece(QString str,int file, int rank, QColor color)
+	QGraphicsTextItem* Game::createPiece(QString str, int file, int rank, QColor color)
 	{
 		QGraphicsTextItem* piece = new QGraphicsTextItem(str);
 		piece->setScale(3);
@@ -218,19 +258,29 @@ using namespace std;
 		scene->addItem(rect);
 	}
 
+	QGraphicsRectItem* Game::CreateRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity)
+	{
+		QGraphicsRectItem* rect = new QGraphicsRectItem();
+		rect->setRect(posX, posY, sizeX, sizeY);
+		rect->setBrush(color);
+		rect->setOpacity(opacity);
+		return rect;
+	}
+
 	void Game::showPieces()
 	{
 		for (int file = 0; file < 8; file++)
 		{
-			for (int rank = 0; rank < 8; rank++)  
+			for (int rank = 0; rank < 8; rank++)
 			{
 				if (mat[file][rank] != nullptr)
 					scene->addItem(mat[file][rank]);
-				
 			}
 		}
 	}
 
+
+}
 //map<pair<int, int>, QGraphicsTextItem*> piecesContainer;à
 //map<pair<int, int>, QGraphicsTextItem*> piecesContainer;
 //map<pair<int, int>, int> try2;
