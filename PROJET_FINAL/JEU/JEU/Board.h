@@ -14,6 +14,7 @@ public:
 	//std::vector<Square> validateMoves(std::vector<Square> moveList);
 	void getMoves(Square position); //pt
 	friend AbsPiece;
+	void addPiece(AbsPiece* piece, Square position);
 private:
 	std::vector<std::vector<AbsPiece*>> chessBoard;
 
