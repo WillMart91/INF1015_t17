@@ -50,6 +50,7 @@ namespace FrontEnd {
 		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
 		void setupTeam(QColor color);
 		void mouvementPiece(Position pos1, Position pos2);
+		void switchPieces(Position pos1, Position pos2); //castle
 
 		QGraphicsView* view;
 		//unique_ptr<QGraphicsView> view;
@@ -60,6 +61,9 @@ namespace FrontEnd {
 		Button* buttons[8][8];
 		//chessPiece* pieces[8][8];
 		//vector<QGraphicsRectItem*> locations;
+		Position temp;
+		Position lastClicked;
+		int validClicks;
 
 	};
 }//

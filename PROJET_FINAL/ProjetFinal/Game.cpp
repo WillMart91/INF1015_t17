@@ -26,13 +26,18 @@ namespace FrontEnd {
 
 		showPieces();
 
-		
+
+		//Position pos1 = { 0,0 };
+		//Position pos2 = { 0,1 };
+		//mouvementPiece(pos1, pos2);
+		//showPieces();
 
 		
 	}
 
 	void Game::initializeGame()
 	{
+		validClicks = 0;
 		// clean the array
 		for (int i = 0; i < 8; i++)
 		{
@@ -151,14 +156,26 @@ namespace FrontEnd {
 	void Game::tilePressed() //fction call when a button is pressed
 	{
 		auto obj = sender();
-		Position pos;
+		
 		for (int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
 				if (buttons[i][j] == sender())
 				{
-					QMessageBox::information(this, "x,y",QString("pos : %1 %2 ").arg(buttons[i][j]->getPos().rank).arg(buttons[i][j]->getPos().file));
+					//QMessageBox::information(this, "x,y",QString("pos : %1 %2 ").arg(buttons[i][j]->getPos().rank).arg(buttons[i][j]->getPos().file));
+
+					validClicks++;
+
+					Position temp = lastClicked;
+					Position pos = { j,i };
+					lastClicked = pos;
+					
+					if(validClicks==2) //condition
+					{
+						mouvementPiece(temp, lastClicked);
+						validClicks = 0;
+					}
 				}
 			}
 		}
@@ -216,17 +233,30 @@ namespace FrontEnd {
 			drawRectangle(HORIZONTAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE+ 10, VERTICAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE-20, SQUARE_SIZE-20, gray, 0.70);
 	}
 
-	void Game::mouvementPiece(Position pos1, Position pos2)
+	void Game::mouvementPiece(Position pos1, Position pos2) //piece à pos1 mange ou déplace à pos2
 	{
-		if (mat[pos2.file][pos2.rank] != nullptr)
-		{
-			//add to sides
-			mat[pos2.file][pos2.rank] = nullptr; //delete from game
-		}
+		if (pos1.rank == pos2.rank && pos1.file == pos2.file ||  mat[pos1.file][pos1.rank] == nullptr)
+			return;
 
-		//mat[pos1.file][pos1.rank]->setPosition(pos1.file,pos1.rank);
+		if(mat[pos2.file][pos2.rank] != nullptr)
+			scene->removeItem(mat[pos2.file][pos2.rank]);
+		scene->removeItem(mat[pos1.file][pos1.rank]);
+
+
+		mat[pos1.file][pos1.rank]->setPos(HORIZONTAL_MARGIN + SQUARE_SIZE * pos2.file, VERTICAL_MARGIN + SQUARE_SIZE * pos2.rank); //pos1
 		mat[pos2.file][pos2.rank] = mat[pos1.file][pos1.rank];
 		mat[pos1.file][pos1.rank] = nullptr;
+
+		if(mat[pos2.file][pos2.rank] != nullptr)
+			scene->addItem(mat[pos2.file][pos2.rank]);
+		
+	}
+
+	void Game::switchPieces(Position pos1, Position pos2) //piece à pos1 chage de place avec pos2 (AKA castle)
+	{
+		auto temp = mat[pos2.file][pos2.rank];
+		mat[pos2.file][pos2.rank] = mat[pos1.file][pos1.rank];
+		mat[pos1.file][pos1.rank] = temp;
 	}
 
 	QGraphicsTextItem* Game::createPiece(QString str, int file, int rank, QColor color)
@@ -234,7 +264,6 @@ namespace FrontEnd {
 		QGraphicsTextItem* piece = new QGraphicsTextItem(str);
 		piece->setScale(3);
 		piece->setDefaultTextColor(color);
-		piece->setTextInteractionFlags(TextEditorInteraction);
 		piece->setPos(HORIZONTAL_MARGIN + SQUARE_SIZE * file, VERTICAL_MARGIN + SQUARE_SIZE * rank);
 		return piece;
 	}
@@ -278,8 +307,6 @@ namespace FrontEnd {
 			}
 		}
 	}
-
-
 }
 //map<pair<int, int>, QGraphicsTextItem*> piecesContainer;à
 //map<pair<int, int>, QGraphicsTextItem*> piecesContainer;
