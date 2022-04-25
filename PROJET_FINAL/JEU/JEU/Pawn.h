@@ -10,8 +10,8 @@ private:
 
 
 	const int range =1;
-	const std::vector<std::vector<int, int>> direction = { {1, 0} };
-	const std::vector<std::vector<int, int>> attackDirection = { {1, 1}, {1,-1} };
+	const std::vector<std::pair<int, int>> direction = { {1, 0} };
+	const std::vector<std::pair<int, int>> attackDirection = { {1, 1}, {1,-1} };
 	
 };
 

@@ -8,7 +8,7 @@ public:
 	//AbsPiece* endSwitch();
 
 private:
-	const std::vector<std::vector<int, int>> direction = { {2, 1},{-2, 1},{2, -1},{-2, -1},{1,2},{-1,2}, {1,-2},{-1,-2} };
+	const std::vector<std::pair<int, int>> direction = { {2, 1},{-2, 1},{2, -1},{-2, -1},{1,2},{-1,2}, {1,-2},{-1,-2} };
 	
 
 };
