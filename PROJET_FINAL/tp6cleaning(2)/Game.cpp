@@ -146,10 +146,7 @@ namespace FrontEnd {
 
 		for (int i = 0; i < 8; i++)
 		{
-			//mat[i][w] = make_unique<QGraphicsTextItem*>(createPiece("♟",i,w, color));
 			mat[i][w] = createPiece("♟", i, w, color);
-			//Pawn* piece = new Pawn(true,pos);
-			//matPiece[i][w] = piece;
 		}
 	}
 

@@ -39,11 +39,9 @@ namespace FrontEnd {
 		void drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
 		QGraphicsRectItem* CreateRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
 		void drawSides();
-		//void updateScene();//send board
 		void drawPositions();
 		void drawText(QString str, int posX, int posY, int scale, QColor color);
 		void settupPossibleLocation();
-		//void createButton(Position pos);
 		void startGame();
 		void showPieces();
 		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
