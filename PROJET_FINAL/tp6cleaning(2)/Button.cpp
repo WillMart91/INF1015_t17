@@ -2,7 +2,7 @@
 #include <QGraphicsTextItem>
 #include <QBrush>
 
-Button::Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) {
+Button::Button(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) {
 
     color1 = baseColor;
     color2 = hoverColor;
@@ -38,7 +38,7 @@ void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
     setBrush(brush);
 }
 
-Position Button::getPos()
+Square Button::getPos()
 {
     return pos;
 }
