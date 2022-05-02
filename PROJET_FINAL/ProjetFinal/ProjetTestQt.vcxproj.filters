@@ -64,7 +64,7 @@
     <ClCompile Include="Bishop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
+    <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pawn.cpp">
@@ -84,7 +84,7 @@
     <QtMoc Include="Game.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Button.h">
+    <QtMoc Include="Tile.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="AbsPiece.h">

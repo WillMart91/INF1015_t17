@@ -116,7 +116,7 @@
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Rook.cpp" />
@@ -126,7 +126,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="googletest\src\gtest-all.cc" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Position.cpp" />
+    <ClCompile Include="Square.cpp" />
     <ClCompile Include="TestCalc.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,13 +140,13 @@
     <QtMoc Include="AbsPiece.h" />
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Board.h" />
-    <QtMoc Include="Button.h" />
+    <QtMoc Include="Tile.h" />
     <ClInclude Include="GlobalConst.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
-    <ClInclude Include="Position.h" />
+    <ClInclude Include="Square.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

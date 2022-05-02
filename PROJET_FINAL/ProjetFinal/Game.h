@@ -16,9 +16,9 @@
 #include <QString>
 #include <QPushButton>
 #include <cppitertools/range.hpp>
-#include "Position.h"
+#include "Square.h"
 #include <QMouseEvent>
-#include "button.h"
+#include "Tile.h"
 //#include "AbsPiece.h"
 #include <QMessageBox>
 
@@ -49,8 +49,8 @@ namespace FrontEnd {
 		void showPieces();
 		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
 		void setupTeam(QColor color);
-		void mouvementPiece(Position pos1, Position pos2);
-		void switchPieces(Position pos1, Position pos2); //castle
+		void mouvementPiece(Square pos1, Square pos2);
+		void switchPieces(Square pos1, Square pos2); //castle
 
 		QGraphicsView* view;
 		//unique_ptr<QGraphicsView> view;
@@ -58,11 +58,11 @@ namespace FrontEnd {
 		//map<pair<int, int>, QGraphicsTextItem*> piecesContainer;
 		QGraphicsTextItem* mat[8][8];
 		//AbsPiece* matPiece[8][8];
-		Button* buttons[8][8];
+		Tile* Tiles[8][8];
 		//chessPiece* pieces[8][8];
 		//vector<QGraphicsRectItem*> locations;
-		Position temp;
-		Position lastClicked;
+		Square temp;
+		Square lastClicked;
 		int validClicks;
 
 	};

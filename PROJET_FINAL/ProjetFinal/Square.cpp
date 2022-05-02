@@ -1,12 +1,10 @@
-//#include "Square.h"
-//
-//Square::Square(int rank, int file)
-//{
-//	position = Position(rank, file);
-//	pieceOnMe = nullptr;
-//}
-//
-//bool Square::friendlyOccupied(ChessPiece* piece)
-//{
-//	return piece->isBlackTeam()==pieceOnMe->isBlackTeam();
-//}
+#include "Square.h"
+
+Square operator+(const Square p1, const Square p2)
+{
+	return Square(p1.rank+p2.rank,p1.file+p2.file);
+}
+Square operator-(const Square p1, const Square p2)
+{
+	return Square(p1.rank - p2.rank, p1.file - p2.file);
+}

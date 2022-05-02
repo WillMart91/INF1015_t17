@@ -1,8 +1,8 @@
-#include "Button.h"
+#include "Tile.h"
 #include <QGraphicsTextItem>
 #include <QBrush>
 
-Button::Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) {
+Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) {
 
     color1 = baseColor;
     color2 = hoverColor;
@@ -15,12 +15,12 @@ Button::Button(Position position, int sizeX, int sizeY, QColor baseColor, QColor
     setAcceptHoverEvents(true);
 }
 
-void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void Tile::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     emit Clicked();
 }
 
-void Button::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+void Tile::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 {
     emit Hovered();
     QBrush brush;
@@ -29,7 +29,7 @@ void Button::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
     setBrush(brush);
 }
 
-void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
+void Tile::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 {
     emit OffHovered();
     QBrush brush;
@@ -38,7 +38,7 @@ void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
     setBrush(brush);
 }
 
-Position Button::getPos()
+Square Tile::getPos()
 {
     return pos;
 }

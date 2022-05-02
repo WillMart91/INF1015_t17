@@ -1,31 +1,29 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
-#include "Position.h"
+#include "Square.h"
 #include "GlobalConst.h"
-#include <string>
 
 using namespace Qt;
 
-class AbsPiece :public QObject, public QGraphicsRectItem {
+class Tile :public QObject, public QGraphicsRectItem {
     Q_OBJECT
 public:
     // constructors
-    AbsPiece(bool blackteam, QString pieceImage, Position position, QGraphicsItem* parent = NULL);
+    Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent = NULL);
 
     // public methods (events)
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
-    Position getPos();
-    void setPos(Position newPos);
+    Square getPos();
 signals:
-    void Pressed();
+    void Clicked();
+    void Hovered();
+    void OffHovered();
 private:
     QGraphicsTextItem* text;
-    Position pos;
-    bool blackTeam;
-    QColor color;
+    Square pos;
+    QColor color1;
+    QColor color2;
 
 };
-
-
