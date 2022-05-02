@@ -9,7 +9,7 @@ class Tile :public QObject, public QGraphicsRectItem {
     Q_OBJECT
 public:
     // constructors
-    Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent = NULL);
+    Button(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent = NULL);
 
     // public methods (events)
     void mousePressEvent(QGraphicsSceneMouseEvent* event);

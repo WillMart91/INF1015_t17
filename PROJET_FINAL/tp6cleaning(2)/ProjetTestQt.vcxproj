@@ -111,11 +111,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbsPiece.cpp" />
     <ClCompile Include="bibliotheque_cours\bibliotheque_cours.cpp" />
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
-    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="googletest\src\gtest-all.cc" />
+    <ClCompile Include="King.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Square.cpp" />
   </ItemGroup>
@@ -123,9 +126,12 @@
     <QtMoc Include="Game.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Tile.h" />
-    <ClInclude Include="GlobalConst.h" />
     <ClInclude Include="Square.h" />
+    <QtMoc Include="Button.h" />
+    <ClInclude Include="AbsPiece.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="GlobalConst.h" />
+    <ClInclude Include="King.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

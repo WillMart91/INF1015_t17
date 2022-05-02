@@ -2,6 +2,21 @@
 #include <stdexcept>
 #include <iostream>
 namespace BackEnd {
+	Board::Board()
+	{
+		fillBoard();
+	}
+	Board::~Board()
+	{
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; i < 8; j++) {
+				delete chessBoard[i][j];
+			}
+		}
+	}
+	void Board::movePiece(AbsPiece* piece, Square moveTo)
+	{
+	}
 	void Board::fillBoard()
 	{
 		King* k=nullptr;
@@ -11,10 +26,13 @@ namespace BackEnd {
 		}
 		catch(std::logic_error& e) {
 			chessBoard[0][0] = nullptr;
-			std::cout << "error resolved";
+			std::cout << "error resolved"<< e.what();
 			delete k;
 		}
 
+	}
+	void Board::tryMove(AbsPiece* piece, Square moveTo)
+	{
 	}
 	void Board::getMoves(Square position)
 	{
@@ -25,6 +43,9 @@ namespace BackEnd {
 		//std::vector<Square> moveList = validateMoves(piece->getMoves());
 		Square startPos = piece->getPosition();
 
+	}
+	void Board::addPiece(AbsPiece* piece, Square position)
+	{
 	}
 }
 

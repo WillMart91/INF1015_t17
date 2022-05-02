@@ -168,7 +168,7 @@ namespace FrontEnd {
 					validClicks++;
 
 					Square temp = lastClicked;
-					Square pos = { i,j };
+					Square pos = { j,i };
 					lastClicked = pos;
 					if (validClicks == 1)
 					{

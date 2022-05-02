@@ -17,8 +17,7 @@ namespace BackEnd {
 		friend AbsPiece;
 		void addPiece(AbsPiece* piece, Square position);
 	private:
-		std::vector<std::vector<AbsPiece*>> chessBoard;
-
+		AbsPiece* chessBoard[8][8];
 	};
 }
 	

@@ -1,5 +1,5 @@
 
-#pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
+#pragma warning(push, 0) // Sinon Qt fait des avertissements ï¿½ /W4.
 #include <QMainWindow>
 
 #include <QString>
@@ -18,7 +18,8 @@
 #include <cppitertools/range.hpp>
 #include "Square.h"
 #include <QMouseEvent>
-#include "Tile.h"
+#include "button.h"
+#include "Board.h" 
 #include <QMessageBox>
 
 //#include "Pawn.h"
@@ -47,9 +48,6 @@ namespace FrontEnd {
 		void mouvementPiece(Square pos1, Square pos2);
 		void switchPieces(Square pos1, Square pos2); //castle
 
-		void tileHover();
-		void tileOffHover();
-
 		QGraphicsView* view;
 		QGraphicsScene* scene;
 		QGraphicsTextItem* mat[8][8];
@@ -58,6 +56,6 @@ namespace FrontEnd {
 		Square temp;
 		Square lastClicked;
 		int validClicks;
-
+		BackEnd::Board b;
 	};
 }
