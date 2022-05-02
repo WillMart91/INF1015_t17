@@ -143,7 +143,8 @@ ListeFilms creerListe(string nomFichier)
 	int nElements = lireUint16(fichier);
 
 	ListeFilms listeFilms;
-	for ([[maybe_unused]] int i : range(nElements)) { //NOTE: On ne peut pas faire un span simple avec ListeFilms::enSpan car la liste est vide et on ajoute des éléments à mesure.
+	for ([[maybe_unused]] int i : range(nElements)) { //NOTE: On ne peut pas faire un span 
+		//simple avec ListeFilms::enSpan car la liste est vide et on ajoute des éléments à mesure.
 		listeFilms.ajouterFilm(lireFilm(fichier, listeFilms));
 	}
 	
@@ -152,7 +153,9 @@ ListeFilms creerListe(string nomFichier)
 
 // Fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 //[
-//NOTE: La bonne manière serait que la liste sache si elle possède, plutôt qu'on le dise au moment de la destruction, et que ceci soit le destructeur.  Mais ça aurait complexifié le TD2 de demander une solution de ce genre, d'où le fait qu'on a dit de le mettre dans une méthode.
+//NOTE: La bonne manière serait que la liste sache si elle possède, plutôt qu'on le dise 
+//au moment de la destruction, et que ceci soit le destructeur.  Mais ça aurait complexifié 
+//le TD2 de demander une solution de ce genre, d'où le fait qu'on a dit de le mettre dans une méthode.
 void ListeFilms::detruire()
 {
 	delete[] elements;
@@ -217,7 +220,8 @@ unique_ptr<Livre> creerLivre(const string& info) {
 
 //]
 
-// Pour que l'affichage de Film fonctionne avec <<, il faut aussi modifier l'affichage de l'acteur pour avoir un ostream; l'énoncé ne demande pas que ce soit un opérateur, mais tant qu'à y être...
+// Pour que l'affichage de Film fonctionne avec <<, il faut aussi modifier l'affichage de l'acteur 
+//pour avoir un ostream; l'énoncé ne demande pas que ce soit un opérateur, mais tant qu'à y être...
 ostream& operator<< (ostream& os, const Acteur& acteur)
 {
 	return os << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
@@ -321,7 +325,8 @@ int main()
 	#ifdef VERIFICATION_ALLOCATION_INCLUS
 	bibliotheque_cours::VerifierFuitesAllocations verifierFuitesAllocations;
 	#endif
-	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
+	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs 
+//https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
 
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
@@ -341,4 +346,7 @@ int main()
 	detruireBiblio(biblio);
 	//biblio.erase(biblio.begin());
 }
-//bibliotheque_cours::BreakpointSurAllocations breakpointSurAllocations = { 9U, 14U, 18U, 19U, 21U, 22U, 24U, 29U, 30U, 34U, 39U, 43U, 44U, 48U, 49U, 53U, 54U, 58U, 63U, 67U, 68U, 72U, 73U, 81U, 87U, 91U, 92U, 94U, 95U, 97U, 101U, 107U, 111U, 112U, 114U, 115U, 117U, 122U, 123U, 127U, 133U, 141U, 142U, 146U, 147U, 151U, 152U, 156U, 157U, 164U, 165U, 167U, 169U, 170U, 172U, 175U, 176U, 178U, 181U, 182U, 184U, 206U, 220U, 225U, 232U, 237U, 244U, 258U, };
+//bibliotheque_cours::BreakpointSurAllocations breakpointSurAllocations = { 9U, 14U, 18U, 19U, 21U, 22U, 24U, 29U, 30U, 34U, 
+//39U, 43U, 44U, 48U, 49U, 53U, 54U, 58U, 63U, 67U, 68U, 72U, 73U, 81U, 87U, 91U, 92U, 94U, 95U, 97U, 101U, 107U, 111U, 112U, 
+//114U, 115U, 117U, 122U, 123U, 127U, 133U, 141U, 142U, 146U, 147U, 151U, 152U, 156U, 157U, 164U, 165U, 167U, 169U, 170U, 172U, 
+//175U, 176U, 178U, 181U, 182U, 184U, 206U, 220U, 225U, 232U, 237U, 244U, 258U, };

@@ -16,9 +16,9 @@
 #include <QString>
 #include <QPushButton>
 #include <cppitertools/range.hpp>
-#include "Position.h"
+#include "Square.h"
 #include <QMouseEvent>
-#include "button.h"
+#include "Tile.h"
 #include <QMessageBox>
 
 //#include "Pawn.h"
@@ -29,9 +29,7 @@ namespace FrontEnd {
 
 	public slots:
 		void tilePressed();
-		void tileHover();
-		void tileOffHover();
-		void chessAction();
+		
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
@@ -46,17 +44,20 @@ namespace FrontEnd {
 		void showPieces();
 		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
 		void setupTeam(QColor color);
-		void mouvementPiece(Position pos1, Position pos2);
-		void switchPieces(Position pos1, Position pos2); //castle
+		void mouvementPiece(Square pos1, Square pos2);
+		void switchPieces(Square pos1, Square pos2); //castle
+
+		void tileHover();
+		void tileOffHover();
 
 		QGraphicsView* view;
 		QGraphicsScene* scene;
 		QGraphicsTextItem* mat[8][8];
-		Button* buttons[8][8];
+		Tile* board[8][8];
 		//vector<QGraphicsRectItem*> locations;
-		Position temp;
-		Position lastClicked;
+		Square temp;
+		Square lastClicked;
 		int validClicks;
 
 	};
-}//
+}

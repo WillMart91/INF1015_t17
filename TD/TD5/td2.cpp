@@ -305,7 +305,7 @@ forward_list<shared_ptr<Item>> renverserFList(forward_list<shared_ptr<Item>> fli
 {
 	forward_list<shared_ptr<Item>> flistRev;
 
-	for (auto iterateur = flist.begin(); iterateur != flist.end(); iterateur++) //enlever i
+	for (auto iterateur = flist.begin(); iterateur != flist.end(); iterateur++) 
 	{
 		flistRev.push_front(*iterateur);
 	}
@@ -406,22 +406,39 @@ int main(int argc, char* argv[])
 
 	
 	//1.1
+	/*Copier les pointeurs du vecteur d’items final de la biliothèque dans une forward_list (liste liée simple
+similaire à celle du chap.14) dans l’ordre original (même ordre que dans le vecteur), en O(n). Attention que
+forward_list n’a pas de push_back*/
 	forward_list<shared_ptr<Item>> flist = copierVecEnFList(items);
 	afficherListeItems(flist);
 
 	//1.2
+	/*Copier la liste qui est en ordre original à l’envers (le dernier item se retrouve en premier) en O(n) dans une
+autre forward_list sans passer par un conteneur intermédiaire ni avec une fonction récursive (fonction qui
+fait appel à elle-même directement ou indirectement) ni en utilisant « reverse » qui le fait automatiquement. */
 	forward_list<shared_ptr<Item>> flistrev = renverserFList(flist);
 	afficherListeItems(flistrev);
 	
 	//1.3
+	/*Copier la liste qui est en ordre original dans le même ordre qu’elle est, en O(n) dans une autre forward_list
+sans passer par un conteneur intermédiaire ni avec une fonction récursive (fonction qui fait appel à ellemême directement 
+ou indirectement) ni en utilisant la copie intégrée à forward_list (constructeur de copie
+ou operator=)*/
 	forward_list<shared_ptr<Item>> flistCop = copierFList(flist);
 	afficherListeItems(flistCop);
 	
 	//1.4
+	/*Copier la liste qui est en ordre original à l’envers dans un vector avec les mêmes contraintes que ci-dessus
+(sans conteneur intermédiaire ni fonction récursive). Tentez d’optimiser l’ordre O(…) de votre algorithme
+et indiquez cet ordre en commentaire.*/
 	vector<shared_ptr<Item>> vect = renverserFListEnVec(flist); //O(n)
 	afficherListeItems(vect);
 
 	//1.5
+	/*Ajoutez ce qu’il faut pour pouvoir itérer directement sur une liste : for (auto&& acteur : film.acteurs) (ou
+film.getActeurs() si vous avez un accesseur qui retourne les ListeActeurs, pas un span qui a déjà ce qu’il
+faut pour l’itérer de cette manière). Itérez en utilisant cette manière pour afficher les acteurs du premier
+film (Alien) . */
 	Film film = dynamic_cast<Film&>(*vect[0]);
 	for (auto&& acteur : film.acteurs) {
 		cout << acteur->nom<<endl;
@@ -429,6 +446,9 @@ int main(int argc, char* argv[])
 	cout << endl;
 
 	//2.1
+	/*Utilisez un conteneur, pas un algorithme de tri (pas « sort », « qsort » …), pour avoir les items en ordre
+alphabétique. Affichez ces items. Encore, on utilise des pointeurs non propriétaires pour ne pas avoir à
+faire de copies d’items tel que dit au début de l’énoncé. */
 	map<string, shared_ptr<Item>> carte;
 	for (int i : range(vect.size()))
 	{
@@ -442,6 +462,8 @@ int main(int argc, char* argv[])
 	}
 
 	//2.2
+	/*Utilisez un conteneur qui, après une étape initiale, va permettre de trouver des items par titre en O(1) en
+moyenne pour chaque item cherché. Affichez l’item « The Hobbit ».*/
 	unordered_map<string, shared_ptr<Item>> carteBrut;
 	for (auto it = carte.begin(); it != carte.end(); it++)
 	{
@@ -450,15 +472,99 @@ int main(int argc, char* argv[])
 	cout<< carteBrut["The Hobbit"]<<endl;
 
 	//3.1
+	/*Utilisez l’algorithme copy_if ou copy pour copier les items qui « sont des » Film de liste faite en 1.1 vers un
+vector, en gardant l’ordre, en une ligne de programme. Vous avez le droit d’écrire une fonction
+d’adaptation, d’une ligne, qui permet de passer un « range » au lieu de deux itérateurs à ces algorithmes
+(similairement à ce qu’il y a dans ranges:: de C++20).
+Aide : vous pouvez commencer par écrire les différentes parties de la ligne sur plusieurs lignes pour aider à
+trouver vos erreurs. 
+*/
 	vector<shared_ptr<Item>> v;
 	copy_if(flist.begin(), flist.end(), back_inserter(v), [](shared_ptr<Item> i) {return dynamic_cast<Film*>(i.get())!=NULL; });
 	cout << v[0]->titre << endl;
 
 	//3.2
+	/*Faites la somme des recettes des films trouvés ci-dessus, en une ligne (pas de « for »). 
+	*/
 	int somme =transform_reduce(v.begin(), v.end(), 0, plus{}, [](shared_ptr<Item> i) { return dynamic_cast<Film*>(i.get())->recette; });
 	cout << somme;
-
 
 	return 0;
 }
 
+
+class Tache {
+public:
+	Tache() {
+
+	}
+
+private:
+	vector<Tache> taches_;
+};
+
+class Projet {
+public:
+	Projet() {
+	}
+	void ajouterTache(const Tache& tache);
+	void supprimerTache(const Tache& tache);
+	void supprimerTache(const Tache& tache);
+	void trierTaches(function<bool(const Tache&, const Tache&)> f);
+
+private:
+	vector<Tache> taches_ ;
+};
+
+//Conteneur et algorithme :
+void Projet::ajouterTache(const Tache& tache) {
+	if (auto it = find(taches_.begin(), taches_.end(), tache); it == taches_.end())
+		taches_.push_back(tache);
+}
+
+void Projet::supprimerTache(const Tache& tache) {
+	auto it = remove(taches_.begin(), taches_.end(), tache);
+	taches_.erase(it, taches_.end());
+}
+// Ou, puisque ce n'est pas dit s'il faut enlever plusieurs tâches identique (et n'est pas dans les tests):
+void Projet::supprimerTache(const Tache& tache) {
+	if (auto it = find(taches_.begin(), taches_.end(), tache); it != taches_.end())
+		taches_.erase(it);
+}
+
+void Projet::trierTaches(function<bool(const Tache&, const Tache&)> f) {
+	// Attention que le compilateur sur Moodle n'a pas les ranges:: de C++20.
+	sort(taches_.begin(), taches_.end(), f);
+}
+
+/*
+Questions en vrac :
+Il est possible de lever une exception dans un bloc de capture d'exception ("catch"). 
+; Il est possible d'utiliser plusieurs blocs "catch" à la suite d'un bloc "try".
+
+L'utilisation d'un espace de noms(namespace) permet de * réduire * la portée(scope) 
+de ce qu'elle contient. Il est possible de définir *un seule* symbole(s) ayant le même 
+nom dans un même espace de nom.
+
+doit absolument hériter de std::exception : Faux
+
+Une méthode statique peut être appelée sans instancier d'objet de la classe dont elle 
+fait partie. ; L'accès à une méthode statique peut se faire à l'aide de l'opérateur de 
+résolution de portée("::").; L'utilisation d'attributs statiques de classe permet de les 
+partager entre toutes les instances de la classe.
+
+Exceptions:
+13. Une exception est lancée dans Citoyen::faireDesCourses(), se propage à travers 
+Citoyen::faireDesTartelettesPortugaises() et est attrapée dans le main().Le citoyen va 
+ensuite attendre 14 jours(deuxième catch) et le programme se termine correctement(atteint 
+la fin du main()).
+
+14. Une exception est lancée dans Citoyen::faireDesCourses(), se propage à travers 
+Citoyen::faireDesTartelettesPortugaises() et est attrapée dans le main().Le citoyen va 
+ensuite garder ses distances et le programme se termine correctement(atteint la fin du main()).
+
+15. Au premier appel de drArruda.faireDesTartelettesPortugaises(), une exception est 
+levée et attrapée par le deuxième catch (donc on attend 14 jours).La boucle se répète une 
+deuxième fois, la méthode complète son appel et affiche «Miam!», puis la boucle se brise.Le 
+programme se termine ensuite normalement.
+*/
