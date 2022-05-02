@@ -38,6 +38,22 @@ void Tile::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
     setBrush(brush);
 }
 
+void Tile::glow()
+{
+    QBrush brush;
+    brush.setStyle(SolidPattern);
+    brush.setColor(color2);
+    setBrush(brush);
+}
+
+void Tile::stopGlowing()
+{
+    QBrush brush;
+    brush.setStyle(SolidPattern);
+    brush.setColor(color1);
+    setBrush(brush);
+}
+
 Square Tile::getPos()
 {
     return pos;

@@ -30,9 +30,7 @@ namespace FrontEnd {
 
 	public slots:
 		void tilePressed();
-		void tileHover();
-		void tileOffHover();
-		void chessAction();
+		
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
@@ -51,6 +49,8 @@ namespace FrontEnd {
 		void setupTeam(QColor color);
 		void mouvementPiece(Square pos1, Square pos2);
 		void switchPieces(Square pos1, Square pos2); //castle
+		void tileHover(Square allo);
+		void tileOffHover(Square allo);
 
 		QGraphicsView* view;
 		//unique_ptr<QGraphicsView> view;

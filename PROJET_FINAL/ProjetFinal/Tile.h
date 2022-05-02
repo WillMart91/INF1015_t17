@@ -9,13 +9,15 @@ class Tile :public QObject, public QGraphicsRectItem {
     Q_OBJECT
 public:
     // constructors
-    Button(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent = NULL);
+    Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent = NULL);
 
     // public methods (events)
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
     Square getPos();
+    void glow();
+    void stopGlowing();
 signals:
     void Clicked();
     void Hovered();

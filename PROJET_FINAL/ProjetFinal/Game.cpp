@@ -70,8 +70,6 @@ namespace FrontEnd {
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
-					connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
 					scene->addItem(playButton);
 					Tiles[i][j] = playButton;
 				}
@@ -79,8 +77,6 @@ namespace FrontEnd {
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
-					connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
 					scene->addItem(playButton);
 					Tiles[i][j] = playButton;
 				}
@@ -163,8 +159,6 @@ namespace FrontEnd {
 			{
 				if (Tiles[j][i] == sender())
 				{
-					//QMessageBox::information(this, "x,y",QString("pos : %1 %2 ").arg(buttons[i][j]->getPos().rank).arg(buttons[i][j]->getPos().file));
-
 					if (validClicks == 0 && mat[i][j] == nullptr) //1er click pas sur piece
 						break;
 
@@ -173,10 +167,15 @@ namespace FrontEnd {
 					Square temp = lastClicked;
 					Square pos = { i,j };
 					lastClicked = pos;
-					
-					if(validClicks==2) //condition
+					if (validClicks == 1)
+					{
+						tileHover(pos);
+					}
+
+					if (validClicks == 2) //condition
 					{
 						mouvementPiece(temp, lastClicked);
+						tileOffHover(pos);
 						validClicks = 0;
 					}
 				}
@@ -184,42 +183,34 @@ namespace FrontEnd {
 		}
 	}
 
-	void Game::tileHover()
+	void Game::tileHover(Square allo)
 	{
 		//calls for possible location of chessPiece
 		//exemple of positions (to test)
-		Square pos1 = { 4,3 };
-		Square pos2 = { 4,5 };
-		Square pos3 = { 4,6 };
-		Square pos4 = { 5,4 };
-		Square pos5 = { 3,4 };
-		vector<Square> pos = {pos1, pos2, pos3, pos4, pos5 };
+		Square pos1 = { allo.file + 1,allo.rank };
+		Square pos2 = { allo.file,allo.rank + 1 };
+		Square pos3 = { allo.file - 1,allo.rank };
+		Square pos4 = { allo.file,allo.rank - 1 };
+		vector<Square> pos = { pos1, pos2, pos3, pos4};
 
 		for (int i = 0; i < pos.size(); i++)
 		{
-			//locations.push_back(CreateRectangle(HORIZONTAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE + 10, VERTICAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE - 20, SQUARE_SIZE - 20, gray, 0.70));
+			Tiles[pos[i].rank][pos[i].file]->glow();
 		}
 	}
 
-	void Game::tileOffHover()
+	void Game::tileOffHover(Square allo)
 	{
-		//locations.clear();
-	}
+		Square pos1 = { allo.file + 1,allo.rank };
+		Square pos2 = { allo.file,allo.rank + 1 };
+		Square pos3 = { allo.file - 1,allo.rank };
+		Square pos4 = { allo.file,allo.rank - 1 };
+		vector<Square> pos = { pos1, pos2, pos3, pos4 };
 
-	void Game::chessAction() //fction call when a button is pressed
-	{
-	//	auto obj = sender();
-	//	Position pos;
-	//	for (int i = 0; i < 8; i++)
-	//	{
-	//		for (int j = 0; j < 8; j++)
-	//		{
-	//			if (buttons[i][j] == sender())
-	//			{
-	//				QMessageBox::information(this, "x,y", QString("pos : %1 %2 ").arg(chessBoard[i][j]->getPos().file).arg(chessBoard[i][j]->getPos().rank));
-	//			}
-	//		}
-	//	}
+		for (int i = 0; i < pos.size(); i++)
+		{
+			Tiles[pos[i].rank][pos[i].file]->stopGlowing();
+		}
 	}
 
 	void Game::settupPossibleLocation() //will receve vector of position
