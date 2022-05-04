@@ -59,16 +59,14 @@ namespace FrontEnd {
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					scene->addItem(playButton);
-					Tiles[i][j] = playButton;  
+					scene->addItem(playButton); 
 					tileList.push_back(playButton); //testing
 				}
 				else
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					scene->addItem(playButton);
-					Tiles[i][j] = playButton;		
+					scene->addItem(playButton);		
 					tileList.push_back(playButton); //testing
 					
 				}
@@ -140,44 +138,26 @@ namespace FrontEnd {
 
 	void Game::tilePressed() //fction call when a button is pressed
 	{
-		auto b = dynamic_cast<Tile*>(sender());
-		auto c = b->getPos();
-
-
-		//auto matching_iter = find_if(tileList.begin(), tileList.end(),
-		//	[&c](Tile* p) {
-		//		return p == c;
-		//	});
+		auto obj = dynamic_cast<Tile*>(sender());
+		auto position = obj->getPos();
 		
+		if (validClicks == 0 && mat[position.file][position.rank] == nullptr) //WE IGNORE A FRIST CLICK ON A FREE TILE
+			return;
 
-		auto obj = sender();
-		
-		for (int file = 0; file < 8; file++)
+		validClicks++;
+		clicked = { position.file,position.rank };
+
+		if (validClicks == 1)  // + VERIFY WHO'S TURN (BLACK VS WHITE PIECES)
 		{
-			for (int rank = 0; rank < 8; rank++)
-			{
-				if (Tiles[file][rank] == sender())
-				{
-					if (validClicks == 0 && mat[file][rank] == nullptr) //1er click pas sur piece
-						break;
+			displayPossibleLocations(clicked);
+			selected = clicked;
+		}
 
-					validClicks++;
-					clicked = { file,rank };
-
-					if (validClicks == 1) //&& piece.player1
-					{
-						displayPossibleLocations(clicked);
-						selected = clicked;
-					}
-
-					if (validClicks == 2) //condition
-					{
-						mouvementPiece(selected, clicked);
-						removePossibleLocations(selected);
-						validClicks = 0;
-					}
-				}
-			}
+		if (validClicks == 2)  // + VERIFY IF LEGIT
+		{
+			mouvementPiece(selected, clicked);
+			removePossibleLocations(selected);
+			validClicks = 0;
 		}
 	}
 
@@ -190,9 +170,16 @@ namespace FrontEnd {
 		Square pos3 = { allo.file - 1,allo.rank };
 		Square pos4 = { allo.file,allo.rank - 1 };
 		vector<Square> pos = { pos1, pos2, pos3, pos4};
+		//^^ will be gone
 
-		for (int i:range(pos.size()))
-			Tiles[pos[i].file][pos[i].rank]->glow();
+		Square position;
+		for (int i : range(pos.size()))
+		{
+			position = { pos[i].file,pos[i].rank };
+			auto matching_iter = find_if(tileList.begin(), tileList.end(),[&position](Tile* obj) {return position == obj;});
+			(*matching_iter)->glow();
+		}
+			
 		
 	}
 
@@ -205,9 +192,15 @@ namespace FrontEnd {
 		Square pos3 = { allo.file - 1,allo.rank };
 		Square pos4 = { allo.file,allo.rank - 1 };
 		vector<Square> pos = { pos1, pos2, pos3, pos4 };
+		//^^ will be gone
 
+		Square position;
 		for (int i : range(pos.size()))
-			Tiles[pos[i].file][pos[i].rank]->stopGlowing();
+		{
+			position = { pos[i].file,pos[i].rank };
+			auto matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+			(*matching_iter)->stopGlowing();
+		}
 
 	}
 
@@ -280,7 +273,10 @@ namespace FrontEnd {
 
 }
 
-
+//auto matching_iter = find_if(tileList.begin(), tileList.end(),
+//	[&position](Tile* obj) {
+//		return position == obj;
+//	});
 
 
 

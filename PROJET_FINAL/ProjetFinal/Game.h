@@ -51,9 +51,7 @@ namespace FrontEnd {
 
 		//containers
 		QGraphicsTextItem* mat[8][8]; ////contains all of the pieces
-		Tile* Tiles[8][8]; //contains all of the tiles
 		QList<Tile*> tileList; // testing
-		Tile* Tile1D[64];
 
 		//attributes necessary for the gameplay
 		Square clicked;

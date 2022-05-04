@@ -2,9 +2,17 @@
 
 Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) 
 {
+    pieceType = " ";
     pos = position;
     setRect(HORIZONTAL_MARGIN + (position.file * SQUARE_SIZE), VERTICAL_MARGIN + (position.rank * SQUARE_SIZE), sizeX, sizeY); 
-
+    
+    //ADDING THE PIECE TEXT TO THE TILE (empty for now)
+    text = new QGraphicsTextItem(pieceType, this);
+    int x = HORIZONTAL_MARGIN + (position.file * SQUARE_SIZE);
+    int y = VERTICAL_MARGIN + (position.rank * SQUARE_SIZE)-40; 
+    text->setScale(8);
+    text->setPos(x,y);
+    
     //DEFINING THE TILE COLORS
     QBrush brush;
     brush.setStyle(SolidPattern);
@@ -26,16 +34,7 @@ Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hover
     setAcceptHoverEvents(true);
 }
 
-void Tile::mousePressEvent(QGraphicsSceneMouseEvent* event) { emit Clicked(); }
-void Tile::hoverEnterEvent(QGraphicsSceneHoverEvent* event) { setBrush(*darkerBrush); }
-void Tile::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) { setBrush(*lighterBrush); }
 
-void Tile::glow(){ setBrush(*validBrush); }
-
-void Tile::stopGlowing(){ setBrush(*lighterBrush); }
-
-Square Tile::getPos() const
-{ return pos;}
 
 bool operator==(const Tile* p1, const Square s)
 {
