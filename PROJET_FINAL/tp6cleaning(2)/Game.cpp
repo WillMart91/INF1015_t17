@@ -74,21 +74,21 @@ namespace FrontEnd {
 				Square pos = {i,j};
 				if ((i + j) % 2)
 				{
-					Button* playButton = new Button(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
+					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
-					connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
+					//connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
+					//connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
 					scene->addItem(playButton);
-					buttons[i][j] = playButton;
+					board[i][j] = playButton;
 				}
 				else
 				{
-					Button* playButton = new Button(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
+					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
-					connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
+					//connect(playButton, SIGNAL(Hovered()), this, SLOT(tileHover()));
+					//connect(playButton, SIGNAL(OffHovered()), this, SLOT(tileOffHover()));
 					scene->addItem(playButton);
-					buttons[i][j] = playButton;
+					board[i][j] = playButton;
 				}
 			}
 		}
@@ -116,16 +116,16 @@ namespace FrontEnd {
 	void Game::drawPositions()
 	{
 		//vertical
-		for (int rank = 1; rank <= 8; rank++)
+		for (int file = 1; file <= 8; file++)
 		{
-			drawText(QString::number(rank), HORIZONTAL_MARGIN - 25, VERTICAL_MARGIN + SQUARE_SIZE * rank - 60, 1, white);
+			drawText(QString::number(file), HORIZONTAL_MARGIN - 25, VERTICAL_MARGIN + SQUARE_SIZE * file - 60, 1, white);
 		}
 
 		//horizontal
 		vector<QString> tab = { "a","b","c","d","e","f","g","h" };
-		for (int file = 0; file < 8; file++)
+		for (int rank = 0; rank < 8; rank++)
 		{
-			drawText(tab[file], HORIZONTAL_MARGIN + SQUARE_SIZE * (file + 1) - 60, VERTICAL_MARGIN + NB_BOX * SQUARE_SIZE, 1, white);
+			drawText(tab[rank], HORIZONTAL_MARGIN + SQUARE_SIZE * (rank + 1) - 60, VERTICAL_MARGIN + NB_BOX * SQUARE_SIZE, 1, white);
 		}
 	}
 
@@ -164,7 +164,7 @@ namespace FrontEnd {
 		{
 			for (int j = 0; j < 8; j++)
 			{
-				if (buttons[i][j] == sender())
+				if (board[i][j] == sender())
 				{
 					//QMessageBox::information(this, "x,y",QString("pos : %1 %2 ").arg(buttons[i][j]->getPos().rank).arg(buttons[i][j]->getPos().file));
 
@@ -176,10 +176,15 @@ namespace FrontEnd {
 					Square temp = lastClicked;
 					Square pos = { j,i };
 					lastClicked = pos;
-					
+					if (validClicks == 1)
+					{
+						tileHover();
+					}
+
 					if(validClicks==2) //condition
 					{
 						mouvementPiece(temp, lastClicked);
+						tileOffHover();
 						validClicks = 0;
 					}
 				}
@@ -200,29 +205,23 @@ namespace FrontEnd {
 
 		for (int i = 0; i < pos.size(); i++)
 		{
-			//locations.push_back(CreateRectangle(HORIZONTAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE + 10, VERTICAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE - 20, SQUARE_SIZE - 20, gray, 0.70));
+			board[pos[i].rank][pos[i].rank]->glow();
 		}
 	}
 
 	void Game::tileOffHover()
 	{
-		//locations.clear();
-	}
+		Square pos1 = { 4,3 };
+		Square pos2 = { 4,5 };
+		Square pos3 = { 4,6 };
+		Square pos4 = { 5,4 };
+		Square pos5 = { 3,4 };
+		vector<Square> pos = { pos1, pos2, pos3, pos4, pos5 };
 
-	void Game::chessAction() //fction call when a button is pressed
-	{
-	//	auto obj = sender();
-	//	Position pos;
-	//	for (int i = 0; i < 8; i++)
-	//	{
-	//		for (int j = 0; j < 8; j++)
-	//		{
-	//			if (buttons[i][j] == sender())
-	//			{
-	//				QMessageBox::information(this, "x,y", QString("pos : %1 %2 ").arg(chessBoard[i][j]->getPos().file).arg(chessBoard[i][j]->getPos().rank));
-	//			}
-	//		}
-	//	}
+		for (int i = 0; i < pos.size(); i++)
+		{
+			board[pos[i].file][pos[i].rank]->stopGlowing();
+		}
 	}
 
 	void Game::settupPossibleLocation() //will receve vector of position
@@ -236,12 +235,12 @@ namespace FrontEnd {
 		vector<Square> pos = { pos1, pos2, pos3, pos4, pos5};
 
 		for (int i = 0; i < pos.size(); i++)
-			drawRectangle(HORIZONTAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE+ 10, VERTICAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE-20, SQUARE_SIZE-20, gray, 0.70);
+			drawRectangle(HORIZONTAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE+ 10, VERTICAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE + 10, SQUARE_SIZE-20, SQUARE_SIZE-20, gray, 0.70);
 	}
 
 	void Game::mouvementPiece(Square pos1, Square pos2) //piece à pos1 mange ou déplace à pos2
 	{
-		if (pos1.rank == pos2.rank && pos1.file == pos2.file ||  mat[pos1.file][pos1.rank] == nullptr)
+		if (pos1.file == pos2.file && pos1.rank == pos2.rank ||  mat[pos1.rank][pos1.file] == nullptr)  //revoir
 			return;
 
 		if(mat[pos2.file][pos2.rank] != nullptr)

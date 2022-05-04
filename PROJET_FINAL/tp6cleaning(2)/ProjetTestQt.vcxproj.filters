@@ -57,7 +57,7 @@
     <QtMoc Include="Game.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Button.h">
+    <QtMoc Include="Tile.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

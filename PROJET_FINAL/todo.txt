@@ -1,0 +1,2 @@
+prendre hoverTile pis offhovertile du tp6 ; amene projet final
+finir backend + call fction pr piece dans hovertile + empeche click interdit

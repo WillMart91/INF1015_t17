@@ -1,28 +1,20 @@
-
 #pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
-#include <QMainWindow>
 
+//QT INCLUDES
 #include <QString>
-#include <QLabel>
-
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
-#include <QGraphicsPixmapItem>
-#include <QObject>
-#include <QList> //list << element
-#include <QPointF> //F for float + more fctions 
-#include <QPixmap>
 #include <QString>
-#include <QPushButton>
 #include <cppitertools/range.hpp>
-#include "Position.h"
-#include <QMouseEvent>
-#include "button.h"
-//#include "AbsPiece.h"
 #include <QMessageBox>
+#include <QtAlgorithms>
+//OTHER
+#include "Square.h"
+#include "Tile.h"
 
-//#include "Pawn.h"
+using namespace std;
+using namespace iter;
 
 namespace FrontEnd {
 	class Game : public QGraphicsView {
@@ -30,40 +22,42 @@ namespace FrontEnd {
 
 	public slots:
 		void tilePressed();
-		void tileHover();
-		void tileOffHover();
-		void chessAction();
+		
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
-		void initializeGame();
-		void drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
-		QGraphicsRectItem* CreateRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
+
+		//INITIAL BOARD RELATED
 		void drawSides();
-		//void updateScene();//send board
 		void drawPositions();
-		void drawText(QString str, int posX, int posY, int scale, QColor color);
-		void settupPossibleLocation();
-		//void createButton(Position pos);
 		void startGame();
-		void showPieces();
-		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
+		void showInitialPieces();
+		void initializeGame();
 		void setupTeam(QColor color);
-		void mouvementPiece(Position pos1, Position pos2);
-		void switchPieces(Position pos1, Position pos2); //castle
+		//GAMEPLAY RELATED
+		void displayPossibleLocations(Square allo);
+		void removePossibleLocations(Square allo);
+		void mouvementPiece(Square pos1, Square pos2);
+		void switchPieces(Square pos1, Square pos2); 
+		//CREATORS RELATED
+		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
+		void drawText(QString str, int posX, int posY, int scale, QColor color);
+		void drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
 
+	private:
+		//necessary attributes for the display
 		QGraphicsView* view;
-		//unique_ptr<QGraphicsView> view;
 		QGraphicsScene* scene;
-		//map<pair<int, int>, QGraphicsTextItem*> piecesContainer;
-		QGraphicsTextItem* mat[8][8];
-		//AbsPiece* matPiece[8][8];
-		Button* buttons[8][8];
-		//chessPiece* pieces[8][8];
-		//vector<QGraphicsRectItem*> locations;
-		Position temp;
-		Position lastClicked;
-		int validClicks;
 
+		//containers
+		QGraphicsTextItem* mat[8][8]; ////contains all of the pieces
+		Tile* Tiles[8][8]; //contains all of the tiles
+		QList<Tile*> tileList; // testing
+		Tile* Tile1D[64];
+
+		//attributes necessary for the gameplay
+		Square clicked;
+		Square selected;
+		int validClicks;
 	};
-}//
+}

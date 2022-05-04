@@ -4,7 +4,7 @@
 It also contains an array of tile wich represent the visual board
 */
 
-#pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
+#pragma warning(push, 0) // Sinon Qt fait des avertissements ï¿½ /W4.
 #include <QMainWindow>
 
 #include <QString>
@@ -35,9 +35,7 @@ namespace FrontEnd {
 
 	public slots:
 		void tilePressed();
-		void tileHover();
-		void tileOffHover();
-		void chessAction();
+		
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
@@ -58,11 +56,11 @@ namespace FrontEnd {
 		QGraphicsView* view;
 		QGraphicsScene* scene;
 		QGraphicsTextItem* mat[8][8];
-		Button* buttons[8][8];
+		Tile* board[8][8];
 		//vector<QGraphicsRectItem*> locations;
 		Square temp;
 		Square lastClicked;
 		int validClicks;
 		BackEnd::Board b;
 	};
-}//
+}
