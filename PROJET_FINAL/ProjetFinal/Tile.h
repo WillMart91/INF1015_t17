@@ -1,5 +1,8 @@
+//QT INCLIDES
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QBrush>
+//OTHER
 #include "Square.h"
 #include "GlobalConst.h"
 
@@ -15,17 +18,22 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
-    Square getPos();
+
+
+    Square getPos() const;
     void glow();
     void stopGlowing();
 signals:
     void Clicked();
-    void Hovered();
-    void OffHovered();
+
 private:
-    QGraphicsTextItem* text;
     Square pos;
-    QColor color1;
-    QColor color2;
+
+    QBrush* lighterBrush;
+    QBrush* darkerBrush;
+    QBrush* validBrush;
+
 
 };
+
+bool operator==(const Tile* p1, const Square s);

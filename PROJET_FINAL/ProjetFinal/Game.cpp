@@ -1,7 +1,8 @@
 ﻿#include "Game.h"
 #include "qchar.h"
+#include <QHash>
 
-using namespace std;
+//using namespace std;
 
 
 namespace FrontEnd {
@@ -17,22 +18,10 @@ namespace FrontEnd {
 
 	}
 
-	void Game::startGame() //receves Player1, Player2, Board
+	void Game::startGame() 
 	{
 		initializeGame();
-
-		//settupPossibleLocation();
-		
-
-		showPieces();
-
-
-		//Position pos1 = { 0,0 };
-		//Position pos2 = { 0,1 };
-		//mouvementPiece(pos1, pos2);
-		//showPieces();
-
-		
+		showInitialPieces(); //show the initial pieces	
 	}
 
 	void Game::initializeGame()
@@ -65,20 +54,23 @@ namespace FrontEnd {
 			for (int j = 0; j < NB_BOX; j++)
 			{
 				
-				Square pos = {i,j};
+				Square pos = {i,j};//INVERTED
 				if ((i + j) % 2)
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
 					scene->addItem(playButton);
-					Tiles[i][j] = playButton;
+					Tiles[i][j] = playButton;  
+					tileList.push_back(playButton); //testing
 				}
 				else
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
 					scene->addItem(playButton);
-					Tiles[i][j] = playButton;
+					Tiles[i][j] = playButton;		
+					tileList.push_back(playButton); //testing
+					
 				}
 			}
 		}
@@ -106,14 +98,14 @@ namespace FrontEnd {
 	void Game::drawPositions()
 	{
 		//vertical
-		for (int rank = 1; rank <= 8; rank++)
+		for (int rank : range(NB_BOX))
 		{
 			drawText(QString::number(rank), HORIZONTAL_MARGIN - 25, VERTICAL_MARGIN + SQUARE_SIZE * NB_BOX - rank * SQUARE_SIZE +35, 1, white);
 		}
 
 		//horizontal
 		vector<QString> tab = { "a","b","c","d","e","f","g","h" };
-		for (int file = 0; file < 8; file++)
+		for (int file :range(NB_BOX))
 		{
 			drawText(tab[file], HORIZONTAL_MARGIN + SQUARE_SIZE * (file + 1) - 60, VERTICAL_MARGIN + NB_BOX * SQUARE_SIZE, 1, white);
 		}
@@ -142,40 +134,46 @@ namespace FrontEnd {
 
 		for (int i = 0; i < 8; i++)
 		{
-			//mat[i][w] = make_unique<QGraphicsTextItem*>(createPiece("♟",i,w, color));
 			mat[i][w] = createPiece("♟", i, w, color);
-			//Pawn* piece = new Pawn(true,pos);
-			//matPiece[i][w] = piece;
 		}
 	}
 
 	void Game::tilePressed() //fction call when a button is pressed
 	{
+		auto b = dynamic_cast<Tile*>(sender());
+		auto c = b->getPos();
+
+
+		//auto matching_iter = find_if(tileList.begin(), tileList.end(),
+		//	[&c](Tile* p) {
+		//		return p == c;
+		//	});
+		
+
 		auto obj = sender();
 		
-		for (int i = 0; i < 8; i++)
+		for (int file = 0; file < 8; file++)
 		{
-			for (int j = 0; j < 8; j++)
+			for (int rank = 0; rank < 8; rank++)
 			{
-				if (Tiles[j][i] == sender())
+				if (Tiles[file][rank] == sender())
 				{
-					if (validClicks == 0 && mat[i][j] == nullptr) //1er click pas sur piece
+					if (validClicks == 0 && mat[file][rank] == nullptr) //1er click pas sur piece
 						break;
 
 					validClicks++;
+					clicked = { file,rank };
 
-					Square temp = lastClicked;
-					Square pos = { i,j };
-					lastClicked = pos;
-					if (validClicks == 1)
+					if (validClicks == 1) //&& piece.player1
 					{
-						tileHover(pos);
+						displayPossibleLocations(clicked);
+						selected = clicked;
 					}
 
 					if (validClicks == 2) //condition
 					{
-						mouvementPiece(temp, lastClicked);
-						tileOffHover(pos);
+						mouvementPiece(selected, clicked);
+						removePossibleLocations(selected);
 						validClicks = 0;
 					}
 				}
@@ -183,9 +181,9 @@ namespace FrontEnd {
 		}
 	}
 
-	void Game::tileHover(Square allo)
+	//calls for possible location of chessPiece
+	void Game::displayPossibleLocations(Square allo) 
 	{
-		//calls for possible location of chessPiece
 		//exemple of positions (to test)
 		Square pos1 = { allo.file + 1,allo.rank };
 		Square pos2 = { allo.file,allo.rank + 1 };
@@ -193,41 +191,28 @@ namespace FrontEnd {
 		Square pos4 = { allo.file,allo.rank - 1 };
 		vector<Square> pos = { pos1, pos2, pos3, pos4};
 
-		for (int i = 0; i < pos.size(); i++)
-		{
-			Tiles[pos[i].rank][pos[i].file]->glow();
-		}
+		for (int i:range(pos.size()))
+			Tiles[pos[i].file][pos[i].rank]->glow();
+		
 	}
 
-	void Game::tileOffHover(Square allo)
+	//calls for possible location of chessPiece
+	void Game::removePossibleLocations(Square allo)
 	{
+		//exemple of positions (to test)
 		Square pos1 = { allo.file + 1,allo.rank };
 		Square pos2 = { allo.file,allo.rank + 1 };
 		Square pos3 = { allo.file - 1,allo.rank };
 		Square pos4 = { allo.file,allo.rank - 1 };
 		vector<Square> pos = { pos1, pos2, pos3, pos4 };
 
-		for (int i = 0; i < pos.size(); i++)
-		{
-			Tiles[pos[i].rank][pos[i].file]->stopGlowing();
-		}
+		for (int i : range(pos.size()))
+			Tiles[pos[i].file][pos[i].rank]->stopGlowing();
+
 	}
 
-	void Game::settupPossibleLocation() //will receve vector of position
-	{
-		//exemple of positions (to test)
-		Square pos1 = { 4,3 };
-		Square pos2 = { 4,5 };
-		Square pos3 = { 4,6 };
-		Square pos4 = { 5,4 };
-		Square pos5 = { 3,4 };
-		vector<Square> pos = { pos1, pos2, pos3, pos4, pos5};
-
-		for (int i = 0; i < pos.size(); i++)
-			drawRectangle(HORIZONTAL_MARGIN + (pos[i].rank - 1) * SQUARE_SIZE+ 10, VERTICAL_MARGIN + (pos[i].file - 1) * SQUARE_SIZE + 10, SQUARE_SIZE-20, SQUARE_SIZE-20, gray, 0.70);
-	}
-
-	void Game::mouvementPiece(Square pos1, Square pos2) //piece à pos1 mange ou déplace à pos2
+	//piece à pos1 mange ou déplace à pos2 //TO BE CHANGED
+	void Game::mouvementPiece(Square pos1, Square pos2) 
 	{
 		if (pos1.rank == pos2.rank && pos1.file == pos2.file ||  mat[pos1.file][pos1.rank] == nullptr)
 			return;
@@ -281,27 +266,69 @@ namespace FrontEnd {
 		scene->addItem(rect);
 	}
 
-	QGraphicsRectItem* Game::CreateRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity)
+	void Game::showInitialPieces()
 	{
-		QGraphicsRectItem* rect = new QGraphicsRectItem();
-		rect->setRect(posX, posY, sizeX, sizeY);
-		rect->setBrush(color);
-		rect->setOpacity(opacity);
-		return rect;
-	}
-
-	void Game::showPieces()
-	{
-		for (int file = 0; file < 8; file++)
+		for (int file : range(NB_BOX))
 		{
-			for (int rank = 0; rank < 8; rank++)
+			for (int rank :range(NB_BOX))
 			{
 				if (mat[file][rank] != nullptr)
 					scene->addItem(mat[file][rank]);
 			}
 		}
 	}
+
 }
-//map<pair<int, int>, QGraphicsTextItem*> piecesContainer;à
-//map<pair<int, int>, QGraphicsTextItem*> piecesContainer;
-//map<pair<int, int>, int> try2;
+
+
+
+
+
+//auto itbegin = tileList.begin();
+//auto itend = tileList.end();
+//find(tileList.begin(), tileList.end(), );
+//auto it = find(tileList.begin(), tileList.end(), sender());
+
+//int i = 0;
+//for (auto it = itbegin; it != itend; it++)
+//{
+//	if (*it == sender())
+//	{
+//		QMessageBox::information(this, "x,y", QString("pos : %1 %2 ").arg(tileList[i]->getPos().file).arg(tileList[i]->getPos().rank));
+//		i++;
+//	}
+//}
+
+
+//for(int i=0; i<tileList.size();i++)
+//{
+//	if (tileList[i]->getPos() == c);
+//	{
+//		QMessageBox::information(this, "x,y",QString("pos : %1 %2 ").arg(tileList[i]->getPos().file).arg(tileList[i]->getPos().rank));
+
+//		auto var3 = tileList[i];
+//		auto var2 = tileList[i]->getPos();
+//		auto var = tileList[i]->getPos().file;
+//		auto var1 = tileList[i]->getPos().rank;
+
+
+//		if (validClicks == 0 && mat[tileList[i]->getPos().file][tileList[i]->getPos().rank] == nullptr) //1er click pas sur piece
+//			break;
+
+
+//		Square temp = lastClicked;
+//		Square pos = { tileList[i]->getPos().rank,tileList[i]->getPos().file };
+//		lastClicked = pos;
+//		if (validClicks == 1)
+//		{
+//			//tileHover(pos);
+//		}
+
+//		if (validClicks == 2) //condition
+//		{
+//			mouvementPiece(temp, lastClicked);
+//			//tileOffHover(temp);
+//			validClicks = 0;
+//		}
+//	}
+//}
