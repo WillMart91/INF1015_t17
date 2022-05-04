@@ -1,3 +1,8 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: declaration of the chess board class. main class that manage all the flow of the game
+*/
+
 #pragma once
 #include "AbsPiece.h"
 #include "Square.h"

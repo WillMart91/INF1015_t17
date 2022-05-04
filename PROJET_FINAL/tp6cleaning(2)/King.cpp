@@ -1,3 +1,10 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: implementation of a king piece
+*/
+
+
+
 #include "King.h"
 #include <iostream>
 #include <stdexcept>

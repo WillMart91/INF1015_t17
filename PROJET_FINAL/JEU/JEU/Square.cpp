@@ -1,26 +1,30 @@
+
 #include "Square.h"
 #include <vector>
 
-	Square operator+(const Square p1, const Square p2)
-	{
-		return Square{ p1.file + p2.file, p1.rank + p2.rank };
-	};
+Square operator+(const Square p1, const Square p2)
+{
+	return Square{ p1.file + p2.file, p1.rank + p2.rank };
+};
 
-	Square operator+(const Square p1, const std::vector<int, int> move)
-	{
-		return Square{ p1.file + move[0],p1.rank + move[1] };
-	};
+Square operator+(const Square p1, const std::pair<int, int> move)
+{
+	return Square{ p1.file + move.first,p1.rank + move.second };
+};
 
 
-	std::vector<int, int> operator*(const std::vector<int, int> move, const int i)
-	{
-		return std::vector<int, int>{move[0] * i, move[1] * i};
-	};
+std::pair<int, int> operator*(const std::pair<int, int> move, const int i)
+{
+	return std::pair<int, int>{move.first* i, move.second* i};
+};
 
-	std::vector<int, int> operator*(const int i, const std::vector<int, int> move)
-	{
-		return move * i;
-	};
+std::pair<int, int> operator*(const int i, const std::pair<int, int> move)
+{
+	return move * i;
+};
+
+
+
 
 
 
