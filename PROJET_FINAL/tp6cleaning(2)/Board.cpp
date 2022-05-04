@@ -1,3 +1,9 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: part implementation of the chess board
+*/
+
+
 #include "Board.h"
 #include <stdexcept>
 #include <iostream>

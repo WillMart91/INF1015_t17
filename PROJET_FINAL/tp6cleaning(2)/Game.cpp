@@ -1,4 +1,10 @@
-﻿#include "Game.h"
+﻿/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: declaration of the front end class: "game"
+*/
+
+
+#include "Game.h"
 #include "qchar.h"
 
 using namespace std;

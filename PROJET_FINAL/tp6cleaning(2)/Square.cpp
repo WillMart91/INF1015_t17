@@ -1,3 +1,8 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: implementation of custon operator for square struct (position on the board)
+*/
+
 #include "Square.h"
 #include <vector>
 

@@ -1,3 +1,8 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: implementation of the button class
+*/
+
 #include "Button.h"
 #include <QGraphicsTextItem>
 #include <QBrush>

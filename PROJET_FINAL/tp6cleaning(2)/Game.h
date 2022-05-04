@@ -1,3 +1,8 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: The game class if the main class handling everything that has to do with the visual of the program.
+It also contains an array of tile wich represent the visual board
+*/
 
 #pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
 #include <QMainWindow>

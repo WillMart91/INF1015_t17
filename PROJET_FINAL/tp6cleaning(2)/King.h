@@ -1,3 +1,9 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: class declaring a king piece
+*/
+
+
 #pragma once
 
 #include "AbsPiece.h"

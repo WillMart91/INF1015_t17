@@ -1,3 +1,8 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: declaration of square struct (position on the board)
+*/
+
 #pragma once
 #include <vector>
 

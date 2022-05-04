@@ -1,3 +1,10 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: class that represents a single square on the visual 8 by 8 board. 
+It affects the color of the square and handles everything to do with the click and hover of buttons.
+*/
+
+
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 #include "Square.h"

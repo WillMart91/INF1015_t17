@@ -1,3 +1,8 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: class declaring a generic piece
+*/
+
 #pragma once
 #include "Square.h"
 #include <vector>

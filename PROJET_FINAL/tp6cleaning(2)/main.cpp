@@ -1,3 +1,8 @@
+/*author: Gabriel Sawka and Wiliam Martin
+* date: 25 april
+* description: main of our project
+*/
+
 #include "Game.h"
 #include <QApplication>
 
