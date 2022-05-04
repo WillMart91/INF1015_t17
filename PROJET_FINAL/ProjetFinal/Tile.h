@@ -16,17 +16,18 @@ public:
     ~Tile() = default;
 
     // EVENTS RELATED METHODS
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) { emit Clicked(); };
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* event) { setBrush(*darkerBrush); };
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) { setBrush(*lighterBrush); };
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) { emit Clicked(); }
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* event) { setBrush(*darkerBrush); }
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) { setBrush(*lighterBrush); }
 
     // OTHER METHODS
-    Square getPos() const { return pos; };
-    QString getPieceType() const { return pieceType; };
-    void setPieceType(char newType) { pieceType = newType; };
-    void glow() { setBrush(*validBrush); };
-    void stopGlowing() { setBrush(*lighterBrush); };
-
+    bool getMoveValidity() const { return isValid; }
+    Square getPos() const { return pos; }
+    QString getPieceType() const { return pieceType; }
+    bool getPieceTeam() const { return blackTeam; }
+    void setPieceType(QString newType, bool isBlack);
+    void glow();
+    void stopGlowing();
 
 signals:
     void Clicked();
@@ -34,11 +35,14 @@ signals:
 private:
     Square pos;
     QString pieceType;
+    bool blackTeam;
     QGraphicsTextItem* text;
 
     QBrush* lighterBrush;
     QBrush* darkerBrush;
     QBrush* validBrush;
+
+    bool isValid;
 
 };
 

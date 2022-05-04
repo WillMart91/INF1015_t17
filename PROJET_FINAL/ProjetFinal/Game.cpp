@@ -2,8 +2,6 @@
 #include "qchar.h"
 #include <QHash>
 
-//using namespace std;
-
 
 namespace FrontEnd {
 	Game::Game(QWidget* parent) : QGraphicsView(parent)
@@ -18,26 +16,15 @@ namespace FrontEnd {
 
 	}
 
+	//ADD START BUTTON
 	void Game::startGame() 
 	{
 		initializeGame();
-		showInitialPieces(); //show the initial pieces	
 	}
 
 	void Game::initializeGame()
 	{
 		validClicks = 0;
-		// clean the array
-		for (int i = 0; i < 8; i++)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				mat[i][j] = nullptr;
-			}
-		}
-		// add correct pieces to array
-		setupTeam(white);
-		setupTeam(black);
 
 		//Drawing backround
 		drawSides();
@@ -53,25 +40,26 @@ namespace FrontEnd {
 		{
 			for (int j = 0; j < NB_BOX; j++)
 			{
-				
-				Square pos = {i,j};//INVERTED
+				Square pos = {i,j};
 				if ((i + j) % 2)
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
 					scene->addItem(playButton); 
-					tileList.push_back(playButton); //testing
+					tileList.push_back(playButton); 
 				}
 				else
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
 					scene->addItem(playButton);		
-					tileList.push_back(playButton); //testing
-					
+					tileList.push_back(playButton); 		
 				}
 			}
 		}
+
+		setupTeam(white);
+		setupTeam(black);
 	}
 
 	void Game::drawSides()
@@ -96,7 +84,7 @@ namespace FrontEnd {
 	void Game::drawPositions()
 	{
 		//vertical
-		for (int rank : range(NB_BOX))
+		for (int rank : range(1,NB_BOX))
 		{
 			drawText(QString::number(rank), HORIZONTAL_MARGIN - 25, VERTICAL_MARGIN + SQUARE_SIZE * NB_BOX - rank * SQUARE_SIZE +35, 1, white);
 		}
@@ -111,28 +99,56 @@ namespace FrontEnd {
 
 	void Game::setupTeam(QColor color)
 	{
+		Square position;
 		int v = 0;
 		int w = 1;
+		bool isBlack = true;
 		if (color == white)
 		{
+			isBlack = false;
 			v = 7;
 			w = 6;
 		}
-		mat[3][v] = createPiece("♛", 3, v, color);
-		mat[4][v] = createPiece("♚", 4, v, color);
 
-		mat[2][v] = createPiece("♝", 2, v, color);
-		mat[5][v] = createPiece("♝", 5, v, color);
+		position = { 3,v };
+		auto matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♛", isBlack);
 
-		mat[1][v] = createPiece("♞", 1, v, color);
-		mat[6][v] = createPiece("♞", 6, v, color);
+		position = { 4,v };
+		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♚", isBlack);
 
-		mat[0][v] = createPiece("♜", 0, v, color);
-		mat[7][v] = createPiece("♜", 7, v, color);
+		position = { 2,v };
+		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♝", isBlack);
 
+		position = { 5,v };
+		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♝", isBlack);
+
+		position = { 1,v };
+		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♞", isBlack);
+
+		position = { 6,v };
+		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♞", isBlack);
+
+
+		position = { 0,v };
+		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♜", isBlack);
+
+		position = { 7,v };
+		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♜", isBlack);
+
+	
 		for (int i = 0; i < 8; i++)
 		{
-			mat[i][w] = createPiece("♟", i, w, color);
+			position = { i,w };
+			matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+			(*matching_iter)->setPieceType("♟", isBlack);
 		}
 	}
 
@@ -141,7 +157,9 @@ namespace FrontEnd {
 		auto obj = dynamic_cast<Tile*>(sender());
 		auto position = obj->getPos();
 		
-		if (validClicks == 0 && mat[position.file][position.rank] == nullptr) //WE IGNORE A FRIST CLICK ON A FREE TILE
+
+		auto iterTilePiece = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		if (validClicks == 0 && (*iterTilePiece)->getPieceType() == " ") //WE IGNORE A FRIST CLICK ON A FREE TILE
 			return;
 
 		validClicks++;
@@ -153,15 +171,20 @@ namespace FrontEnd {
 			selected = clicked;
 		}
 
-		if (validClicks == 2)  // + VERIFY IF LEGIT
+		if (validClicks == 2 && (*iterTilePiece)->getMoveValidity())  // + VERIFY IF LEGIT
 		{
 			mouvementPiece(selected, clicked);
 			removePossibleLocations(selected);
 			validClicks = 0;
 		}
+		else if ((*iterTilePiece)->getMoveValidity())
+		{
+			removePossibleLocations(selected);
+			validClicks = 0;
+		}
 	}
 
-	//calls for possible location of chessPiece
+	//CHANGE FOR LIST
 	void Game::displayPossibleLocations(Square allo) 
 	{
 		//exemple of positions (to test)
@@ -183,7 +206,7 @@ namespace FrontEnd {
 		
 	}
 
-	//calls for possible location of chessPiece
+	//CHANGE FOR LIST
 	void Game::removePossibleLocations(Square allo)
 	{
 		//exemple of positions (to test)
@@ -204,40 +227,39 @@ namespace FrontEnd {
 
 	}
 
-	//piece à pos1 mange ou déplace à pos2 //TO BE CHANGED
 	void Game::mouvementPiece(Square pos1, Square pos2) 
 	{
-		if (pos1.rank == pos2.rank && pos1.file == pos2.file ||  mat[pos1.file][pos1.rank] == nullptr)
+		//iter pos1 :
+		Square position1 = { pos1.file,pos1.rank };
+		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&position1](Tile* obj) {return position1 == obj; });
+		//iter pos2 :
+		Square position2 = { pos2.file,pos2.rank };
+		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&position2](Tile* obj) {return position2 == obj; });
+
+		if (position1 == position2)
 			return;
 
-		if(mat[pos2.file][pos2.rank] != nullptr)
-			scene->removeItem(mat[pos2.file][pos2.rank]);
-		scene->removeItem(mat[pos1.file][pos1.rank]);
+		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
+		(*iterTilePiece1)->setPieceType(" ", false);
+	
 
-
-		mat[pos1.file][pos1.rank]->setPos(HORIZONTAL_MARGIN + SQUARE_SIZE * pos2.file, VERTICAL_MARGIN + SQUARE_SIZE * pos2.rank); //pos1
-		mat[pos2.file][pos2.rank] = mat[pos1.file][pos1.rank];
-		mat[pos1.file][pos1.rank] = nullptr;
-
-		if(mat[pos2.file][pos2.rank] != nullptr)
-			scene->addItem(mat[pos2.file][pos2.rank]);
-		
 	}
 
+	//REVOIR OR DELETE
 	void Game::switchPieces(Square pos1, Square pos2) //piece à pos1 chage de place avec pos2 (AKA castle)
 	{
-		auto temp = mat[pos2.file][pos2.rank];
-		mat[pos2.file][pos2.rank] = mat[pos1.file][pos1.rank];
-		mat[pos1.file][pos1.rank] = temp;
-	}
+		//iter pos1 :
+		Square position1 = { pos1.file,pos1.rank };
+		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&position1](Tile* obj) {return position1 == obj; });
 
-	QGraphicsTextItem* Game::createPiece(QString str, int file, int rank, QColor color)
-	{
-		QGraphicsTextItem* piece = new QGraphicsTextItem(str);
-		piece->setScale(3);
-		piece->setDefaultTextColor(color);
-		piece->setPos(HORIZONTAL_MARGIN + SQUARE_SIZE * file, VERTICAL_MARGIN + SQUARE_SIZE * rank);
-		return piece;
+		//iter pos2 :
+		Square position2 = { pos2.file,pos2.rank };
+		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&position2](Tile* obj) {return position2 == obj; });
+
+		//iter temp
+		auto temp = iterTilePiece2;
+		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
+		(*iterTilePiece1)->setPieceType((*temp)->getPieceType(), (*temp)->getPieceTeam());
 	}
 
 	void Game::drawText(QString str, int posX, int posY, int scale, QColor color)
@@ -259,72 +281,4 @@ namespace FrontEnd {
 		scene->addItem(rect);
 	}
 
-	void Game::showInitialPieces()
-	{
-		for (int file : range(NB_BOX))
-		{
-			for (int rank :range(NB_BOX))
-			{
-				if (mat[file][rank] != nullptr)
-					scene->addItem(mat[file][rank]);
-			}
-		}
-	}
-
 }
-
-//auto matching_iter = find_if(tileList.begin(), tileList.end(),
-//	[&position](Tile* obj) {
-//		return position == obj;
-//	});
-
-
-
-//auto itbegin = tileList.begin();
-//auto itend = tileList.end();
-//find(tileList.begin(), tileList.end(), );
-//auto it = find(tileList.begin(), tileList.end(), sender());
-
-//int i = 0;
-//for (auto it = itbegin; it != itend; it++)
-//{
-//	if (*it == sender())
-//	{
-//		QMessageBox::information(this, "x,y", QString("pos : %1 %2 ").arg(tileList[i]->getPos().file).arg(tileList[i]->getPos().rank));
-//		i++;
-//	}
-//}
-
-
-//for(int i=0; i<tileList.size();i++)
-//{
-//	if (tileList[i]->getPos() == c);
-//	{
-//		QMessageBox::information(this, "x,y",QString("pos : %1 %2 ").arg(tileList[i]->getPos().file).arg(tileList[i]->getPos().rank));
-
-//		auto var3 = tileList[i];
-//		auto var2 = tileList[i]->getPos();
-//		auto var = tileList[i]->getPos().file;
-//		auto var1 = tileList[i]->getPos().rank;
-
-
-//		if (validClicks == 0 && mat[tileList[i]->getPos().file][tileList[i]->getPos().rank] == nullptr) //1er click pas sur piece
-//			break;
-
-
-//		Square temp = lastClicked;
-//		Square pos = { tileList[i]->getPos().rank,tileList[i]->getPos().file };
-//		lastClicked = pos;
-//		if (validClicks == 1)
-//		{
-//			//tileHover(pos);
-//		}
-
-//		if (validClicks == 2) //condition
-//		{
-//			mouvementPiece(temp, lastClicked);
-//			//tileOffHover(temp);
-//			validClicks = 0;
-//		}
-//	}
-//}

@@ -31,7 +31,6 @@ namespace FrontEnd {
 		void drawSides();
 		void drawPositions();
 		void startGame();
-		void showInitialPieces();
 		void initializeGame();
 		void setupTeam(QColor color);
 		//GAMEPLAY RELATED
@@ -40,7 +39,6 @@ namespace FrontEnd {
 		void mouvementPiece(Square pos1, Square pos2);
 		void switchPieces(Square pos1, Square pos2); 
 		//CREATORS RELATED
-		QGraphicsTextItem* createPiece(QString str, int i, int j, QColor color);
 		void drawText(QString str, int posX, int posY, int scale, QColor color);
 		void drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
 
@@ -49,9 +47,8 @@ namespace FrontEnd {
 		QGraphicsView* view;
 		QGraphicsScene* scene;
 
-		//containers
-		QGraphicsTextItem* mat[8][8]; ////contains all of the pieces
-		QList<Tile*> tileList; // testing
+		//container
+		QList<Tile*> tileList; // contains all tiles (each tile contains chessPiece images)
 
 		//attributes necessary for the gameplay
 		Square clicked;
