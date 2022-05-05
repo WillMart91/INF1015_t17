@@ -1,14 +1,13 @@
 #include "GameButton.h"
 
-GameButton::GameButton(QString buttonText, int posX, int posY, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent)
-{
-    setRect(0,0,200,50);
+GameButton::GameButton(QString buttonText, int posX, int posY, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) {
+    setRect(posX, posY, sizeX, sizeY);
 
     //ADDING THE PIECE TEXT TO THE TILE (empty for now)
     text = new QGraphicsTextItem(buttonText, this);
-    int x =rect().width()/2 - text-> boundingRect().width()/2;
-    int y = rect().height() / 2 - text->boundingRect().height() / 2;
-    text->setScale(4);
+    int x = posX;
+    int y = posY;
+    text->setScale(2);
     text->setPos(x, y);
 
     //DEFINING THE BUTTON COLORS
@@ -16,7 +15,6 @@ GameButton::GameButton(QString buttonText, int posX, int posY, int sizeX, int si
     brush.setStyle(SolidPattern);
     brush.setColor(baseColor);
     lighterBrush = new QBrush(brush);
-
     QBrush brush2;
     brush2.setStyle(SolidPattern);
     brush2.setColor(hoverColor);
@@ -26,4 +24,5 @@ GameButton::GameButton(QString buttonText, int posX, int posY, int sizeX, int si
     setBrush(*lighterBrush);
     setAcceptHoverEvents(true);
 }
+
 

@@ -3,7 +3,6 @@
 #include <QBrush>
 #include <QGraphicsTextItem>
 //OTHER
-#include "GlobalConst.h"
 
 using namespace std;
 using namespace Qt;
@@ -25,10 +24,8 @@ signals:
 
 private:
     QGraphicsTextItem* text;
-
     QBrush* lighterBrush;
     QBrush* darkerBrush;
-
 };
 
 
