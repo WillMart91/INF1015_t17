@@ -3,8 +3,9 @@
 #include <QBrush>
 #include <QGraphicsTextItem>
 //OTHER
-
-
+#pragma once
+#include "GlobalConst.h"
+#include "Square.h"
 
 using namespace Qt;
 

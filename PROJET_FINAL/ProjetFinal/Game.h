@@ -10,8 +10,12 @@
 #include <QMessageBox>
 #include <QtAlgorithms>
 //OTHER
+#pragma once
+//#include "GlobalConst.h"
+#include "Tile.h"
+#include "Board.h"
 
-
+#include "Square.h"
 //#include "GameButton.h"
 
 
@@ -24,7 +28,7 @@ namespace FrontEnd {
 
 	public slots:
 		void tilePressed();
-		
+
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
@@ -42,7 +46,7 @@ namespace FrontEnd {
 		void displayPossibleLocations(list<Square> positions);
 		void removePossibleLocations(list<Square> positions);
 		void mouvementPiece(Square pos1, Square pos2);
-		void switchPieces(Square pos1, Square pos2); 
+		void switchPieces(Square pos1, Square pos2);
 		//CREATORS RELATED
 		void drawText(QString str, int posX, int posY, int scale, QColor color);
 		void drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
