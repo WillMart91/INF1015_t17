@@ -1,6 +1,6 @@
-﻿#include "Game.h"
-#include "qchar.h"
-#include <QHash>
+﻿#include "Board.h"
+#include "Game.h"
+
 
 
 namespace FrontEnd {
@@ -8,12 +8,18 @@ namespace FrontEnd {
 	{
 		scene = new QGraphicsScene();
 		view = new QGraphicsView();
-
-		startGame();
-
 		view->setScene(scene);
 		view->show();
+		//set default window size
 
+		//dislayMainMenu();
+		startGame();
+
+	}
+
+	void Game::dislayMainMenu()
+	{
+		//GameButton gb = new GameButton();
 	}
 
 	//ADD START BUTTON
@@ -84,7 +90,7 @@ namespace FrontEnd {
 	void Game::drawPositions()
 	{
 		//vertical
-		for (int rank : range(1,NB_BOX))
+		for (int rank : range(1,NB_BOX+1))
 		{
 			drawText(QString::number(rank), HORIZONTAL_MARGIN - 25, VERTICAL_MARGIN + SQUARE_SIZE * NB_BOX - rank * SQUARE_SIZE +35, 1, white);
 		}
@@ -154,75 +160,56 @@ namespace FrontEnd {
 
 	void Game::tilePressed() //fction call when a button is pressed
 	{
-		auto obj = dynamic_cast<Tile*>(sender());
-		auto position = obj->getPos();
-		
+		removePossibleLocations(validMoves);
 
+		Tile* obj = dynamic_cast<Tile*>(sender());
+		Square position = obj->getPos();
 		auto iterTilePiece = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		if (validClicks == 0 && (*iterTilePiece)->getPieceType() == " ") //WE IGNORE A FRIST CLICK ON A FREE TILE
-			return;
-
-		validClicks++;
-		clicked = { position.file,position.rank };
-
-		if (validClicks == 1)  // + VERIFY WHO'S TURN (BLACK VS WHITE PIECES)
+		if ((*iterTilePiece)->getMoveValidity())
 		{
-			displayPossibleLocations(clicked);
-			selected = clicked;
+			list<pair<Square, Square>> a = Board::getInstance()->moveOnBoard(position);
+			
+			for(auto it = a.begin(); it != a.end(), it++)
+			{
+				if (it->first != it->second) {
+					mouvementPiece(it->first, it->second);
+					//turn est changer // je peu te faire un getter de turn
+				}
+	
+			}
+		}
+		else 
+		{
+			validMoves = Board::getInstance()->getMovesOfPiece(position);
+			displayPossibleLocations(validMoves); //envoit validMoves
 		}
 
-		if (validClicks == 2 && (*iterTilePiece)->getMoveValidity())  // + VERIFY IF LEGIT
-		{
-			mouvementPiece(selected, clicked);
-			removePossibleLocations(selected);
-			validClicks = 0;
-		}
-		else if ((*iterTilePiece)->getMoveValidity())
-		{
-			removePossibleLocations(selected);
-			validClicks = 0;
-		}
 	}
 
-	//CHANGE FOR LIST
-	void Game::displayPossibleLocations(Square allo) 
+	void Game::displayPossibleLocations(list<Square> positions) 
 	{
-		//exemple of positions (to test)
-		Square pos1 = { allo.file + 1,allo.rank };
-		Square pos2 = { allo.file,allo.rank + 1 };
-		Square pos3 = { allo.file - 1,allo.rank };
-		Square pos4 = { allo.file,allo.rank - 1 };
-		vector<Square> pos = { pos1, pos2, pos3, pos4};
-		//^^ will be gone
 
 		Square position;
-		for (int i : range(pos.size()))
+		for (int i : range(positions.size()))
 		{
-			position = { pos[i].file,pos[i].rank };
+			position = positions.front();
 			auto matching_iter = find_if(tileList.begin(), tileList.end(),[&position](Tile* obj) {return position == obj;});
 			(*matching_iter)->glow();
+			positions.pop_front();
 		}
 			
 		
 	}
 
-	//CHANGE FOR LIST
-	void Game::removePossibleLocations(Square allo)
+	void Game::removePossibleLocations(list<Square> positions)
 	{
-		//exemple of positions (to test)
-		Square pos1 = { allo.file + 1,allo.rank };
-		Square pos2 = { allo.file,allo.rank + 1 };
-		Square pos3 = { allo.file - 1,allo.rank };
-		Square pos4 = { allo.file,allo.rank - 1 };
-		vector<Square> pos = { pos1, pos2, pos3, pos4 };
-		//^^ will be gone
-
 		Square position;
-		for (int i : range(pos.size()))
+		for (int i : range(positions.size()))
 		{
-			position = { pos[i].file,pos[i].rank };
+			position = positions.front();
 			auto matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
 			(*matching_iter)->stopGlowing();
+			positions.pop_front();
 		}
 
 	}
@@ -245,7 +232,7 @@ namespace FrontEnd {
 
 	}
 
-	//REVOIR OR DELETE
+	//REDO OR DELETE
 	void Game::switchPieces(Square pos1, Square pos2) //piece à pos1 chage de place avec pos2 (AKA castle)
 	{
 		//iter pos1 :
@@ -282,3 +269,44 @@ namespace FrontEnd {
 	}
 
 }
+
+/*		//exemple of positions (to test)
+		list<Square> pos ;
+		Square pos1 = { allo.file + 1,allo.rank };
+		Square pos2 = { allo.file,allo.rank + 1 };
+		Square pos3 = { allo.file - 1,allo.rank };
+		Square pos4 = { allo.file,allo.rank - 1 };
+		pos.push_back(pos1);
+		pos.push_back(pos2);
+		pos.push_back(pos3);
+		pos.push_back(pos4);
+		//^^ will be gone*/
+
+
+/*		//auto obj = dynamic_cast<Tile*>(sender());
+		//auto position = obj->getPos();
+
+		//auto iterTilePiece = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		//if (validClicks == 0 && (*iterTilePiece)->getPieceType() == " ") //WE IGNORE A FRIST CLICK ON A FREE TILE
+		//	return;
+
+		//validClicks++;
+		//clicked = { position.file,position.rank };
+
+		//if (validClicks == 1)  // + VERIFY WHO'S TURN (BLACK VS WHITE PIECES)
+		//{
+		//	displayPossibleLocations(clicked);
+		//	selected = clicked;
+		//}
+
+		//if (validClicks == 2 && (*iterTilePiece)->getMoveValidity())  // + VERIFY IF LEGIT
+		//{
+		//	mouvementPiece(selected, clicked);
+		//	removePossibleLocations(selected);
+		//	validClicks = 0;
+		//}
+		//else if ((*iterTilePiece)->getMoveValidity())
+		//{
+		//	removePossibleLocations(selected);
+		//	validClicks = 0;
+		//}*/

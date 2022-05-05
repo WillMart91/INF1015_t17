@@ -12,6 +12,8 @@
 //OTHER
 #include "Square.h"
 #include "Tile.h"
+#include "GameButton.h"
+
 
 using namespace std;
 using namespace iter;
@@ -22,11 +24,15 @@ namespace FrontEnd {
 
 	public slots:
 		void tilePressed();
+		void startGame();
 		
 	public:
 		Game(QWidget* parent = nullptr);
 		~Game() override = default;
 
+
+		//PRE-GAME 
+		void dislayMainMenu();
 		//INITIAL BOARD RELATED
 		void drawSides();
 		void drawPositions();
@@ -34,8 +40,8 @@ namespace FrontEnd {
 		void initializeGame();
 		void setupTeam(QColor color);
 		//GAMEPLAY RELATED
-		void displayPossibleLocations(Square allo);
-		void removePossibleLocations(Square allo);
+		void displayPossibleLocations(list<Square> positions);
+		void removePossibleLocations(list<Square> positions);
 		void mouvementPiece(Square pos1, Square pos2);
 		void switchPieces(Square pos1, Square pos2); 
 		//CREATORS RELATED
@@ -51,8 +57,11 @@ namespace FrontEnd {
 		QList<Tile*> tileList; // contains all tiles (each tile contains chessPiece images)
 
 		//attributes necessary for the gameplay
-		Square clicked;
-		Square selected;
-		int validClicks;
+		//Square clicked;
+		//Square selected;
+
+		list<Square> validMoves;
+
+		//int validClicks;
 	};
 }

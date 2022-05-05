@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClCompile Include="bibliotheque_cours\bibliotheque_cours.cpp" />
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
+    <ClCompile Include="GameButton.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Calc.cpp" />
     <ClCompile Include="CalcWindow.cpp" />
@@ -131,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Tile.h" />
+    <QtMoc Include="GameButton.h" />
     <ClInclude Include="GlobalConst.h" />
     <ClInclude Include="Square.h" />
   </ItemGroup>
