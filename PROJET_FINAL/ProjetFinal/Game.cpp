@@ -1,5 +1,11 @@
-﻿#include "Game.h"
+﻿
+#include "Game.h"
+#include "Square.h"
+
+#include "GlobalConst.h"
 #include "Board.h"
+#include "Tile.h"
+
 
 namespace FrontEnd {
 	Game::Game(QWidget* parent) : QGraphicsView(parent) {

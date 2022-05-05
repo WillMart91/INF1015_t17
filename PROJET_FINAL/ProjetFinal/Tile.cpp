@@ -1,5 +1,7 @@
-#include "Tile.h"
 
+#include "Tile.h"
+#include "GlobalConst.h"
+#include "Square.h"
 Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) 
 {
     isValid = false;

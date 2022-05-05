@@ -111,9 +111,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbsPiece.cpp" />
     <ClCompile Include="bibliotheque_cours\bibliotheque_cours.cpp" />
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
+    <ClCompile Include="Bishop.cpp" />
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="GameButton.cpp" />
+    <ClCompile Include="King.cpp" />
+    <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Queen.cpp" />
+    <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Calc.cpp" />
     <ClCompile Include="CalcWindow.cpp" />
@@ -133,7 +141,15 @@
   <ItemGroup>
     <QtMoc Include="Tile.h" />
     <QtMoc Include="GameButton.h" />
+    <ClInclude Include="AbsPiece.h" />
+    <ClInclude Include="Bishop.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="GlobalConst.h" />
+    <ClInclude Include="King.h" />
+    <ClInclude Include="Knight.h" />
+    <ClInclude Include="Pawn.h" />
+    <ClInclude Include="Queen.h" />
+    <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

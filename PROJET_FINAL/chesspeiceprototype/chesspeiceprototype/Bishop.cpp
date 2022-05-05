@@ -1,8 +1,7 @@
-#include "AbsPiece.h"
-#include "Board.h"
+
 #include "Bishop.h"
 
-Bishop::Bishop(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,inStartPos)
+Bishop::Bishop(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'b', inStartPos)
 {
 }
 

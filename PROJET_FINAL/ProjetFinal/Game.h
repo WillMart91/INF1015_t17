@@ -1,4 +1,4 @@
-#pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
+#pragma warning(push, 0) // Sinon Qt fait des avertissements ï¿½ /W4.
 
 //QT INCLUDES
 #include <QString>
@@ -9,10 +9,10 @@
 #include <cppitertools/range.hpp>
 #include <QMessageBox>
 #include <QtAlgorithms>
-//OTHERS
-#include "Square.h"
-#include "Tile.h"
-#include "GameButton.h"
+//OTHER
+
+
+//#include "GameButton.h"
 
 
 using namespace std;

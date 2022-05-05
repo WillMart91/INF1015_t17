@@ -1,16 +1,20 @@
-#include "Square.h"
-#include <vector>
+#pragma once
+#include <map>
 
 class Board
 {
 public:
-	Board();
-	//vector of box
-	bool squareOccupied(Square pos);
-	void movePiece(ChessPiece piece, Square square);
+	AbsPiece* getPieceOn(Square pos) { return chessBoard_[pos]; }
+	static Board* getInstance() { return instance; }
+	void fillBoard(std::map<Square, AbsPiece*> newBoard) { chessBoard_ = newBoard; }
+	~Board();
+	std::list<Square> getMovesOfPiece(Square clicked);
+	std::list<std::pair<Square, Square>> moveOnBoard(Square clicked);
 private:
-	std::vector < std::vector<Square>> chessBoard;
-
-
+	Board()=default; 
+	static Board* instance;
+	std::map<Square, AbsPiece*> chessBoard_;
+	Square lastClicked;
+	bool blackTurn;
 };
 

@@ -1,7 +1,10 @@
-
-
 #include "Queen.h"
-Queen::Queen(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'q', inStartPos)
+
+#include "Square.h"
+#include "AbsPiece.h"
+#include "Board.h"
+
+Queen::Queen(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,inStartPos)
 {
 }
 

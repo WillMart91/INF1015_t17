@@ -1,8 +1,7 @@
-#include "AbsPiece.h"
-#include "Board.h"
+
 #include "Rook.h"
 
-Rook::Rook(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam,position,inStartPos)
+Rook::Rook(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam,position,'r', inStartPos)
 {
 }
 
