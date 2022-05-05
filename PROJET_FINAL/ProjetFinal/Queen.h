@@ -1,4 +1,4 @@
-#include "Board.h"
+
 class Queen : public AbsPiece
 {
 public:

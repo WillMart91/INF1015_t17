@@ -1,6 +1,10 @@
-﻿#include "Board.h"
+﻿
 #include "Game.h"
+#include "Square.h"
 
+#include "GlobalConst.h"
+#include "Board.h"
+#include "Tile.h"
 
 
 namespace FrontEnd {
@@ -30,7 +34,6 @@ namespace FrontEnd {
 
 	void Game::initializeGame()
 	{
-		validClicks = 0;
 
 		//Drawing backround
 		drawSides();
@@ -167,11 +170,11 @@ namespace FrontEnd {
 		auto iterTilePiece = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
 		if ((*iterTilePiece)->getMoveValidity())
 		{
-			list<pair<Square, Square>> a = Board::getInstance()->moveOnBoard(position);
+			list<pair<Square, Square>> moving = Board::getInstance()->moveOnBoard(position);
 			
-			for(auto it = a.begin(); it != a.end(), it++)
+			for(auto&& it = moving.begin(); it != moving.end(); it++)
 			{
-				if (it->first != it->second) {
+				if (!(it->first == it->second)) {
 					mouvementPiece(it->first, it->second);
 					//turn est changer // je peu te faire un getter de turn
 				}
@@ -217,13 +220,11 @@ namespace FrontEnd {
 	void Game::mouvementPiece(Square pos1, Square pos2) 
 	{
 		//iter pos1 :
-		Square position1 = { pos1.file,pos1.rank };
-		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&position1](Tile* obj) {return position1 == obj; });
+		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&pos1](Tile* obj) {return pos1 == obj; });
 		//iter pos2 :
-		Square position2 = { pos2.file,pos2.rank };
-		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&position2](Tile* obj) {return position2 == obj; });
+		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&pos2](Tile* obj) {return pos2 == obj; });
 
-		if (position1 == position2)
+		if (pos1 == pos2)
 			return;
 
 		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
@@ -236,13 +237,10 @@ namespace FrontEnd {
 	void Game::switchPieces(Square pos1, Square pos2) //piece à pos1 chage de place avec pos2 (AKA castle)
 	{
 		//iter pos1 :
-		Square position1 = { pos1.file,pos1.rank };
-		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&position1](Tile* obj) {return position1 == obj; });
+		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&pos1](Tile* obj) {return obj == pos1; });
 
 		//iter pos2 :
-		Square position2 = { pos2.file,pos2.rank };
-		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&position2](Tile* obj) {return position2 == obj; });
-
+		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&pos2](Tile* obj) {return obj == pos2; });
 		//iter temp
 		auto temp = iterTilePiece2;
 		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());

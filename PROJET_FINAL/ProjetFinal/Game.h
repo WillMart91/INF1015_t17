@@ -10,9 +10,9 @@
 #include <QMessageBox>
 #include <QtAlgorithms>
 //OTHER
-#include "Square.h"
-#include "Tile.h"
-#include "GameButton.h"
+
+
+//#include "GameButton.h"
 
 
 using namespace std;
@@ -24,7 +24,6 @@ namespace FrontEnd {
 
 	public slots:
 		void tilePressed();
-		void startGame();
 		
 	public:
 		Game(QWidget* parent = nullptr);

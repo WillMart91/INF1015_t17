@@ -1,7 +1,10 @@
-
 #include "Pawn.h"
+#include "Square.h"
+#include "AbsPiece.h"
+#include "Board.h"
 
-Pawn::Pawn(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'p', inStartPos)
+
+Pawn::Pawn(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position, inStartPos)
 {
 }
 

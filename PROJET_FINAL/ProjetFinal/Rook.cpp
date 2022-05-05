@@ -1,11 +1,15 @@
+#include "Rook.h"
+
+#include "Square.h"
+#include "AbsPiece.h"
+#include "Board.h"
 
 
-#include "Queen.h"
-Queen::Queen(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'q', inStartPos)
+Rook::Rook(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam,position,inStartPos)
 {
 }
 
-std::list<Square> Queen::getValidMoves()
+std::list<Square> Rook::getValidMoves()
 {
 	std::list<std::pair<int, int>> allDirCopy = allDir;
 	std::list<Square> p;

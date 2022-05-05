@@ -1,4 +1,4 @@
-#include "Board.h"
+
 class Pawn : public AbsPiece
 {
 	Pawn(bool blackTeam, Square position, bool inStartPos = true);

@@ -1,5 +1,7 @@
-#include "Tile.h"
 
+#include "Tile.h"
+#include "GlobalConst.h"
+#include "Square.h"
 Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hoverColor, QGraphicsItem* parent) : QGraphicsRectItem(parent) 
 {
     isValid = false;
@@ -39,6 +41,11 @@ Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hover
 bool operator==(const Tile* p1, const Square s)
 {
     return (p1->getPos() == s);
+}
+
+bool operator==(const Square s, const Tile* p1)
+{
+    return p1 == s;
 }
 
 void Tile::setPieceType(QString newType, bool isBlack)

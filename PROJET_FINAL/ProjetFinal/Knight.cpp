@@ -1,8 +1,11 @@
-
 #include "Knight.h"
 
+#include "AbsPiece.h"
+#include "Board.h"
+#include "Square.h"
 
-Knight::Knight(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam,position,'k', inStartPos)
+
+Knight::Knight(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam,position,inStartPos)
 {
 }
 

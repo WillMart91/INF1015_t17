@@ -1,4 +1,4 @@
-#include "Board.h"
+
 class Bishop : public AbsPiece
 {
 public:

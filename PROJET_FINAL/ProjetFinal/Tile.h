@@ -3,8 +3,8 @@
 #include <QBrush>
 #include <QGraphicsTextItem>
 //OTHER
-#include "Square.h"
-#include "GlobalConst.h"
+
+
 
 using namespace Qt;
 
@@ -47,6 +47,7 @@ private:
 };
 
 bool operator==(const Tile* p1, const Square s);
+bool operator==(const Square s, const Tile* p1);
 
 
 
