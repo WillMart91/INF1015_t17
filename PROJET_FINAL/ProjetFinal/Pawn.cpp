@@ -7,27 +7,32 @@ Pawn::Pawn(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTea
 
 std::list<Square> Pawn::getValidMoves()
 {
+	std::list<Square> p = std::list<Square>();
 	Square pos = getSquare();
-	std::list<Square> p;
-	Square checkPos = regMove * ((-1)^ (int)!isBlackTeam()) + pos;
+	int side =(int)isBlackTeam();
+	side = pow(-1, side);
+	Square checkPos = (regMove * side) + pos;
 	AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
 	if (Square::isValid(checkPos) && pieceOn == nullptr)
 	{
 		p.push_back(checkPos);
 	}
-	checkPos = startMove * ((-1) ^ (int)!isBlackTeam()) + pos;
+	checkPos = (startMove * side) + pos;
 	pieceOn = Board::getInstance()->getPieceOn(checkPos);
-	if (inStartPos() && pieceOn == nullptr)
+	if (Square::isValid(checkPos) && inStartPos() && pieceOn == nullptr)
 	{
 		p.push_back(checkPos);
 	}
 	for (auto&& it = attMoves.begin(); it != attMoves.end(); it++) {
-		checkPos = *it * ((-1) ^ (int)!isBlackTeam()) + pos;
+		checkPos = (*it * side) + pos;
 		pieceOn = Board::getInstance()->getPieceOn(checkPos);
-		if (Square::isValid(checkPos) && pieceOn->isBlackTeam() != this->isBlackTeam())
-		{
-			p.push_back(checkPos);
+		if (pieceOn != nullptr) {
+			if (Square::isValid(checkPos) && (pieceOn->isBlackTeam() != ((AbsPiece*)this)->isBlackTeam()))
+			{
+				p.push_back(checkPos);
+			}
 		}
+		
 	}
 	return p;
 }

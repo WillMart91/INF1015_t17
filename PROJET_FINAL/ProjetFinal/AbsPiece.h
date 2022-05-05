@@ -6,7 +6,7 @@ class AbsPiece
 {
 public:
 	Square getSquare() { return position_; }
-	void move(Square newPos) { position_ = newPos; }
+	void move(Square newPos);
 	virtual std::list<Square> getValidMoves() = 0;
 
 	bool isBlackTeam() { return blackTeam_; }

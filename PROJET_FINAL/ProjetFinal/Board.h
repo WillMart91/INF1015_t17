@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <list>
 #include "AbsPiece.h"
 class Board
 {
@@ -21,9 +22,9 @@ private:
 	static bool blackTurn_;
 
 
-	const std::list<std::pair<int, int>> knightCheck = { {2, 1},{-2, 1},{2, -1},{-2, -1},{1,2},{-1,2}, {1,-2},{-1,-2} };
-	const std::list<std::pair<int, int>> bishopCheck = { {1, 1},{-1, 1},{1, -1},{-1, -1} };
-	const std::list<std::pair<int, int>> rookCheck = { {1, 0},{-1, 0},{0, -1},{0, 1} };
-	const std::list<std::pair<int, int>> pawnCheck = { {1, 1},{-1, 1} };
+	static const std::list<std::pair<int, int>> knightCheck_; 
+	static const std::list<std::pair<int, int>> bishopCheck_; 
+	static const std::list<std::pair<int, int>> rookCheck_;
+	static const std::list<std::pair<int, int>> pawnCheck_;
 };
 

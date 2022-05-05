@@ -8,18 +8,18 @@ Knight::Knight(bool blackTeam, Square position, bool inStartPos) :AbsPiece(black
 
 std::list<Square> Knight::getValidMoves()
 {
-	std::list<Square> p;
+	std::list<Square> p = std::list<Square>();
 	Square pos = getSquare();
 
 	for (auto&& it = allMoves.begin(); it != allMoves.end(); it++) 
 	{
 		Square checkPos = pos + *it;
-		if (Square::isValid(checkPos)) {
+		if (!Square::isValid(checkPos)) {
 			continue;
 		}
 		AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
 		if ( pieceOn != nullptr) {
-			if (pieceOn->isBlackTeam() != this->isBlackTeam()) {
+			if (pieceOn->isBlackTeam() != ((AbsPiece*)this)->isBlackTeam()) {
 				p.push_back(checkPos);
 			}
 		}
