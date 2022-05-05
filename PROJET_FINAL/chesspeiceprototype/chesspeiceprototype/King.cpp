@@ -3,7 +3,7 @@
 
 
 
-
+int King::nbOfKings = 0;
 King::King(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'K', inStartPos)
 {
 	if (++nbOfKings >= 2) {
@@ -41,7 +41,5 @@ std::list<Square> King::getValidMoves()
 			p.push_back(checkPos);
 		}
 	}
-
-
 	return p;
 }

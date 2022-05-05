@@ -1,11 +1,7 @@
+
 #include "Rook.h"
 
-#include "Square.h"
-#include "AbsPiece.h"
-#include "Board.h"
-
-
-Rook::Rook(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam,position,inStartPos)
+Rook::Rook(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam,position,'r', inStartPos)
 {
 }
 
@@ -25,7 +21,7 @@ std::list<Square> Rook::getValidMoves()
 			}
 			AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
 			if (pieceOn != nullptr) {
-				if (pieceOn->isBlackTeam() != isBlackTeam()) {
+				if (pieceOn->isBlackTeam() != this->isBlackTeam()) {
 					p.push_back(checkPos);
 				}
 				allDirCopy.erase(it);

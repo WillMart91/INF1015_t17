@@ -1,10 +1,7 @@
+
 #include "Bishop.h"
 
-#include "AbsPiece.h"
-#include "Board.h"
-#include "Square.h"
-
-Bishop::Bishop(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,inStartPos)
+Bishop::Bishop(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'b', inStartPos)
 {
 }
 
@@ -24,7 +21,7 @@ std::list<Square> Bishop::getValidMoves()
 			}
 			AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
 			if (pieceOn != nullptr) {
-				if (pieceOn->isBlackTeam() != isBlackTeam()) {
+				if (pieceOn->isBlackTeam() != this->isBlackTeam()) {
 					p.push_back(checkPos);
 				}
 				allDirCopy.erase(it);

@@ -40,8 +40,3 @@ bool Square::isValid(Square s)
 {
 	return (s.file >= 1 && s.file <= 8) && (s.rank >= 1 && s.rank <= 8);
 }
-
-bool Square::operator==(const Square p2)
-{
-	return file == p2.file && rank == p2.rank;
-}

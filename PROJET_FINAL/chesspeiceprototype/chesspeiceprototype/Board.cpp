@@ -1,6 +1,6 @@
 
 #include "Board.h"
-
+Board* Board::instance_;
 Board::~Board()
 {
     for (auto&& it = chessBoard_.begin(); it != chessBoard_.end(); it++) {

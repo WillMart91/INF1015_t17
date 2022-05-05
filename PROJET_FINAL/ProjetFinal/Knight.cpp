@@ -1,11 +1,8 @@
+
 #include "Knight.h"
 
-#include "AbsPiece.h"
-#include "Board.h"
-#include "Square.h"
 
-
-Knight::Knight(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam,position,inStartPos)
+Knight::Knight(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam,position,'k', inStartPos)
 {
 }
 
@@ -22,7 +19,7 @@ std::list<Square> Knight::getValidMoves()
 		}
 		AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
 		if ( pieceOn != nullptr) {
-			if (pieceOn->isBlackTeam() != isBlackTeam()) {
+			if (pieceOn->isBlackTeam() != this->isBlackTeam()) {
 				p.push_back(checkPos);
 			}
 		}

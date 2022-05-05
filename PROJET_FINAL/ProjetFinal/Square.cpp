@@ -40,3 +40,4 @@ bool Square::isValid(Square s)
 {
 	return (s.file >= 1 && s.file <= 8) && (s.rank >= 1 && s.rank <= 8);
 }
+

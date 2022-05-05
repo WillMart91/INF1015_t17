@@ -4,7 +4,6 @@ struct Square
 	int file;
 	int rank;
 	static bool isValid(Square s);
-	bool operator==(const Square p2);
 };
 Square operator+(const Square p1, const Square p2);
 Square operator+(const Square p1, const std::pair<int, int> move);

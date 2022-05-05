@@ -1,6 +1,7 @@
-
+#include "Board.h"
 class Pawn : public AbsPiece
 {
+public:
 	Pawn(bool blackTeam, Square position, bool inStartPos = true);
 	~Pawn() = default;
 	virtual std::list<Square> getValidMoves();

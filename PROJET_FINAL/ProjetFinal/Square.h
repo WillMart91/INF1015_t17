@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 struct Square
 {
@@ -12,3 +13,5 @@ std::pair<int, int> operator*(const std::pair<int, int> move, const int i);
 std::pair<int, int> operator*(const int i, const std::pair<int, int> move);
 bool operator==(const Square p1, const Square p2);
 bool operator<(const Square p1, const Square p2);
+
+
