@@ -1,36 +1,68 @@
-﻿#include "Board.h"
-#include "Game.h"
-
-
+﻿#include "Game.h"
+#include "Board.h"
 
 namespace FrontEnd {
-	Game::Game(QWidget* parent) : QGraphicsView(parent)
-	{
-		scene = new QGraphicsScene();
-		view = new QGraphicsView();
-		view->setScene(scene);
-		view->show();
-		//set default window size
+	Game::Game(QWidget* parent) : QGraphicsView(parent) {
+		scene_ = new QGraphicsScene();
+		view_ = new QGraphicsView();
+		view_->setFixedHeight(1080);
+		view_->setFixedWidth(1920);
 
-		//dislayMainMenu();
-		startGame();
+		view_->setScene(scene_);
+		view_->show();
 
+		initializeGame();
+		dislayMainMenu();	
 	}
 
-	void Game::dislayMainMenu()
-	{
-		//GameButton gb = new GameButton();
+	Game::~Game() {
+		delete(view_);
+		delete(scene_);
+		delete(startGameButton_);
+		delete(restartGameButton_);
+		delete(endGameButton_);
 	}
 
-	//ADD START BUTTON
+	void Game::dislayMainMenu() {
+		startGameButton_ = new GameButton("Start game", 520, 425,150,50, darkCyan, cyan);
+		connect(startGameButton_, SIGNAL(Clicked()), this, SLOT(startGame()));
+		scene_->addItem(startGameButton_);
+	}
+
 	void Game::startGame() 
 	{
-		initializeGame();
+		scene_->removeItem(startGameButton_);
+
+		restartGameButton_ = new GameButton("Restart game", 15, 890, 150, 50, darkYellow, darkCyan);
+		connect(restartGameButton_, SIGNAL(Clicked()), this, SLOT(restartGame()));
+		scene_->addItem(restartGameButton_);
+
+		endGameButton_ = new GameButton("End game", 1025, 890, 150, 50, darkYellow, darkCyan);
+		connect(endGameButton_, SIGNAL(Clicked()), this, SLOT(endGame()));
+		scene_->addItem(endGameButton_);
+
+		setupTeam(white);
+		setupTeam(black);
+	}
+
+	void Game::endGame() {
+		tileList_.clear();
+		scene_->clear();
+	}
+
+	void Game::restartGame() {
+		//clearing the tiles from their piece type
+		for (auto it = tileList_.begin(); it != tileList_.end(); it++)
+			(*it)->removePiece();
+
+		setupTeam(white);
+		setupTeam(black);
 	}
 
 	void Game::initializeGame()
 	{
-		validClicks = 0;
+		validClicks_ = 0;
+		mouvementMade_ = 0;
 
 		//Drawing backround
 		drawSides();
@@ -42,34 +74,32 @@ namespace FrontEnd {
 		QColor color3 = QColor(163, 135, 41, 255);		// brown
 		QColor color4 = QColor(97, 77, 12, 255);		// darker
 
-		for (int i = 0; i < NB_BOX; i++)
+		for (int i = 1; i <= NB_BOX; i++)
 		{
-			for (int j = 0; j < NB_BOX; j++)
+			for (int j = 1; j <= NB_BOX; j++)
 			{
 				Square pos = {i,j};
 				if ((i + j) % 2)
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color1, color2);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					scene->addItem(playButton); 
-					tileList.push_back(playButton); 
+					scene_->addItem(playButton); 
+					tileList_.push_back(playButton); 
 				}
 				else
 				{
 					Tile* playButton = new Tile(pos, SQUARE_SIZE, SQUARE_SIZE, color3, color4);
 					connect(playButton, SIGNAL(Clicked()), this, SLOT(tilePressed()));
-					scene->addItem(playButton);		
-					tileList.push_back(playButton); 		
+					scene_->addItem(playButton);		
+					tileList_.push_back(playButton); 		
 				}
 			}
 		}
 
-		setupTeam(white);
-		setupTeam(black);
+
 	}
 
-	void Game::drawSides()
-	{
+	void Game::drawSides() {
 		//drawing the sides
 		drawRectangle(0, VERTICAL_MARGIN, HORIZONTAL_MARGIN, NB_BOX * SQUARE_SIZE, black, 0.8); //left
 		drawRectangle(HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE, VERTICAL_MARGIN, HORIZONTAL_MARGIN, NB_BOX * SQUARE_SIZE, black, 0.8); //right
@@ -85,6 +115,15 @@ namespace FrontEnd {
 		//drawing turns 
 		drawText("'s turn to play", (HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE) / 2 + 50, VERTICAL_MARGIN / 7, 2, white);
 		//drawText("<3", (HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE) / 2 + 50, VERTICAL_MARGIN / 6, 5);
+
+		playerTurn_ = new QGraphicsTextItem(" ");
+		playerTurn_->setPos((HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE) / 2 - 50, VERTICAL_MARGIN / 7);
+		playerTurn_->setScale(2);
+		playerTurn_->setDefaultTextColor(white);
+		playerTurn_->setTextInteractionFlags(TextEditorInteraction);
+		
+		scene_->addItem(playerTurn_);
+
 	}
 
 	void Game::drawPositions()
@@ -106,207 +145,142 @@ namespace FrontEnd {
 	void Game::setupTeam(QColor color)
 	{
 		Square position;
-		int v = 0;
-		int w = 1;
-		bool isBlack = true;
-		if (color == white)
-		{
-			isBlack = false;
-			v = 7;
-			w = 6;
+		int rankBackLine = 1;
+		int rankFrontLine = 2;
+		
+		if (color == black){
+			rankBackLine = 8;
+			rankFrontLine = 7;
 		}
 
-		position = { 3,v };
-		auto matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♛", isBlack);
+		position = { 4,rankBackLine };
+		auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♛", color);
 
-		position = { 4,v };
-		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♚", isBlack);
+		position = { 5,rankBackLine };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♚", color);
 
-		position = { 2,v };
-		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♝", isBlack);
+		position = { 3,rankBackLine };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♝", color);
 
-		position = { 5,v };
-		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♝", isBlack);
+		position = { 6,rankBackLine };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♝", color);
 
-		position = { 1,v };
-		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♞", isBlack);
+		position = {2,rankBackLine };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♞", color);
 
-		position = { 6,v };
-		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♞", isBlack);
+		position = { 7,rankBackLine };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♞", color);
 
 
-		position = { 0,v };
-		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♜", isBlack);
+		position = { 1,rankBackLine };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♜", color);
 
-		position = { 7,v };
-		matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♜", isBlack);
-
+		position = { 8,rankBackLine };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♜", color);
 	
-		for (int i = 0; i < 8; i++)
+		for (int i = 1; i <= 8; i++)
 		{
-			position = { i,w };
-			matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-			(*matching_iter)->setPieceType("♟", isBlack);
+			position = { i,rankFrontLine };
+			matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+			(*matching_iter)->setPieceType("♟", color);
 		}
 	}
 
-	void Game::tilePressed() //fction call when a button is pressed
-	{
-		removePossibleLocations(validMoves);
 
+
+	void Game::tilePressed() {
+		
 		Tile* obj = dynamic_cast<Tile*>(sender());
 		Square position = obj->getPos();
-		auto iterTilePiece = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+		auto iterTilePiece = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
 		if ((*iterTilePiece)->getMoveValidity())
 		{
-			list<pair<Square, Square>> a = Board::getInstance()->moveOnBoard(position);
-			
-			for(auto it = a.begin(); it != a.end(), it++)
+			list<pair<Square, Square>> moving = Board::getInstance()->moveOnBoard(position);
+
+			for (auto&& it = moving.begin(); it != moving.end(); it++)
 			{
-				if (it->first != it->second) {
+				if (!(it->first == it->second)) {
 					mouvementPiece(it->first, it->second);
 					//turn est changer // je peu te faire un getter de turn
 				}
-	
+
 			}
 		}
-		else 
+		else
 		{
-			validMoves = Board::getInstance()->getMovesOfPiece(position);
-			displayPossibleLocations(validMoves); //envoit validMoves
+			validMoves_ = Board::getInstance()->getMovesOfPiece(position);
+			displayPossibleLocations(validMoves_); //envoit validMoves
 		}
-
 	}
 
-	void Game::displayPossibleLocations(list<Square> positions) 
-	{
-
+	//TODO : MAKE IT RECEVE LIST 
+	void Game::displayPossibleLocations(list<Square> positions) {
 		Square position;
 		for (int i : range(positions.size()))
 		{
 			position = positions.front();
-			auto matching_iter = find_if(tileList.begin(), tileList.end(),[&position](Tile* obj) {return position == obj;});
+			auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
 			(*matching_iter)->glow();
 			positions.pop_front();
 		}
-			
-		
 	}
 
-	void Game::removePossibleLocations(list<Square> positions)
-	{
+	//TODO : MAKE IT RECEVE LIST 
+	void Game::removePossibleLocations(list<Square> positions) {
 		Square position;
 		for (int i : range(positions.size()))
 		{
 			position = positions.front();
-			auto matching_iter = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
+			auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
 			(*matching_iter)->stopGlowing();
 			positions.pop_front();
 		}
 
 	}
 
-	void Game::mouvementPiece(Square pos1, Square pos2) 
-	{
-		//iter pos1 :
-		Square position1 = { pos1.file,pos1.rank };
-		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&position1](Tile* obj) {return position1 == obj; });
-		//iter pos2 :
-		Square position2 = { pos2.file,pos2.rank };
-		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&position2](Tile* obj) {return position2 == obj; });
-
-		if (position1 == position2)
+	void Game::mouvementPiece(Square pos1, Square pos2) {
+		if(pos1 == pos2)
 			return;
 
-		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
-		(*iterTilePiece1)->setPieceType(" ", false);
-	
+		auto iterTilePiece1 = find_if(tileList_.begin(), tileList_.end(), [&pos1](Tile* obj) {return pos1 == obj; });
+		auto iterTilePiece2 = find_if(tileList_.begin(), tileList_.end(), [&pos2](Tile* obj) {return pos2 == obj; });
 
+		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
+		(*iterTilePiece1)->removePiece();
 	}
 
 	//REDO OR DELETE
-	void Game::switchPieces(Square pos1, Square pos2) //piece à pos1 chage de place avec pos2 (AKA castle)
-	{
-		//iter pos1 :
-		Square position1 = { pos1.file,pos1.rank };
-		auto iterTilePiece1 = find_if(tileList.begin(), tileList.end(), [&position1](Tile* obj) {return position1 == obj; });
-
-		//iter pos2 :
-		Square position2 = { pos2.file,pos2.rank };
-		auto iterTilePiece2 = find_if(tileList.begin(), tileList.end(), [&position2](Tile* obj) {return position2 == obj; });
-
-		//iter temp
+	void Game::switchPieces(Square pos1, Square pos2) {
+		auto iterTilePiece1 = find_if(tileList_.begin(), tileList_.end(), [&pos1](Tile* obj) {return pos1 == obj; });
+		auto iterTilePiece2 = find_if(tileList_.begin(), tileList_.end(), [&pos2](Tile* obj) {return pos2 == obj; });
 		auto temp = iterTilePiece2;
+
 		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
 		(*iterTilePiece1)->setPieceType((*temp)->getPieceType(), (*temp)->getPieceTeam());
 	}
 
-	void Game::drawText(QString str, int posX, int posY, int scale, QColor color)
-	{
+	void Game::drawText(QString str, int posX, int posY, int scale, QColor color) {
 		QGraphicsTextItem* text = new QGraphicsTextItem(str);
 		text->setPos(posX, posY);
 		text->setScale(scale);
 		text->setDefaultTextColor(color);
 		text->setTextInteractionFlags(TextEditorInteraction);
-		scene->addItem(text);
+		scene_->addItem(text);
 	}
 
-	void Game::drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity)
-	{
+	void Game::drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity) {
 		QGraphicsRectItem* rect = new QGraphicsRectItem();
 		rect->setRect(posX, posY, sizeX, sizeY);
 		rect->setBrush(color);
 		rect->setOpacity(opacity);
-		scene->addItem(rect);
+		scene_->addItem(rect);	
 	}
-
 }
-
-/*		//exemple of positions (to test)
-		list<Square> pos ;
-		Square pos1 = { allo.file + 1,allo.rank };
-		Square pos2 = { allo.file,allo.rank + 1 };
-		Square pos3 = { allo.file - 1,allo.rank };
-		Square pos4 = { allo.file,allo.rank - 1 };
-		pos.push_back(pos1);
-		pos.push_back(pos2);
-		pos.push_back(pos3);
-		pos.push_back(pos4);
-		//^^ will be gone*/
-
-
-/*		//auto obj = dynamic_cast<Tile*>(sender());
-		//auto position = obj->getPos();
-
-		//auto iterTilePiece = find_if(tileList.begin(), tileList.end(), [&position](Tile* obj) {return position == obj; });
-		//if (validClicks == 0 && (*iterTilePiece)->getPieceType() == " ") //WE IGNORE A FRIST CLICK ON A FREE TILE
-		//	return;
-
-		//validClicks++;
-		//clicked = { position.file,position.rank };
-
-		//if (validClicks == 1)  // + VERIFY WHO'S TURN (BLACK VS WHITE PIECES)
-		//{
-		//	displayPossibleLocations(clicked);
-		//	selected = clicked;
-		//}
-
-		//if (validClicks == 2 && (*iterTilePiece)->getMoveValidity())  // + VERIFY IF LEGIT
-		//{
-		//	mouvementPiece(selected, clicked);
-		//	removePossibleLocations(selected);
-		//	validClicks = 0;
-		//}
-		//else if ((*iterTilePiece)->getMoveValidity())
-		//{
-		//	removePossibleLocations(selected);
-		//	validClicks = 0;
-		//}*/

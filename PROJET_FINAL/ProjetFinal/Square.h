@@ -1,9 +1,7 @@
 #pragma once
 
-
 struct Square
 {
-public:
 	int file; 
 	int rank;
 };

@@ -24,10 +24,12 @@ public:
     bool getMoveValidity() const { return isValid; }
     Square getPos() const { return pos; }
     QString getPieceType() const { return pieceType; }
-    bool getPieceTeam() const { return blackTeam; }
-    void setPieceType(QString newType, bool isBlack);
+    QColor getPieceTeam() const { return *teamColor; }
+    void setPieceType(QString newType, QColor newColor);
     void glow();
     void stopGlowing();
+    void removePiece();
+    bool isTileFree() { return pieceType == " "; }
 
 signals:
     void Clicked();
@@ -35,12 +37,12 @@ signals:
 private:
     Square pos;
     QString pieceType;
-    bool blackTeam;
     QGraphicsTextItem* text;
 
     QBrush* lighterBrush;
     QBrush* darkerBrush;
     QBrush* validBrush;
+    QColor* teamColor;
 
     bool isValid;
 

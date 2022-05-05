@@ -4,14 +4,14 @@ Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hover
 {
     isValid = false;
     pieceType = " ";
-    blackTeam = false;
+    teamColor = nullptr;
     pos = position;
-    setRect(HORIZONTAL_MARGIN + (position.file * SQUARE_SIZE), VERTICAL_MARGIN + (position.rank * SQUARE_SIZE), sizeX, sizeY); 
+    setRect(HORIZONTAL_MARGIN + ((position.file-1) * SQUARE_SIZE), VERTICAL_MARGIN + ((8-position.rank) * SQUARE_SIZE), sizeX, sizeY); 
     
     //ADDING THE PIECE TEXT TO THE TILE (empty for now)
     text = new QGraphicsTextItem(pieceType, this);
-    int x = HORIZONTAL_MARGIN + (position.file * SQUARE_SIZE);
-    int y = VERTICAL_MARGIN + (position.rank * SQUARE_SIZE); 
+    int x = HORIZONTAL_MARGIN + ((position.file - 1) * SQUARE_SIZE);
+    int y = VERTICAL_MARGIN + ((8 - position.rank) * SQUARE_SIZE);
     text->setScale(4);
     text->setPos(x,y);
     
@@ -36,34 +36,35 @@ Tile::Tile(Square position, int sizeX, int sizeY, QColor baseColor, QColor hover
     setAcceptHoverEvents(true);
 }
 
-bool operator==(const Tile* p1, const Square s)
-{
-    return (p1->getPos() == s);
-}
 
-void Tile::setPieceType(QString newType, bool isBlack)
-{
+
+void Tile::setPieceType(QString newType, QColor newColor) {
     pieceType = newType;
-    blackTeam = isBlack;
+    teamColor = new QColor(newColor);
     text->setPlainText(newType);
-
-    if (blackTeam)
-        text->setDefaultTextColor(black);
-    else
-        text->setDefaultTextColor(white);
+    text->setDefaultTextColor(newColor);
+   
 }
 
-void Tile::glow()
-{
+void Tile::glow() {
     setBrush(*validBrush);
     setAcceptHoverEvents(false);
     isValid = true;
 }
 
-void Tile::stopGlowing()
-{
+void Tile::stopGlowing() {
     setBrush(*lighterBrush);
     isValid = false;
     setAcceptHoverEvents(true);
 }
 
+void Tile::removePiece() {
+    pieceType = " ";
+    teamColor = nullptr;
+    text->setPlainText(pieceType);
+}
+
+bool operator==(const Tile* p1, const Square s)
+{
+    return (p1->getPos() == s);
+}

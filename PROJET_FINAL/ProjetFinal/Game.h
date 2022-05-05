@@ -9,7 +9,7 @@
 #include <cppitertools/range.hpp>
 #include <QMessageBox>
 #include <QtAlgorithms>
-//OTHER
+//OTHERS
 #include "Square.h"
 #include "Tile.h"
 #include "GameButton.h"
@@ -25,18 +25,18 @@ namespace FrontEnd {
 	public slots:
 		void tilePressed();
 		void startGame();
+		void endGame();
+		void restartGame();
 		
 	public:
 		Game(QWidget* parent = nullptr);
-		~Game() override = default;
-
+		~Game();
 
 		//PRE-GAME 
 		void dislayMainMenu();
 		//INITIAL BOARD RELATED
 		void drawSides();
 		void drawPositions();
-		void startGame();
 		void initializeGame();
 		void setupTeam(QColor color);
 		//GAMEPLAY RELATED
@@ -50,18 +50,21 @@ namespace FrontEnd {
 
 	private:
 		//necessary attributes for the display
-		QGraphicsView* view;
-		QGraphicsScene* scene;
+		QGraphicsView* view_;
+		QGraphicsScene* scene_;
+		GameButton* startGameButton_;
+		GameButton* restartGameButton_;
+		GameButton* endGameButton_;
+		QGraphicsTextItem* playerTurn_;
 
 		//container
-		QList<Tile*> tileList; // contains all tiles (each tile contains chessPiece images)
+		QList<Tile*> tileList_; // contains all tiles (each tile contains chessPiece images)
+		list<Square> validMoves_;
 
 		//attributes necessary for the gameplay
-		//Square clicked;
-		//Square selected;
-
-		list<Square> validMoves;
-
-		//int validClicks;
+		Square clicked_;
+		Square selected_;
+		int validClicks_;
+		int mouvementMade_;
 	};
 }
