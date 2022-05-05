@@ -69,3 +69,8 @@ bool operator==(const Tile* p1, const Square s)
 {
     return (p1->getPos() == s);
 }
+
+bool operator==(const Square s, const Tile* p1)
+{
+    return p1==s;
+}

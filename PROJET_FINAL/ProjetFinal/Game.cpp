@@ -61,7 +61,6 @@ namespace FrontEnd {
 
 	void Game::initializeGame()
 	{
-		validClicks_ = 0;
 		mouvementMade_ = 0;
 
 		//Drawing backround
@@ -200,15 +199,16 @@ namespace FrontEnd {
 		
 		Tile* obj = dynamic_cast<Tile*>(sender());
 		Square position = obj->getPos();
-		auto iterTilePiece = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		auto iterTilePiece = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });					
 		if ((*iterTilePiece)->getMoveValidity())
 		{
 			list<pair<Square, Square>> moving = Board::getInstance()->moveOnBoard(position);
-
+			removePossibleLocations(validMoves_);
 			for (auto&& it = moving.begin(); it != moving.end(); it++)
 			{
 				if (!(it->first == it->second)) {
 					mouvementPiece(it->first, it->second);
+					
 					//turn est changer // je peu te faire un getter de turn
 				}
 
@@ -216,6 +216,7 @@ namespace FrontEnd {
 		}
 		else
 		{
+			removePossibleLocations(validMoves_);
 			validMoves_ = Board::getInstance()->getMovesOfPiece(position);
 			displayPossibleLocations(validMoves_); //envoit validMoves
 		}

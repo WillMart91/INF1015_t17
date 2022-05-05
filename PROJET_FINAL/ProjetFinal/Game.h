@@ -16,7 +16,7 @@
 #include "Board.h"
 
 #include "Square.h"
-//#include "GameButton.h"
+#include "GameButton.h"
 
 
 using namespace std;
@@ -68,7 +68,6 @@ namespace FrontEnd {
 		//attributes necessary for the gameplay
 		Square clicked_;
 		Square selected_;
-		int validClicks_;
 		int mouvementMade_;
 	};
 }
