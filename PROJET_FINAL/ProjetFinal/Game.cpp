@@ -41,8 +41,21 @@ namespace FrontEnd {
 		connect(endGameButton_, SIGNAL(Clicked()), this, SLOT(endGame()));
 		scene_->addItem(endGameButton_);
 
+		customGameButton_ = new GameButton("Custom start", 15, 820, 150, 50, darkYellow, darkCyan);
+		connect(customGameButton_, SIGNAL(Clicked()), this, SLOT(startCustomGame()));
+		scene_->addItem(customGameButton_);
+
 		setupTeam(white);
 		setupTeam(black);
+	}
+
+	void Game::startCustomGame() {
+		//clearing the tiles from their piece type
+		for (auto it = tileList_.begin(); it != tileList_.end(); it++)
+			(*it)->removePiece();
+
+		customWhiteTeam();
+		customBlackTeam();
 	}
 
 	void Game::endGame() {
@@ -105,17 +118,17 @@ namespace FrontEnd {
 		drawRectangle(0, 0, HORIZONTAL_MARGIN * 2 + NB_BOX * SQUARE_SIZE, VERTICAL_MARGIN, black, 0.8); //top
 		drawRectangle(0, NB_BOX * SQUARE_SIZE + VERTICAL_MARGIN, HORIZONTAL_MARGIN * 2 + NB_BOX * SQUARE_SIZE, SQUARE_SIZE / 2, black, 0.8); //bottom
 
-		//drawing players elim text
-		drawText("Player 1's elimination", 0, VERTICAL_MARGIN - 40, 1, white);
+		////drawing players elim text
+		//drawText("Player 1's elimination", 0, VERTICAL_MARGIN - 40, 1, white);
 
-		//QGraphicsTextItem* player2 = new QGraphicsTextItem("Player 2's elimination");
-		drawText("Player 2's elimination", HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE - 60, VERTICAL_MARGIN - 40, 1, white);
+		////QGraphicsTextItem* player2 = new QGraphicsTextItem("Player 2's elimination");
+		//drawText("Player 2's elimination", HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE - 60, VERTICAL_MARGIN - 40, 1, white);
 
 		//drawing turns 
 		drawText("'s turn to play", (HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE) / 2 + 50, VERTICAL_MARGIN / 7, 2, white);
 		//drawText("<3", (HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE) / 2 + 50, VERTICAL_MARGIN / 6, 5);
 
-		playerTurn_ = new QGraphicsTextItem(" ");
+		playerTurn_ = new QGraphicsTextItem("White");
 		playerTurn_->setPos((HORIZONTAL_MARGIN + NB_BOX * SQUARE_SIZE) / 2 - 50, VERTICAL_MARGIN / 7);
 		playerTurn_->setScale(2);
 		playerTurn_->setDefaultTextColor(white);
@@ -193,7 +206,26 @@ namespace FrontEnd {
 		}
 	}
 
+	void Game::customWhiteTeam()
+	{
 
+		Square position = { 4,2 };
+		auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♚", white);
+
+
+		position = { 4,7 };
+		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♜", white);
+
+	}
+
+	void Game::customBlackTeam()
+	{
+		Square position = { 3,3 };
+		auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
+		(*matching_iter)->setPieceType("♚", black);
+	}
 
 	void Game::tilePressed() {
 		
@@ -208,8 +240,11 @@ namespace FrontEnd {
 			{
 				if (!(it->first == it->second)) {
 					mouvementPiece(it->first, it->second);
-					
-					//turn est changer // je peu te faire un getter de turn
+					mouvementMade_++;
+					if (mouvementMade_ % 2)
+						playerTurn_->setPlainText("Black");
+					else
+						playerTurn_->setPlainText("White");
 				}
 
 			}
@@ -222,7 +257,6 @@ namespace FrontEnd {
 		}
 	}
 
-	//TODO : MAKE IT RECEVE LIST 
 	void Game::displayPossibleLocations(list<Square> positions) {
 		Square position;
 		for (int i : range(positions.size()))
@@ -234,7 +268,6 @@ namespace FrontEnd {
 		}
 	}
 
-	//TODO : MAKE IT RECEVE LIST 
 	void Game::removePossibleLocations(list<Square> positions) {
 		Square position;
 		for (int i : range(positions.size()))
@@ -256,16 +289,6 @@ namespace FrontEnd {
 
 		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
 		(*iterTilePiece1)->removePiece();
-	}
-
-	//REDO OR DELETE
-	void Game::switchPieces(Square pos1, Square pos2) {
-		auto iterTilePiece1 = find_if(tileList_.begin(), tileList_.end(), [&pos1](Tile* obj) {return pos1 == obj; });
-		auto iterTilePiece2 = find_if(tileList_.begin(), tileList_.end(), [&pos2](Tile* obj) {return pos2 == obj; });
-		auto temp = iterTilePiece2;
-
-		(*iterTilePiece2)->setPieceType((*iterTilePiece1)->getPieceType(), (*iterTilePiece1)->getPieceTeam());
-		(*iterTilePiece1)->setPieceType((*temp)->getPieceType(), (*temp)->getPieceTeam());
 	}
 
 	void Game::drawText(QString str, int posX, int posY, int scale, QColor color) {

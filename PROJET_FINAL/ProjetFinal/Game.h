@@ -31,6 +31,7 @@ namespace FrontEnd {
 		void startGame();
 		void endGame();
 		void restartGame();
+		void startCustomGame();
 		
 	public:
 		Game(QWidget* parent = nullptr);
@@ -43,11 +44,12 @@ namespace FrontEnd {
 		void drawPositions();
 		void initializeGame();
 		void setupTeam(QColor color);
+		void customWhiteTeam();
+		void customBlackTeam();
 		//GAMEPLAY RELATED
 		void displayPossibleLocations(list<Square> positions);
 		void removePossibleLocations(list<Square> positions);
 		void mouvementPiece(Square pos1, Square pos2);
-		void switchPieces(Square pos1, Square pos2);
 		//CREATORS RELATED
 		void drawText(QString str, int posX, int posY, int scale, QColor color);
 		void drawRectangle(int posX, int posY, int sizeX, int sizeY, QBrush color, float opacity);
@@ -59,6 +61,7 @@ namespace FrontEnd {
 		GameButton* startGameButton_;
 		GameButton* restartGameButton_;
 		GameButton* endGameButton_;
+		GameButton* customGameButton_;
 		QGraphicsTextItem* playerTurn_;
 
 		//container
