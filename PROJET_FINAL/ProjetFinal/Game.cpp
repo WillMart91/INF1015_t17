@@ -48,6 +48,7 @@ namespace FrontEnd {
 	void Game::endGame() {
 		tileList_.clear();
 		scene_->clear();
+
 	}
 
 	void Game::restartGame() {

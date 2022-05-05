@@ -1,7 +1,7 @@
 
 #include "Pawn.h"
 
-Pawn::Pawn(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam, position, 'r', inStartPos)
+Pawn::Pawn(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam, position, 'p', inStartPos)
 {
 }
 

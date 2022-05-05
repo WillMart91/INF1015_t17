@@ -7,7 +7,7 @@ GameButton::GameButton(QString buttonText, int posX, int posY, int sizeX, int si
     text = new QGraphicsTextItem(buttonText, this);
     int x = posX;
     int y = posY;
-    text->setScale(2);
+    text->setScale(1.5);
     text->setPos(x, y);
 
     //DEFINING THE BUTTON COLORS

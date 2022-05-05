@@ -59,6 +59,7 @@ std::list<std::pair<Square, Square>> Board::moveOnBoard(Square clicked)
 
 bool Board::validateMove(Square endangeredPos)
 {
+
 	int maxDist = std::max(std::max(endangeredPos.file, endangeredPos.rank), std::max(8 - endangeredPos.file, 8 - endangeredPos.rank));
 	std::list<std::pair<int, int>> knightCheckCopy = knightCheck_;
 	for (auto&& it = knightCheckCopy.cbegin(); it != knightCheckCopy.cend(); it++)
@@ -67,7 +68,7 @@ bool Board::validateMove(Square endangeredPos)
 		if (!Square::isValid(checkPos)) {
 			continue;
 		}
-		AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
+		AbsPiece* pieceOn = chessBoard_[checkPos];
 		if (pieceOn != nullptr) {
 			if (pieceOn->isType('k'))
 			{
@@ -84,7 +85,7 @@ bool Board::validateMove(Square endangeredPos)
 		if (!Square::isValid(checkPos)) {
 			continue;
 		}
-		AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
+		AbsPiece* pieceOn = chessBoard_[checkPos];
 		if (pieceOn != nullptr) {
 			if (pieceOn->isType('p'))
 			{
@@ -106,7 +107,7 @@ bool Board::validateMove(Square endangeredPos)
 				bIt.push_back(it);
 				continue;
 			}
-			AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
+			AbsPiece* pieceOn = chessBoard_[checkPos];
 			if (pieceOn != nullptr) {
 				if (pieceOn->isType('b') || pieceOn->isType('q'))
 				{
@@ -135,7 +136,7 @@ bool Board::validateMove(Square endangeredPos)
 				rIt.push_back(it);
 				continue;
 			}
-			AbsPiece* pieceOn = Board::getInstance()->getPieceOn(checkPos);
+			AbsPiece* pieceOn = chessBoard_[checkPos];
 			if (pieceOn != nullptr) {
 				if (pieceOn->isType('r') || pieceOn->isType('q'))
 				{
