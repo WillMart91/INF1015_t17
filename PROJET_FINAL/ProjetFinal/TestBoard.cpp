@@ -68,4 +68,26 @@ TEST(Board, validity_movement) {
 //
 //}
 
+TEST(Board, destructors) {
+
+	King* king = new King(false, { 1,1 });
+	delete(king);
+	Queen* q = new Queen(false, { 2,2 });
+	delete(q);
+	Knight* k = new Knight(false, { 3,3 });
+	delete(k);
+
+
+	Rook* r = new Rook(false, { 4,4 });
+	delete(r);
+	Bishop* b = new Bishop(false, { 5,5 });
+	delete(b);
+	Pawn* p = new Pawn(false, { 6,6 });
+	delete(p);
+
+	Board::getInstance()->~Board();
+}
+
+
+
 #endif
