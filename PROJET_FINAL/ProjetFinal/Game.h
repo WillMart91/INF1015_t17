@@ -73,7 +73,6 @@ namespace FrontEnd {
 		//attributes necessary for the gameplay
 		//Square clicked_;
 		//Square selected_;
-		int mouvementMade_;
 
 	};
 }

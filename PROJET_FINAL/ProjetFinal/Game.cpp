@@ -35,7 +35,7 @@ namespace FrontEnd {
 	{
 		scene_->removeItem(startGameButton_);
 
-		startNormalGameButton_ = new GameButton("Normal game", 15, 890, 150, 50, darkYellow, darkCyan);
+		startNormalGameButton_ = new GameButton("Classic game", 15, 890, 150, 50, darkYellow, darkCyan);
 		connect(startNormalGameButton_, SIGNAL(Clicked()), this, SLOT(startNormalGame()));
 		scene_->addItem(startNormalGameButton_);
 
@@ -43,11 +43,11 @@ namespace FrontEnd {
 		connect(endGameButton_, SIGNAL(Clicked()), this, SLOT(endGame()));
 		scene_->addItem(endGameButton_);
 
-		customGameButton1_ = new GameButton("2 Kings 1 rook", 15, 830, 150, 50, darkYellow, darkCyan);
+		customGameButton1_ = new GameButton("3 vs 3", 15, 830, 150, 50, darkYellow, darkCyan);
 		connect(customGameButton1_, SIGNAL(Clicked()), this, SLOT(startCustomGame1()));
 		scene_->addItem(customGameButton1_);
 
-		customGameButton2_ = new GameButton("3 vs 3", 15, 770, 150, 50, darkYellow, darkCyan);
+		customGameButton2_ = new GameButton("2 Kings 1 Queen", 15, 770, 150, 50, darkYellow, darkCyan);
 		connect(customGameButton2_, SIGNAL(Clicked()), this, SLOT(startCustomGame2()));
 		scene_->addItem(customGameButton2_);
 
@@ -86,7 +86,6 @@ namespace FrontEnd {
 
 	void Game::initializeGame()
 	{
-		mouvementMade_ = 0;
 
 		//Drawing backround
 		drawSides();
@@ -168,9 +167,8 @@ namespace FrontEnd {
 
 	void Game::setupTeam(int selectedLayout)
 	{
-
-		//map<Square, AbsPiece*> layout = Board::getInstance().getLayout(selectedLayout);
-		map<Square, AbsPiece*> layout; //remove
+		playerTurn_->setPlainText("White");
+		map<Square, AbsPiece*> layout = Board::getInstance()->getLayout(selectedLayout);
 		QColor color;
 		for (auto it = layout.begin(); it != layout.end(); it++)
 		{
@@ -247,8 +245,7 @@ namespace FrontEnd {
 			{
 				if (!(it->first == it->second)) {
 					mouvementPiece(it->first, it->second);
-					mouvementMade_++;
-					if (mouvementMade_ % 2)
+					if (Board::getInstance()->isBlackTurn())
 						playerTurn_->setPlainText("Black");
 					else
 						playerTurn_->setPlainText("White");
