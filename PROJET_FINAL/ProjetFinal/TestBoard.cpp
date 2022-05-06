@@ -142,7 +142,7 @@ TEST(Square, operators) {
 
 	std::pair<int,int> p1(2,2);
 	std::pair<int, int> p2(4, 4);
-	p1 = p1 * 2;
+	p1 = 2 * p1;
 	
 	EXPECT_EQ(p1, p2);
 
