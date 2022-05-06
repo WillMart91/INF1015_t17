@@ -106,6 +106,45 @@ TEST(Board, getmove_queen) {
 	EXPECT_EQ(a, allMoves);
 	Board::getInstance()->removeLayouts();
 }
+TEST(Board, getmove_rook) {
+	std::map<Square, AbsPiece*> p;
+	p[{ 1, 1 }] = new Rook(false, { 1,1 });
+	p[{ 1, 3 }] = new Rook(true, { 1,3 });
+	p[{ 3, 1 }] = new Rook(true, { 3,1 });
+	Board::getInstance()->addLayout(p);
+	Board::getInstance()->fillBoard(0);
+	Board::getInstance()->removeLayouts();
+	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 1,1 });
+	std::list<Square> allMoves = { {2,1},{1,2},{3,1},{1,3} };
+	EXPECT_EQ(a, allMoves);
+	Board::getInstance()->removeLayouts();
+}
+TEST(Board, getmove_knight) {
+	std::map<Square, AbsPiece*> p;
+	p[{ 2, 2 }] = new Knight(false, { 2,2 });
+	p[{ 4, 3 }] = new Pawn(true, { 4,3 });
+	Board::getInstance()->addLayout(p);
+	Board::getInstance()->fillBoard(0);
+	Board::getInstance()->removeLayouts();
+	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 2,2 });
+	std::list<Square> allMoves = { {4, 3},{4, 1},{3,4},{1,4}};
+	EXPECT_EQ(a, allMoves);
+	Board::getInstance()->removeLayouts();
+}
+TEST(Board, getmove_king) {
+	std::map<Square, AbsPiece*> p;
+	p[{ 1, 1 }] = new King(false, { 1,1 });
+	p[{ 1, 2 }] = new Pawn(true, { 1,2 });
+	Board::getInstance()->addLayout(p);
+	Board::getInstance()->fillBoard(0);
+	Board::getInstance()->removeLayouts();
+	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 1,1 });
+	std::list<Square> allMoves = { {2, 1},{1, 2}, {2,2} };
+	EXPECT_EQ(a, allMoves);
+	Board::getInstance()->removeLayouts();
+}
+
+
 
 TEST(Board, destructors) {
 
