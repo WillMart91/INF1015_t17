@@ -19,7 +19,9 @@ namespace FrontEnd {
 		delete(view_);
 		delete(scene_);
 		delete(startGameButton_);
-		delete(restartGameButton_);
+		delete(startNormalGameButton_);
+		delete(customGameButton1_);
+		delete(customGameButton2_);
 		delete(endGameButton_);
 	}
 
@@ -33,27 +35,39 @@ namespace FrontEnd {
 	{
 		scene_->removeItem(startGameButton_);
 
-		restartGameButton_ = new GameButton("Restart game", 15, 890, 150, 50, darkYellow, darkCyan);
-		connect(restartGameButton_, SIGNAL(Clicked()), this, SLOT(restartGame()));
-		scene_->addItem(restartGameButton_);
+		startNormalGameButton_ = new GameButton("Normal game", 15, 890, 150, 50, darkYellow, darkCyan);
+		connect(startNormalGameButton_, SIGNAL(Clicked()), this, SLOT(startNormalGame()));
+		scene_->addItem(startNormalGameButton_);
 
 		endGameButton_ = new GameButton("End game", 1025, 890, 150, 50, darkYellow, darkCyan);
 		connect(endGameButton_, SIGNAL(Clicked()), this, SLOT(endGame()));
 		scene_->addItem(endGameButton_);
 
-		customGameButton_ = new GameButton("Custom start", 15, 820, 150, 50, darkYellow, darkCyan);
-		connect(customGameButton_, SIGNAL(Clicked()), this, SLOT(startCustomGame()));
-		scene_->addItem(customGameButton_);
+		customGameButton1_ = new GameButton("2 Kings 1 rook", 15, 830, 150, 50, darkYellow, darkCyan);
+		connect(customGameButton1_, SIGNAL(Clicked()), this, SLOT(startCustomGame1()));
+		scene_->addItem(customGameButton1_);
+
+		customGameButton2_ = new GameButton("3 vs 3", 15, 770, 150, 50, darkYellow, darkCyan);
+		connect(customGameButton2_, SIGNAL(Clicked()), this, SLOT(startCustomGame2()));
+		scene_->addItem(customGameButton2_);
 
 		setupTeam(0);
 	}
 
-	void Game::startCustomGame() {
+	void Game::startCustomGame1() {
 		//clearing the tiles from their piece type
 		for (auto it = tileList_.begin(); it != tileList_.end(); it++)
 			(*it)->removePiece();
 
 		setupTeam(1);
+	}
+
+	void Game::startCustomGame2() {
+		//clearing the tiles from their piece type
+		for (auto it = tileList_.begin(); it != tileList_.end(); it++)
+			(*it)->removePiece();
+
+		setupTeam(2);
 	}
 
 	void Game::endGame() {
@@ -62,11 +76,10 @@ namespace FrontEnd {
 
 	}
 
-	void Game::restartGame() {
+	void Game::startNormalGame() {
 		//clearing the tiles from their piece type
 		for (auto it = tileList_.begin(); it != tileList_.end(); it++)
 			(*it)->removePiece();
-
 
 		setupTeam(0);
 	}

@@ -30,8 +30,9 @@ namespace FrontEnd {
 		void tilePressed();
 		void startGame();
 		void endGame();
-		void restartGame();
-		void startCustomGame();
+		void startNormalGame();
+		void startCustomGame1();
+		void startCustomGame2();
 		
 	public:
 		Game(QWidget* parent = nullptr);
@@ -59,20 +60,19 @@ namespace FrontEnd {
 		QGraphicsView* view_;
 		QGraphicsScene* scene_;
 		GameButton* startGameButton_;
-		GameButton* restartGameButton_;
+		GameButton* startNormalGameButton_;
 		GameButton* endGameButton_;
-		GameButton* customGameButton_;
+		GameButton* customGameButton1_;
+		GameButton* customGameButton2_;
 		QGraphicsTextItem* playerTurn_;
 
 		//container
 		QList<Tile*> tileList_; // contains all tiles (each tile contains chessPiece images)
 		list<Square> validMoves_;
-		
-		
 
 		//attributes necessary for the gameplay
-		Square clicked_;
-		Square selected_;
+		//Square clicked_;
+		//Square selected_;
 		int mouvementMade_;
 
 	};
