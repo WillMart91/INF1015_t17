@@ -1,3 +1,9 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: AbsPiece is the motherclass of every chess pieces in the game. It implements the aspect common to every pieces.
+*/
+
 #pragma once
 #include <list>
 #include "Square.h"

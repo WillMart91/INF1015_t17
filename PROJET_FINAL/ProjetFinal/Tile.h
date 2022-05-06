@@ -1,3 +1,10 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: A tile object represents a simple tile on the board. This tile also has the task of notifying the "Game" class in case of events.
+* Finaly, a Tile is responsible for the display of the chesspiece on the board.
+*/
+
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QBrush>

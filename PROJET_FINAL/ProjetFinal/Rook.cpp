@@ -1,4 +1,8 @@
-
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: implementation of the class.
+*/
 #include "Rook.h"
 
 Rook::Rook(bool blackTeam, Square position, bool inStartPos) : AbsPiece(blackTeam,position,'r', inStartPos)

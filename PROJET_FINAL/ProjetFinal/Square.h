@@ -1,3 +1,9 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: A Bishop is the definition of a simple type of chess piece
+*/
+
 #pragma once
 #include <vector>
 struct Square

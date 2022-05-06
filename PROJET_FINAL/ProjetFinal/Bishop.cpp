@@ -1,4 +1,8 @@
-
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: implementation of the class.
+*/
 #include "Bishop.h"
 
 Bishop::Bishop(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'b', inStartPos)

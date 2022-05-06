@@ -1,3 +1,10 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: The game class is the main class handling everything that has to do with the visual aspect of the program.
+*/
+
+
 #pragma warning(push, 0) // Sinon Qt fait des avertissements � /W4.
 
 //QT INCLUDES

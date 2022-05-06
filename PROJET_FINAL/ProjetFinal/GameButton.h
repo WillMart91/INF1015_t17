@@ -4,6 +4,13 @@
 #include <QGraphicsTextItem>
 //OTHER
 
+
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: A GameButton if simply a button on the screen. Their only task is notifying the "Game" class when an event occurs
+*/
+
 using namespace std;
 using namespace Qt;
 
