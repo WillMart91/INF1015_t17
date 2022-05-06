@@ -148,16 +148,19 @@ TEST(Board, getmove_king) {
 
 TEST(Board, destructors) {
 
+	
 	King* king = new King(false, { 1,1 });
 	delete(king);
+
 	Queen* q = new Queen(false, { 2,2 });
 	delete(q);
+
 	Knight* k = new Knight(false, { 3,3 });
 	delete(k);
 
-
 	Rook* r = new Rook(false, { 4,4 });
 	delete(r);
+
 	Bishop* b = new Bishop(false, { 5,5 });
 	delete(b);
 	Pawn* p = new Pawn(false, { 6,6 });
@@ -166,6 +169,23 @@ TEST(Board, destructors) {
 	Board::getInstance()->~Board();
 }
 
+
+TEST(Square, operators) {
+
+	Square s1 = { 1,1 };
+	Square s2 = { 2,2 };
+	Square s4 = { 3,3 };
+	Square s3 = s1 + s2;
+	bool s = s3 == s4;
+	EXPECT_EQ(s, true);
+
+	std::pair<int,int> p1(2,2);
+	std::pair<int, int> p2(4, 4);
+	p1 = p1 * 2;
+	
+	EXPECT_EQ(p1, p2);
+
+}
 
 
 #endif
