@@ -49,19 +49,6 @@ int main(int argc, char *argv[])
 
 
 void setUpLayouts() {
-	std::map<Square, AbsPiece*> p;
-	p[{ 4, 4 }] = new King(false, { 4,4 });
-	p[{ 1, 4 }] = new Pawn(false, { 1,4 });
-	p[{ 1, 1 }] = new Queen(true, { 1,1 });
-	p[{ 8, 8 }] = new Bishop(true, { 8,8 });
-	p[{ 6, 2 }] = new Bishop(false, { 6,2 });
-	p[{ 4, 8 }] = new Rook(true, { 4,8 });
-	p[{ 4, 2 }] = new Rook(false, { 4,2 });
-	p[{ 3, 5 }] = new Pawn(true, { 3,5 });
-	p[{ 6, 3 }] = new Knight(true, { 6,3 });
-	Board::getInstance()->addLayout(p);
-
-
 
 
 	std::map<Square, AbsPiece*> classic;
