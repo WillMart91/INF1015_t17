@@ -37,33 +37,35 @@ int main(int argc, char *argv[])
 
 	bibliotheque_cours::VerifierFuitesAllocations verifierFuitesAllocations;
 	QApplication app(argc, argv);
+	
+
 	std::map<Square, AbsPiece*> b;
 
 	for (int i = 1; i <= 8; i++) {
-		b[{ i,2 }]=new Pawn(false, { i,2 });
+		b[{ i, 2 }] = new Pawn(false, { i,2 });
 	}
-	b[{ 1,1 }]=new Rook(false, { 1,1 });
-	b[{ 8,1 }]=new Rook(false, { 8,1 });
-	b[{ 2,1 }]=new Knight(false, { 2,1 });
-	b[{ 7,1 }]=new Knight(false, { 7,1 });
-	b[{ 3,1 }]=new Bishop(false, { 3,1 });
-	b[{ 6,1 }]=new Bishop(false, { 6,1 });
-	b[{ 5,1 }]=new King(false, { 5,1 });
-	b[{ 4,1 }]=new Queen(false, { 4,1 });
+	b[{ 1, 1 }] = new Rook(false, { 1,1 });
+	b[{ 8, 1 }] = new Rook(false, { 8,1 });
+	b[{ 2, 1 }] = new Knight(false, { 2,1 });
+	b[{ 7, 1 }] = new Knight(false, { 7,1 });
+	b[{ 3, 1 }] = new Bishop(false, { 3,1 });
+	b[{ 6, 1 }] = new Bishop(false, { 6,1 });
+	b[{ 5, 1 }] = new King(false, { 5,1 });
+	b[{ 4, 1 }] = new Queen(false, { 4,1 });
 
 	for (int i = 1; i <= 8; i++) {
-		b[{ i,7 }]=new Pawn(true, { i,7 });
+		b[{ i, 7 }] = new Pawn(true, { i,7 });
 	}
-	b[{ 1,8 }]=new Rook(true, { 1,8 });
-	b[{ 8,8 }]=new Rook(true, { 8,8 });
-	b[{ 2,8 }]=new Knight(true, { 2,8 });
-	b[{ 7,8 }]=new Knight(true, { 7,8 });
-	b[{ 3,8 }]=new Bishop(true, { 3,8 });
-	b[{ 6,8 }]=new Bishop(true, { 6,8 });
-	b[{ 5,8 }]=new King(true, { 5,8 });
-	b[{ 4,8 }]=new Queen(true, { 4,8 });
+	b[{ 1, 8 }] = new Rook(true, { 1,8 });
+	b[{ 8, 8 }] = new Rook(true, { 8,8 });
+	b[{ 2, 8 }] = new Knight(true, { 2,8 });
+	b[{ 7, 8 }] = new Knight(true, { 7,8 });
+	b[{ 3, 8 }] = new Bishop(true, { 3,8 });
+	b[{ 6, 8 }] = new Bishop(true, { 6,8 });
+	b[{ 5, 8 }] = new King(true, { 5,8 });
+	b[{ 4, 8 }] = new Queen(true, { 4,8 });
 
-	Board::getInstance()->fillBoard(b);
+
 
 	FrontEnd::Game game;
 

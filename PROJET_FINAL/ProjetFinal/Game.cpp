@@ -45,8 +45,7 @@ namespace FrontEnd {
 		connect(customGameButton_, SIGNAL(Clicked()), this, SLOT(startCustomGame()));
 		scene_->addItem(customGameButton_);
 
-		setupTeam(white);
-		setupTeam(black);
+		setupTeam(0);
 	}
 
 	void Game::startCustomGame() {
@@ -54,8 +53,7 @@ namespace FrontEnd {
 		for (auto it = tileList_.begin(); it != tileList_.end(); it++)
 			(*it)->removePiece();
 
-		customWhiteTeam();
-		customBlackTeam();
+		setupTeam(1);
 	}
 
 	void Game::endGame() {
@@ -68,8 +66,8 @@ namespace FrontEnd {
 		for (auto it = tileList_.begin(); it != tileList_.end(); it++)
 			(*it)->removePiece();
 
-		setupTeam(white);
-		setupTeam(black);
+
+		setupTeam(0);
 	}
 
 	void Game::initializeGame()
@@ -86,6 +84,7 @@ namespace FrontEnd {
 		QColor color3 = QColor(163, 135, 41, 255);		// brown
 		QColor color4 = QColor(97, 77, 12, 255);		// darker
 
+		//filling the 8x8 tilemap
 		for (int i = 1; i <= NB_BOX; i++)
 		{
 			for (int j = 1; j <= NB_BOX; j++)
@@ -107,7 +106,6 @@ namespace FrontEnd {
 				}
 			}
 		}
-
 
 	}
 
@@ -154,55 +152,50 @@ namespace FrontEnd {
 		}
 	}
 
-	void Game::setupTeam(QColor color)
+	void Game::setupTeam(int selectedLayout)
 	{
-		Square position;
-		int rankBackLine = 1;
-		int rankFrontLine = 2;
-		
-		if (color == black){
-			rankBackLine = 8;
-			rankFrontLine = 7;
-		}
 
-		position = { 4,rankBackLine };
-		auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♛", color);
-
-		position = { 5,rankBackLine };
-		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♚", color);
-
-		position = { 3,rankBackLine };
-		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♝", color);
-
-		position = { 6,rankBackLine };
-		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♝", color);
-
-		position = {2,rankBackLine };
-		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♞", color);
-
-		position = { 7,rankBackLine };
-		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♞", color);
-
-
-		position = { 1,rankBackLine };
-		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♜", color);
-
-		position = { 8,rankBackLine };
-		matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-		(*matching_iter)->setPieceType("♜", color);
-	
-		for (int i = 1; i <= 8; i++)
+		//map<Square, AbsPiece*> layout = Board::getInstance().getLayout(selectedLayout);
+		map<Square, AbsPiece*> layout; //remove
+		QColor color;
+		for (auto it = layout.begin(); it != layout.end(); it++)
 		{
-			position = { i,rankFrontLine };
-			matching_iter = find_if(tileList_.begin(), tileList_.end(), [&position](Tile* obj) {return position == obj; });
-			(*matching_iter)->setPieceType("♟", color);
+			if (it->second->isBlackTeam())
+				color = black;
+			else
+				color = white;
+
+			if (it->second->isType('p'))
+			{
+				auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&it](Tile* obj) {return it->first == obj; });
+				(*matching_iter)->setPieceType("♟", color);
+
+			}
+			else if (it->second->isType('r'))
+			{
+				auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&it](Tile* obj) {return it->first == obj; });
+				(*matching_iter)->setPieceType("♜", color);
+			}
+			else if (it->second->isType('k'))
+			{
+				auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&it](Tile* obj) {return it->first == obj; });
+				(*matching_iter)->setPieceType("♞", color);
+			}
+			else if (it->second->isType('b'))
+			{
+				auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&it](Tile* obj) {return it->first == obj; });
+				(*matching_iter)->setPieceType("♝", color);
+			}
+			else if(it->second->isType('q'))
+			{
+				auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&it](Tile* obj) {return it->first == obj; });
+				(*matching_iter)->setPieceType("♛", color);
+			}
+			else if (it->second->isType('K'))
+			{
+				auto matching_iter = find_if(tileList_.begin(), tileList_.end(), [&it](Tile* obj) {return it->first == obj; });
+				(*matching_iter)->setPieceType("♚", color);
+			}
 		}
 	}
 

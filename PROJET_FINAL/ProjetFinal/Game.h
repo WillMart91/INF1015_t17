@@ -43,7 +43,7 @@ namespace FrontEnd {
 		void drawSides();
 		void drawPositions();
 		void initializeGame();
-		void setupTeam(QColor color);
+		void setupTeam(int selectedLayout);
 		void customWhiteTeam();
 		void customBlackTeam();
 		//GAMEPLAY RELATED
@@ -67,10 +67,13 @@ namespace FrontEnd {
 		//container
 		QList<Tile*> tileList_; // contains all tiles (each tile contains chessPiece images)
 		list<Square> validMoves_;
+		
+		
 
 		//attributes necessary for the gameplay
 		Square clicked_;
 		Square selected_;
 		int mouvementMade_;
+
 	};
 }
