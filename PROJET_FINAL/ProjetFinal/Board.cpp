@@ -98,7 +98,7 @@ bool Board::validateMove(Square endangeredPos)
 	std::list<std::pair<int, int>> pawnCheckCopy = pawnCheck_;
 	for (auto&& it = pawnCheckCopy.begin(); it != pawnCheckCopy.end(); it++)
 	{
-		Square checkPos = endangeredPos + *it * ((-1) ^ (int)!blackTurn_);
+		Square checkPos = endangeredPos + *it * pow(-1, (int)!blackTurn_);
 		if (!Square::isValid(checkPos)) {
 			continue;
 		}
