@@ -9,11 +9,17 @@
 Board* Board::instance_;
 Square Board::lastClicked_ = { 9,9 };
 bool Board::blackTurn_ = false;
+std::vector<std::map<Square, AbsPiece*>> Board::layouts_ = std::vector<std::map<Square, AbsPiece*>>() ;
 const std::list<std::pair<int, int>> Board::knightCheck_ = { {2, 1},{-2, 1},{2, -1},{-2, -1},{1,2},{-1,2}, {1,-2},{-1,-2} };
 const std::list<std::pair<int, int>> Board::bishopCheck_ = { {1, 1},{-1, 1},{1, -1},{-1, -1} };
 const std::list<std::pair<int, int>> Board::rookCheck_ = { {1, 0},{-1, 0},{0, -1},{0, 1} };
 const std::list<std::pair<int, int>> Board::pawnCheck_ = { {1, 1},{-1, 1} };
 std::map<Square, AbsPiece*> Board::chessBoard_ = std::map<Square, AbsPiece*>();
+void Board::fillBoard(int layoutNumber)
+{
+	chessBoard_ = layouts_[layoutNumber];
+	blackTurn_ = false;
+}
 Board::~Board()
 {
 	for (auto&& it = chessBoard_.begin(); it != chessBoard_.end(); it++) {
@@ -108,7 +114,7 @@ bool Board::validateMove(Square endangeredPos)
 	for (int d = 1; d <= maxDist; d++) {
 		for (auto&& it = bishopCheckCopy.begin(); it != bishopCheckCopy.end(); it++)
 		{
-			Square checkPos = endangeredPos + *it;
+			Square checkPos = endangeredPos + *it*d;
 			if (!Square::isValid(checkPos)) {
 				bIt.push_back(it);
 				continue;
@@ -137,7 +143,7 @@ bool Board::validateMove(Square endangeredPos)
 		}
 		for (auto&& it = rookCheckCopy.begin(); it != rookCheckCopy.end(); it++)
 		{
-			Square checkPos = endangeredPos + *it;
+			Square checkPos = endangeredPos + *it*d;
 			if (!Square::isValid(checkPos)) {
 				rIt.push_back(it);
 				continue;
@@ -167,3 +173,16 @@ bool Board::validateMove(Square endangeredPos)
 	}
 	return false;
 }
+
+std::map<Square, AbsPiece*> Board::getLayout(int layoutNumber)
+{
+	if (layoutNumber >= layouts_.size() || layoutNumber<0) {
+		return std::map<Square, AbsPiece*>();
+	}
+	else {
+		fillBoard(layoutNumber);
+		return layouts_[layoutNumber];
+	}
+	
+}
+

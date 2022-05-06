@@ -8,20 +8,10 @@
 
 
 
-int King::nbOfKings = 0;
 King::King(bool blackTeam, Square position, bool inStartPos) :AbsPiece(blackTeam, position,'K', inStartPos)
 {
-	if (++nbOfKings > 2) {
-		throw std::logic_error("king");
-	}
 }
 
-King::~King()
-{
-	if (--nbOfKings == 1) {
-		//throw std::logic_error("Win");
-	}
-}
 
 std::list<Square> King::getValidMoves()
 {
