@@ -13,11 +13,10 @@ public:
 	std::list<Square> getMovesOfPiece(Square clicked);
 	std::list<std::pair<Square, Square>> moveOnBoard(Square clicked);
 	bool validateMove(Square endangeredPos);
-	Square getLastClicked() { return lastClicked_; }
-	void setLastClicked(Square newClick) { lastClicked_ = newClick; }
 	void addLayout(std::map<Square, AbsPiece*> newLayout) { layouts_.push_back(newLayout); }
 	std::map<Square, AbsPiece*> getLayout(int layoutNumber);
 	bool isBlackTurn() { return blackTurn_; }
+	void removeLayouts() { layouts_.clear(); }
 private:
 	Board()=default; 
 	static Board* instance_;

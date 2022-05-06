@@ -1,7 +1,4 @@
 #pragma once
-
-#include "Calc.hpp"
-#include "CalcWindow.hpp"
 #include "Game.h"
 #include "PieceInclude.h"
 #include "AbsPiece.h"
@@ -37,11 +34,13 @@ int main(int argc, char *argv[])
 
 	bibliotheque_cours::VerifierFuitesAllocations verifierFuitesAllocations;
 	QApplication app(argc, argv);
+	initialiserBibliothequeCours(argc, argv);
+
 	setUpLayouts();
 
 	FrontEnd::Game game;
 
-	initialiserBibliothequeCours(argc, argv);
+	
 	return app.exec();
 }
 

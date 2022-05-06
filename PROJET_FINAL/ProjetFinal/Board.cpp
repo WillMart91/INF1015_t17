@@ -1,9 +1,10 @@
 
 #include "Board.h"
+#include <algorithm>
 Board* Board::instance_;
 Square Board::lastClicked_ = { 9,9 };
 bool Board::blackTurn_ = false;
-std::vector<std::map<Square, AbsPiece*>> Board::layouts_ = std::vector<std::map<Square, AbsPiece*>>() ;
+std::vector<std::map<Square, AbsPiece*>> Board::layouts_ = std::vector<std::map<Square, AbsPiece*>>();
 const std::list<std::pair<int, int>> Board::knightCheck_ = { {2, 1},{-2, 1},{2, -1},{-2, -1},{1,2},{-1,2}, {1,-2},{-1,-2} };
 const std::list<std::pair<int, int>> Board::bishopCheck_ = { {1, 1},{-1, 1},{1, -1},{-1, -1} };
 const std::list<std::pair<int, int>> Board::rookCheck_ = { {1, 0},{-1, 0},{0, -1},{0, 1} };
@@ -24,14 +25,14 @@ Board::~Board()
 std::list<Square> Board::getMovesOfPiece(Square clicked)
 {
 	std::list<Square> moves;
-	if (true) {
-		lastClicked_ = clicked;
-		if (chessBoard_[clicked] != nullptr) {
-			if (chessBoard_[clicked]->isBlackTeam() == blackTurn_) {
-				moves = chessBoard_[clicked]->getValidMoves();
-			}
+
+	lastClicked_ = clicked;
+	if (chessBoard_[clicked] != nullptr) {
+		if (chessBoard_[clicked]->isBlackTeam() == blackTurn_) {
+			moves = chessBoard_[clicked]->getValidMoves();
 		}
 	}
+
 
 	return moves;
 }
@@ -39,6 +40,9 @@ std::list<Square> Board::getMovesOfPiece(Square clicked)
 std::list<std::pair<Square, Square>> Board::moveOnBoard(Square clicked)
 {
 	std::map<Square, AbsPiece*> chessBoardBefore = chessBoard_;
+	std::list<Square> m = chessBoardBefore[lastClicked_]->getValidMoves();
+	std::list<Square>::iterator it = std::find_if(m.begin(), m.end(), [&clicked](Square s) {return clicked == s; });
+
 	chessBoard_[clicked] = chessBoard_[lastClicked_];
 	chessBoard_.erase(lastClicked_);
 	bool danger = false;
@@ -51,14 +55,15 @@ std::list<std::pair<Square, Square>> Board::moveOnBoard(Square clicked)
 		}
 	}
 	std::list<std::pair<Square, Square>> moves;
-	if (!danger) {
+
+	if (danger || it == m.end()) {
+		moves.push_back({ lastClicked_, lastClicked_ });
+		chessBoard_ = chessBoardBefore;
+	}
+	else {
 		moves.push_back({ lastClicked_, clicked });
 		chessBoard_[clicked]->move(clicked);
 		blackTurn_ = !blackTurn_;
-	}
-	else {
-		moves.push_back({ lastClicked_, lastClicked_ });
-		chessBoard_ = chessBoardBefore;
 	}
 	return moves;
 }
@@ -108,7 +113,7 @@ bool Board::validateMove(Square endangeredPos)
 	for (int d = 1; d <= maxDist; d++) {
 		for (auto&& it = bishopCheckCopy.begin(); it != bishopCheckCopy.end(); it++)
 		{
-			Square checkPos = endangeredPos + *it*d;
+			Square checkPos = endangeredPos + *it * d;
 			if (!Square::isValid(checkPos)) {
 				bIt.push_back(it);
 				continue;
@@ -137,7 +142,7 @@ bool Board::validateMove(Square endangeredPos)
 		}
 		for (auto&& it = rookCheckCopy.begin(); it != rookCheckCopy.end(); it++)
 		{
-			Square checkPos = endangeredPos + *it*d;
+			Square checkPos = endangeredPos + *it * d;
 			if (!Square::isValid(checkPos)) {
 				rIt.push_back(it);
 				continue;
@@ -170,13 +175,13 @@ bool Board::validateMove(Square endangeredPos)
 
 std::map<Square, AbsPiece*> Board::getLayout(int layoutNumber)
 {
-	if (layoutNumber >= layouts_.size() || layoutNumber<0) {
+	if (layoutNumber >= layouts_.size() || layoutNumber < 0) {
 		return std::map<Square, AbsPiece*>();
 	}
 	else {
 		fillBoard(layoutNumber);
 		return layouts_[layoutNumber];
 	}
-	
+
 }
 
