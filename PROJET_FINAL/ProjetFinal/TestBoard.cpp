@@ -1,3 +1,9 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: This file has the purpose of testing multiples limit case in the backend portion the the game.
+*/
+
 #include "Board.h"
 #include "PieceInclude.h"
 #include <list>
