@@ -1,3 +1,9 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: A Rook is the definition of a simple type of chess piece
+*/
+
 #include "Board.h"
 class Rook : public AbsPiece
 {

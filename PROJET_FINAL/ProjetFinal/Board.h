@@ -1,3 +1,8 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: The Board class is the main class handling everything that has to do with the backend of the program.
+*/
 #pragma once
 #include <map>
 #include <list>

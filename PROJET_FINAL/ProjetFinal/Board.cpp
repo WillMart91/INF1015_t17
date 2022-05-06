@@ -1,3 +1,9 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: implementation of the class.
+*/
+
 
 #include "Board.h"
 #include <algorithm>
