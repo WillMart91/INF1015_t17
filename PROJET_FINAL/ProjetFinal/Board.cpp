@@ -76,7 +76,7 @@ std::list<std::pair<Square, Square>> Board::moveOnBoard(Square clicked)
 
 bool Board::validateMove(Square endangeredPos)
 {
-
+	bool endanger = false;
 	int maxDist = std::max(std::max(endangeredPos.file, endangeredPos.rank), std::max(8 - endangeredPos.file, 8 - endangeredPos.rank));
 	std::list<std::pair<int, int>> knightCheckCopy = knightCheck_;
 	for (auto&& it = knightCheckCopy.cbegin(); it != knightCheckCopy.cend(); it++)
@@ -90,7 +90,7 @@ bool Board::validateMove(Square endangeredPos)
 			if (pieceOn->isType('k'))
 			{
 				if (pieceOn->isBlackTeam() != blackTurn_) {
-					return true;
+					endanger=true;
 				}
 			}
 		}
@@ -107,7 +107,7 @@ bool Board::validateMove(Square endangeredPos)
 			if (pieceOn->isType('p'))
 			{
 				if (pieceOn->isBlackTeam() != blackTurn_) {
-					return true;
+					endanger = true;
 				}
 			}
 		}
@@ -129,7 +129,7 @@ bool Board::validateMove(Square endangeredPos)
 				if (pieceOn->isType('b') || pieceOn->isType('q'))
 				{
 					if (pieceOn->isBlackTeam() != blackTurn_) {
-						return true;
+						endanger = true;
 					}
 					else {
 						bIt.push_back(it);
@@ -158,7 +158,7 @@ bool Board::validateMove(Square endangeredPos)
 				if (pieceOn->isType('r') || pieceOn->isType('q'))
 				{
 					if (pieceOn->isBlackTeam() != blackTurn_) {
-						return true;
+						endanger = true;
 					}
 					else {
 						rIt.push_back(it);
@@ -176,7 +176,7 @@ bool Board::validateMove(Square endangeredPos)
 			rIt.pop_front();
 		}
 	}
-	return false;
+	return endanger;
 }
 
 std::map<Square, AbsPiece*> Board::getLayout(int layoutNumber)
