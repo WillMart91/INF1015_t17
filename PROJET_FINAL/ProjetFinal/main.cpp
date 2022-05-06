@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 
 
 void setUpLayouts() {
+
 	std::map<Square, AbsPiece*> classic;
 
 	for (int i = 1; i <= 8; i++) {

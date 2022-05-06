@@ -63,9 +63,43 @@ TEST(Board, validity_movement) {
 	Board::getInstance()->removeLayouts();
 }
 
-//TEST(Board, move_pawn) {
-//	std::map<Square, AbsPiece*> p;
-//
-//}
+TEST(Board, getmove_pawn) {
+	std::map<Square, AbsPiece*> p;
+	p[{ 1, 7 }] = new Pawn(false, { 1,7 });
+	p[{ 2, 8 }] = new Pawn(true, { 2,8 });
+	Board::getInstance()->addLayout(p);
+	Board::getInstance()->fillBoard(0);
+
+	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 1,7 });
+	std::list<Square> allMoves = { {1,8},{2,8} };
+	EXPECT_EQ(a, allMoves);
+	Board::getInstance()->removeLayouts();
+}
+TEST(Board, getmove_bishop) {
+	std::map<Square, AbsPiece*> p;
+	p[{ 1, 1 }] = new Bishop(false, { 1,1 });
+	p[{ 3, 3 }] = new Bishop(true, { 3,3 });
+	Board::getInstance()->addLayout(p);
+	Board::getInstance()->fillBoard(0);
+	Board::getInstance()->removeLayouts();
+	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 1,1 });
+	std::list<Square> allMoves = { {2,2},{3,3} };
+	EXPECT_EQ(a, allMoves);
+	Board::getInstance()->removeLayouts();
+}
+TEST(Board, getmove_queen) {
+	std::map<Square, AbsPiece*> p;
+	p[{ 1, 1 }] = new Queen(false, { 1,1 });
+	p[{ 1, 4 }] = new Queen(true, { 1,4 });
+	p[{ 3, 3 }] = new Knight(false, { 3,3 });
+	p[{ 2, 1 }] = new Rook(false, { 2,1 });
+	Board::getInstance()->addLayout(p);
+	Board::getInstance()->fillBoard(0);
+	Board::getInstance()->removeLayouts();
+	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 1,1 });
+	std::list<Square> allMoves = { {1,2},{2,2},{1,3},{1,4} };
+	EXPECT_EQ(a, allMoves);
+	Board::getInstance()->removeLayouts();
+}
 
 #endif
