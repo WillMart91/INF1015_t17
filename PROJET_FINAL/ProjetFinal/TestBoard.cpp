@@ -66,13 +66,18 @@ TEST(Board, validity_movement) {
 TEST(Board, getmove_pawn) {
 	std::map<Square, AbsPiece*> p;
 	p[{ 1, 7 }] = new Pawn(false, { 1,7 });
+	p[{ 3, 3 }] = new Pawn(false, { 3,3 });
 	p[{ 2, 8 }] = new Pawn(true, { 2,8 });
 	Board::getInstance()->addLayout(p);
 	Board::getInstance()->fillBoard(0);
 
 	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 1,7 });
-	std::list<Square> allMoves = { {1,8},{2,8} };
-	EXPECT_EQ(a, allMoves);
+	std::list<Square> aMoves = { {1,8},{2,8} };
+
+	EXPECT_EQ(a, aMoves);
+	std::list<Square> b = Board::getInstance()->getMovesOfPiece({ 3,3 });
+	std::list<Square> bMoves = { {3,4},{3,5} };
+	EXPECT_EQ(b, bMoves);
 	Board::getInstance()->removeLayouts();
 }
 TEST(Board, getmove_bishop) {
