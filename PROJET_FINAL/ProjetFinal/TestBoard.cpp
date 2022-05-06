@@ -147,6 +147,12 @@ TEST(Board, getmove_king) {
 	std::list<Square> a = Board::getInstance()->getMovesOfPiece({ 1,1 });
 	std::list<Square> allMoves = { {2, 1},{1, 2}, {2,2} };
 	EXPECT_EQ(a, allMoves);
+	std::list<std::pair<Square, Square>> chek = { std::make_pair<Square,Square>({1,1},{1,1}) };
+	std::list<std::pair<Square, Square>> c = Board::getInstance()->moveOnBoard({ 2,1 });
+	EXPECT_EQ(c, chek);
+	std::list<std::pair<Square, Square>> move = { std::make_pair<Square,Square>({1,1},{1,2}) };
+	std::list<std::pair<Square, Square>> d = Board::getInstance()->moveOnBoard({ 1,2 });
+	EXPECT_EQ(d, move);
 	Board::getInstance()->removeLayouts();
 }
 TEST(Board, check) {
