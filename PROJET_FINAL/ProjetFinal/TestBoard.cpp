@@ -1,3 +1,9 @@
+/*
+* Author: Gabriel Sawka and Wiliam Martin
+* Date: mai  6 2022
+* Description: This file has the purpose of testing multiples limit case in the backend portion the the game.
+*/
+
 #include "Board.h"
 #include "PieceInclude.h"
 #include <list>
@@ -197,7 +203,7 @@ TEST(Square, operators) {
 
 	std::pair<int,int> p1(2,2);
 	std::pair<int, int> p2(4, 4);
-	p1 = p1 * 2;
+	p1 = 2 * p1;
 	
 	EXPECT_EQ(p1, p2);
 
